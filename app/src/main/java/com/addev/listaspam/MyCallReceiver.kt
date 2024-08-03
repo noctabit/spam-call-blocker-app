@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -23,10 +24,12 @@ class MyCallReceiver : BroadcastReceiver() {
         private const val SPAM_PREFS = "SPAM_PREFS"
         private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
         private const val SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
+        private const val RESPONDERONO_URL_TEMPLATE = "https://www.responderono.es/numero-de-telefono/%s"
         private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL"
         private const val NOTIFICATION_ID = 1
     }
 
+    @RequiresApi(Build.VERSION_CODES.CUPCAKE)
     override fun onReceive(context: Context, intent: Intent) {
         val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
         val incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
@@ -48,7 +51,7 @@ class MyCallReceiver : BroadcastReceiver() {
         OkHttpClient().newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle error gracefully
-                showToast(context, "Failed to check spam number", Toast.LENGTH_LONG)
+                showToast(context, "Failed to check number in www.responderono.es", Toast.LENGTH_LONG)
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -58,8 +61,34 @@ class MyCallReceiver : BroadcastReceiver() {
                         saveSpamNumber(context, number)
                         sendNotification(context, number)
                     } else {
-                        removeSpamNumber(context, number)
+                        checkResponderono(context, number, spamData)
+                        if (spamData.responderONoNegative) {
+                            saveSpamNumber(context, number)
+                            sendNotification(context, number)
+                        } else {
+                            removeSpamNumber(context, number)
+                            showToast(context, "Incoming call is not spam", Toast.LENGTH_LONG)
+                        }
                     }
+                }
+            }
+        })
+    }
+
+    private fun checkResponderono(context: Context, number: String, spamData: SpamData) {
+        val url = RESPONDERONO_URL_TEMPLATE.format(number)
+        val request = Request.Builder().url(url).build()
+
+        OkHttpClient().newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle error gracefully
+                showToast(context, "Failed to check number in www.responderono.es", Toast.LENGTH_LONG)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.body?.string()?.let { body ->
+                    val isResponderONoNegative = body.contains(".scoreContainer .score.negative")
+                    spamData.responderONoNegative = isResponderONoNegative
                 }
             }
         })
@@ -131,6 +160,6 @@ class MyCallReceiver : BroadcastReceiver() {
         val reports = elementReports?.text()?.toIntOrNull() ?: 0
         val searches = elementSearches?.text()?.toIntOrNull() ?: 0
 
-        return SpamData(reports, searches)
+        return SpamData(reports, searches, false)
     }
 }
