@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.addev.listaspam.MyCallScreeningService.Companion
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -43,6 +44,15 @@ class SpamUtils {
      * @param callback Callback function to handle the result.
      */
     fun checkSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit) {
+        val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
+        val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, null)
+
+        // End call if the number is already blocked
+        if (blockedNumbers?.contains(number) == true) {
+            sendNotification(context, number)
+            return callback(true)
+        }
+
         val url = SPAM_URL_TEMPLATE.format(number)
         val request = Request.Builder().url(url).build()
 

@@ -34,15 +34,6 @@ class MyCallScreeningService : CallScreeningService() {
         val rawNumber = getRawPhoneNumber(details)
 
         rawNumber?.let {
-            val sharedPreferences = getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-            val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, null)
-
-            // End call if the number is already blocked
-            if (blockedNumbers?.contains(rawNumber) == true) {
-                endCall(details)
-                return
-            }
-
             // Check if the number is spam
             spamUtils.checkSpamNumber(this, it) { isSpam ->
                 if (isSpam) {
