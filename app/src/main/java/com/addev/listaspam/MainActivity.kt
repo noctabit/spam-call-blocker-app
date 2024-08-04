@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.telecom.TelecomManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -20,6 +19,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
+/**
+ * MainActivity for handling permissions and requesting call screening role.
+ * Requires Android P (API level 28) or higher.
+ *
+ * Note: For Android Q (API level 29) or higher, MyCallScreeningService should be used instead.
+ */
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -28,6 +33,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var intentLauncher: ActivityResultLauncher<Intent>
 
+    /**
+     * Called when the activity is starting.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,6 +47,9 @@ class MainActivity : AppCompatActivity() {
         requestCallScreeningRole()
     }
 
+    /**
+     * Sets up the window insets to ensure proper padding for system bars.
+     */
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -46,6 +58,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Sets up the ActivityResultLauncher for handling the result of requesting the call screening role.
+     */
     private fun setupIntentLauncher() {
         intentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -57,17 +72,32 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Shows a toast message.
+     * @param context Context for accessing resources.
+     * @param message The message to display in the toast.
+     * @param duration The length of time to show the toast. Default is Toast.LENGTH_SHORT.
+     */
     private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(context, message, duration).show()
     }
 
+    /**
+     * Checks and requests the necessary permissions.
+     */
     private fun checkPermissionsAndRequest() {
-        val permissions = arrayOf(
+        val permissions = mutableListOf(
             android.Manifest.permission.READ_CALL_LOG,
-            android.Manifest.permission.ANSWER_PHONE_CALLS,
-            android.Manifest.permission.READ_PHONE_STATE,
-            android.Manifest.permission.POST_NOTIFICATIONS
+            android.Manifest.permission.READ_PHONE_STATE
         )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            permissions.add(android.Manifest.permission.ANSWER_PHONE_CALLS)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions.add(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         val missingPermissions = permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
@@ -82,6 +112,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Requests the call screening role.
+     */
     private fun requestCallScreeningRole() {
         val telecomManager = ContextCompat.getSystemService(this, TelecomManager::class.java)
 
@@ -97,6 +130,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Requests the call screening role for Android Q (API level 29) and above.
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun requestRoleForQAndAbove() {
         val roleManager = getSystemService(Context.ROLE_SERVICE) as RoleManager
@@ -109,6 +145,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Requests the call screening role for Android P (API level 28) and below.
+     * @param telecomManager The TelecomManager for managing telecom services.
+     */
     private fun requestRoleForBelowQ(telecomManager: TelecomManager) {
         if (telecomManager.defaultDialerPackage == packageName) {
             showToast(this, getString(R.string.call_screening_role_already_granted))
