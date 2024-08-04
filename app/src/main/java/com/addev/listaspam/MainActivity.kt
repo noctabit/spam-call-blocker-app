@@ -135,9 +135,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun requestRoleForQAndAbove() {
         val roleManager = getSystemService(Context.ROLE_SERVICE) as RoleManager
-        if (roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
-            showToast(this, getString(R.string.call_screening_role_already_granted))
-        } else {
+        if (!roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
             intentLauncher.launch(intent)
             showToast(this, getString(R.string.call_screening_role_prompt), Toast.LENGTH_LONG)
