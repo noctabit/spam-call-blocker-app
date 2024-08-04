@@ -30,7 +30,8 @@ class SpamUtils {
     companion object {
         const val SPAM_PREFS = "SPAM_PREFS"
         const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
-        private const val SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
+        const val SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
+        const val REPORT_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s#denuncia"
         private const val RESPONDERONO_URL_TEMPLATE =
             "https://www.responderono.es/numero-de-telefono/%s"
         private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL"

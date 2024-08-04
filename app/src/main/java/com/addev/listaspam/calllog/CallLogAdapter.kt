@@ -1,14 +1,17 @@
-// CallLogAdapter.kt
 package com.addev.listaspam.calllog
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.addev.listaspam.R
+import com.addev.listaspam.utils.SpamUtils
 
 class CallLogAdapter(
     private val context: Context,
@@ -32,6 +35,7 @@ class CallLogAdapter(
         private val numberTextView: TextView = itemView.findViewById(R.id.numberTextView)
         private val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
+        private val reportButton: Button = itemView.findViewById(R.id.reportButton)
 
         fun bind(callLog: CallLogEntry, isBlocked: Boolean) {
             numberTextView.text = "${callLog.number}${if (isBlocked) " (blocked)" else ""}"
@@ -39,9 +43,13 @@ class CallLogAdapter(
             durationTextView.text = "Duration: ${callLog.duration} seconds"
 
             if (isBlocked) {
-                numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
-            } else {
-                numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.black))
+                numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+            }
+
+            reportButton.setOnClickListener {
+                val url = String.format(SpamUtils.REPORT_URL_TEMPLATE, callLog.number)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                context.startActivity(intent)
             }
         }
     }

@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/numberTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/reportButton"
+        android:layout_alignBaseline="@id/reportButton"/>
 
     <TextView
         android:id="@+id/dateTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_below="@id/numberTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignStart="@id/numberTextView"/>
 
     <TextView
         android:id="@+id/durationTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
-</LinearLayout>
+        android:textSize="14sp"
+        android:layout_below="@id/dateTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignStart="@id/numberTextView"/>
+
+    <Button
+        android:id="@+id/reportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"/>
+</RelativeLayout>
