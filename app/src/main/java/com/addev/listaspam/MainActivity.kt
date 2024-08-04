@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.telecom.TelecomManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -18,6 +17,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.addev.listaspam.calllog.CallLogAdapter
+import com.addev.listaspam.calllog.getCallLogs
+import com.addev.listaspam.utils.SpamUtils
 
 /**
  * MainActivity for handling permissions and requesting call screening role.
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var intentLauncher: ActivityResultLauncher<Intent>
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: CallLogAdapter
 
     /**
      * Called when the activity is starting.
@@ -48,6 +54,22 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             requestCallScreeningRole()
         }
+
+        refreshCallLogs()
+    }
+
+    fun refreshCallLogs() {
+        val blockedNumbers = getBlockedNumbers()
+        val callLogs = getCallLogs(this)
+
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = CallLogAdapter(this, callLogs, blockedNumbers)
+    }
+
+    private fun getBlockedNumbers(): Set<String> {
+        val sharedPreferences = getSharedPreferences(SpamUtils.SPAM_PREFS, Context.MODE_PRIVATE)
+        return sharedPreferences.getStringSet(SpamUtils.BLOCK_NUMBERS_KEY, emptySet()) ?: emptySet()
     }
 
     /**

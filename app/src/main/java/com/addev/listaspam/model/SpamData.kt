@@ -1,4 +1,4 @@
-package com.addev.listaspam
+package com.addev.listaspam.model
 
 class SpamData(
     val reports: Int,

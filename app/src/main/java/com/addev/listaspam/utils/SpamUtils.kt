@@ -1,4 +1,4 @@
-package com.addev.listaspam
+package com.addev.listaspam.utils
 
 import android.Manifest
 import android.app.NotificationChannel
@@ -12,7 +12,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.addev.listaspam.MyCallScreeningService.Companion
+import com.addev.listaspam.R
+import com.addev.listaspam.model.SpamData
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -27,8 +28,8 @@ import java.io.IOException
 class SpamUtils {
 
     companion object {
-        private const val SPAM_PREFS = "SPAM_PREFS"
-        private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
+        const val SPAM_PREFS = "SPAM_PREFS"
+        const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
         private const val SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
         private const val RESPONDERONO_URL_TEMPLATE =
             "https://www.responderono.es/numero-de-telefono/%s"

@@ -40,7 +40,7 @@
         </activity>
 
         <service
-            android:name=".MyCallScreeningService"
+            android:name=".services.MyCallScreeningService"
             android:exported="true"
             android:permission="android.permission.BIND_SCREENING_SERVICE">
             <intent-filter>
@@ -49,7 +49,7 @@
         </service>
 
         <receiver
-            android:name=".MyCallReceiver"
+            android:name=".services.MyCallReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
