@@ -29,7 +29,8 @@ class SpamUtils {
         private const val SPAM_PREFS = "SPAM_PREFS"
         private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
         private const val SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
-        private const val RESPONDERONO_URL_TEMPLATE = "https://www.responderono.es/numero-de-telefono/%s"
+        private const val RESPONDERONO_URL_TEMPLATE =
+            "https://www.responderono.es/numero-de-telefono/%s"
         private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL"
         private const val NOTIFICATION_ID = 1
         private const val SPAM_REPORT_THRESHOLD = 1
@@ -47,7 +48,12 @@ class SpamUtils {
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                handleNetworkFailure(context, "Failed to check number in www.listaspam.com", e, callback)
+                handleNetworkFailure(
+                    context,
+                    "Failed to check number in www.listaspam.com",
+                    e,
+                    callback
+                )
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -64,7 +70,12 @@ class SpamUtils {
                             }
                         }
                     }
-                } ?: handleNetworkFailure(context, "Empty response from www.listaspam.com", null, callback)
+                } ?: handleNetworkFailure(
+                    context,
+                    "Empty response from www.listaspam.com",
+                    null,
+                    callback
+                )
             }
         })
     }
@@ -75,20 +86,34 @@ class SpamUtils {
      * @param number Phone number to check.
      * @param callback Callback function to handle the result.
      */
-    private fun checkResponderono(context: Context, number: String, callback: (isNegative: Boolean) -> Unit) {
+    private fun checkResponderono(
+        context: Context,
+        number: String,
+        callback: (isNegative: Boolean) -> Unit
+    ) {
         val url = RESPONDERONO_URL_TEMPLATE.format(number)
         val request = Request.Builder().url(url).build()
 
         OkHttpClient().newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                handleNetworkFailure(context, "Failed to check number in www.responderono.es", e, callback)
+                handleNetworkFailure(
+                    context,
+                    "Failed to check number in www.responderono.es",
+                    e,
+                    callback
+                )
             }
 
             override fun onResponse(call: Call, response: Response) {
                 response.body?.string()?.let { body ->
                     val isResponderONoNegative = body.contains(".scoreContainer .score.negative")
                     callback(isResponderONoNegative)
-                } ?: handleNetworkFailure(context, "Empty response from www.responderono.es", null, callback)
+                } ?: handleNetworkFailure(
+                    context,
+                    "Empty response from www.responderono.es",
+                    null,
+                    callback
+                )
             }
         })
     }
@@ -99,7 +124,11 @@ class SpamUtils {
      * @param number Phone number identified as spam.
      * @param callback Callback function to handle the result.
      */
-    private fun handleSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit) {
+    private fun handleSpamNumber(
+        context: Context,
+        number: String,
+        callback: (isSpam: Boolean) -> Unit
+    ) {
         saveSpamNumber(context, number)
         sendNotification(context, number)
         callback(true)
@@ -111,7 +140,11 @@ class SpamUtils {
      * @param number Phone number identified as not spam.
      * @param callback Callback function to handle the result.
      */
-    private fun handleNonSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit) {
+    private fun handleNonSpamNumber(
+        context: Context,
+        number: String,
+        callback: (isSpam: Boolean) -> Unit
+    ) {
         Handler(Looper.getMainLooper()).post {
             showToast(context, "Incoming call is not spam", Toast.LENGTH_LONG)
         }
@@ -126,7 +159,12 @@ class SpamUtils {
      * @param e Exception that occurred (optional).
      * @param callback Callback function to handle the result.
      */
-    private fun handleNetworkFailure(context: Context, message: String, e: IOException?, callback: (Boolean) -> Unit) {
+    private fun handleNetworkFailure(
+        context: Context,
+        message: String,
+        e: IOException?,
+        callback: (Boolean) -> Unit
+    ) {
         Handler(Looper.getMainLooper()).post {
             showToast(context, message, Toast.LENGTH_LONG)
         }
@@ -141,7 +179,8 @@ class SpamUtils {
      */
     private fun saveSpamNumber(context: Context, number: String) {
         val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-        val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
+        val blockedNumbers =
+            sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
         blockedNumbers?.add(number)
         with(sharedPreferences.edit()) {
             putStringSet(BLOCK_NUMBERS_KEY, blockedNumbers)
@@ -156,7 +195,8 @@ class SpamUtils {
      */
     private fun removeSpamNumber(context: Context, number: String) {
         val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-        val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
+        val blockedNumbers =
+            sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
         blockedNumbers?.remove(number)
         with(sharedPreferences.edit()) {
             putStringSet(BLOCK_NUMBERS_KEY, blockedNumbers)

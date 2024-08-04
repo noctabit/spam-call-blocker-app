@@ -47,13 +47,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupIntentLauncher() {
-        intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                showToast(this, "Success requesting ROLE_CALL_SCREENING!")
-            } else {
-                showToast(this, "Failed requesting ROLE_CALL_SCREENING")
+        intentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    showToast(this, "Success requesting ROLE_CALL_SCREENING!")
+                } else {
+                    showToast(this, "Failed requesting ROLE_CALL_SCREENING")
+                }
             }
-        }
     }
 
     private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {

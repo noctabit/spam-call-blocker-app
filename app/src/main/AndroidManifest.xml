@@ -14,8 +14,10 @@
     <!-- for contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- for internet access -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- for posting notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -48,7 +50,7 @@
 
         <receiver
             android:name=".MyCallReceiver"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
                 <action android:name="android.permission.READ_CALL_LOG" />

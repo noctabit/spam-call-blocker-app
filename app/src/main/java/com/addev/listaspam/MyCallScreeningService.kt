@@ -63,12 +63,15 @@ class MyCallScreeningService : CallScreeningService() {
             details.handle != null -> details.handle.schemeSpecificPart
             details.gatewayInfo?.originalAddress != null -> details.gatewayInfo.originalAddress.schemeSpecificPart
             details.intentExtras != null -> {
-                var uri = details.intentExtras.getParcelable<Uri>(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS)
+                var uri =
+                    details.intentExtras.getParcelable<Uri>(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS)
                 if (uri == null) {
-                    uri = details.intentExtras.getParcelable<Uri>(TelephonyManager.EXTRA_INCOMING_NUMBER)
+                    uri =
+                        details.intentExtras.getParcelable<Uri>(TelephonyManager.EXTRA_INCOMING_NUMBER)
                 }
                 uri?.schemeSpecificPart
             }
+
             else -> null
         }
     }
