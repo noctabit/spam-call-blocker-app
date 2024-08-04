@@ -44,7 +44,10 @@ class MainActivity : AppCompatActivity() {
 
         setupIntentLauncher()
         checkPermissionsAndRequest()
-        requestCallScreeningRole()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestCallScreeningRole()
+        }
     }
 
     /**
@@ -122,12 +125,7 @@ class MainActivity : AppCompatActivity() {
             showToast(this, getString(R.string.telecom_manager_unavailable))
             return
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requestRoleForQAndAbove()
-        } else {
-            requestRoleForBelowQ(telecomManager)
-        }
+        requestRoleForQAndAbove()
     }
 
     /**
@@ -141,20 +139,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
             intentLauncher.launch(intent)
-            showToast(this, getString(R.string.call_screening_role_prompt), Toast.LENGTH_LONG)
-        }
-    }
-
-    /**
-     * Requests the call screening role for Android P (API level 28) and below.
-     * @param telecomManager The TelecomManager for managing telecom services.
-     */
-    private fun requestRoleForBelowQ(telecomManager: TelecomManager) {
-        if (telecomManager.defaultDialerPackage == packageName) {
-            showToast(this, getString(R.string.call_screening_role_already_granted))
-        } else {
-            val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
-            startActivity(intent)
             showToast(this, getString(R.string.call_screening_role_prompt), Toast.LENGTH_LONG)
         }
     }
