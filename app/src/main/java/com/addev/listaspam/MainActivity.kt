@@ -63,7 +63,9 @@ class MainActivity : AppCompatActivity() {
     private fun checkPermissionsAndRequest() {
         val permissions = arrayOf(
             android.Manifest.permission.READ_CALL_LOG,
-            android.Manifest.permission.ANSWER_PHONE_CALLS
+            android.Manifest.permission.ANSWER_PHONE_CALLS,
+            android.Manifest.permission.READ_PHONE_STATE,
+            android.Manifest.permission.POST_NOTIFICATIONS
         )
 
         val missingPermissions = permissions.filter {
