@@ -19,6 +19,11 @@ import androidx.annotation.RequiresApi
 @RequiresApi(Build.VERSION_CODES.P)
 class MyCallReceiver : BroadcastReceiver() {
 
+    companion object {
+        private const val SPAM_PREFS = "SPAM_PREFS"
+        private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
+    }
+
     private val spamUtils = SpamUtils()
 
     /**
@@ -44,6 +49,15 @@ class MyCallReceiver : BroadcastReceiver() {
      * @param incomingNumber The incoming phone number.
      */
     private fun handleIncomingCall(context: Context, incomingNumber: String) {
+        val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
+        val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, null)
+
+        // End call if the number is already blocked
+        if (blockedNumbers?.contains(incomingNumber) == true) {
+            endCall(context)
+            return
+        }
+
         spamUtils.checkSpamNumber(context, incomingNumber) { isSpam ->
             if (isSpam) {
                 endCall(context)
