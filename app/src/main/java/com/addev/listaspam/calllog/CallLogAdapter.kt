@@ -12,12 +12,16 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.addev.listaspam.R
 import com.addev.listaspam.utils.SpamUtils
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 class CallLogAdapter(
     private val context: Context,
     private val callLogs: List<CallLogEntry>,
     private val blockedNumbers: Set<String>
 ) : RecyclerView.Adapter<CallLogAdapter.CallLogViewHolder>() {
+
+    val formatter = SimpleDateFormat("dd/MM/yyyy")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CallLogViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_call_log, parent, false)
@@ -39,7 +43,7 @@ class CallLogAdapter(
 
         fun bind(callLog: CallLogEntry, isBlocked: Boolean) {
             numberTextView.text = "${callLog.number}${if (isBlocked) " (blocked)" else ""}"
-            dateTextView.text = callLog.date.toString()
+            dateTextView.text = formatter.format(callLog.date)
             durationTextView.text = "Duration: ${callLog.duration} seconds"
 
             if (isBlocked) {
