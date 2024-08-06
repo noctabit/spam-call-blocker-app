@@ -15,10 +15,13 @@ data class CallLogEntry(
 
 fun getCallLogs(context: Context): List<CallLogEntry> {
     val callLogs = mutableListOf<CallLogEntry>()
+
+    val selection = "${CallLog.Calls.TYPE} IN (${CallLog.Calls.INCOMING_TYPE}, ${CallLog.Calls.REJECTED_TYPE}, ${CallLog.Calls.BLOCKED_TYPE})"
+
     val cursor: Cursor? = context.contentResolver.query(
         CallLog.Calls.CONTENT_URI,
         null,
-        null,
+        selection,
         null,
         CallLog.Calls.DATE + " DESC"
     )
