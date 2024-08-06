@@ -14,11 +14,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.addev.listaspam.R
 import com.addev.listaspam.model.SpamData
-import okhttp3.Call
-import okhttp3.Callback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import org.jsoup.Jsoup
 import java.io.IOException
 
@@ -30,104 +31,128 @@ class SpamUtils {
     companion object {
         const val SPAM_PREFS = "SPAM_PREFS"
         const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
-        const val SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
-        const val REPORT_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s#denuncia"
-        private const val RESPONDERONO_URL_TEMPLATE =
-            "https://www.responderono.es/numero-de-telefono/%s"
         private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL"
         private const val NOTIFICATION_ID = 1
-        private const val SPAM_REPORT_THRESHOLD = 1
+
+        // URLs
+        const val REPORT_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s#denuncia"
+        const val LISTA_SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
+        private const val RESPONDERONO_URL_TEMPLATE =
+            "https://www.responderono.es/numero-de-telefono/%s"
+        private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
     }
 
+    private val client = OkHttpClient()
+
     /**
-     * Checks if a given phone number is considered spam by querying spam databases.
-     * @param context Context for accessing resources.
-     * @param number Phone number to check.
-     * @param callback Callback function to handle the result.
+     * Checks if a given phone number is spam by checking local blocklist and online databases.
+     *
+     * @param context The application context.
+     * @param number The phone number to check.
+     * @param callback A function to be called with the result (true if spam, false otherwise).
      */
     fun checkSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit) {
-        val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-        val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, null)
+        CoroutineScope(Dispatchers.IO).launch {
+            if (isNumberBlockedLocally(context, number)) {
+                handleSpamNumber(context, number, callback)
+                return@launch
+            }
 
-        // End call if the number is already blocked
-        if (blockedNumbers?.contains(number) == true) {
-            sendNotification(context, number)
-            return callback(true)
+            val spamCheckers = listOf(
+                ::checkListaSpam,
+                ::checkResponderono,
+                ::checkCleverDialer
+            )
+
+            val isSpam = spamCheckers.any { checker ->
+                runCatching { checker(number) }.getOrDefault(false)
+            }
+
+            if (isSpam) {
+                handleSpamNumber(context, number, callback)
+            } else {
+                handleNonSpamNumber(context, number, callback)
+            }
         }
-
-        val url = SPAM_URL_TEMPLATE.format(number)
-        val request = Request.Builder().url(url).build()
-
-        OkHttpClient().newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                handleNetworkFailure(
-                    context,
-                    "Failed to check number in www.listaspam.com",
-                    e,
-                    callback
-                )
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.string()?.let { body ->
-                    val spamData = parseHtmlForSpamReports(body)
-                    if (spamData.reports > SPAM_REPORT_THRESHOLD) {
-                        handleSpamNumber(context, number, callback)
-                    } else {
-                        checkResponderono(context, number) { isResponderONoNegative ->
-                            if (isResponderONoNegative) {
-                                handleSpamNumber(context, number, callback)
-                            } else {
-                                handleNonSpamNumber(context, number, callback)
-                            }
-                        }
-                    }
-                } ?: handleNetworkFailure(
-                    context,
-                    "Empty response from www.listaspam.com",
-                    null,
-                    callback
-                )
-            }
-        })
     }
 
     /**
-     * Checks if a given phone number is considered negative by the ResponderONo database.
-     * @param context Context for accessing resources.
-     * @param number Phone number to check.
-     * @param callback Callback function to handle the result.
+     * Checks if a number is blocked locally in shared preferences.
+     *
+     * @param context The application context.
+     * @param number The phone number to check.
+     * @return True if the number is blocked locally, false otherwise.
      */
-    private fun checkResponderono(
-        context: Context,
-        number: String,
-        callback: (isNegative: Boolean) -> Unit
-    ) {
+    private fun isNumberBlockedLocally(context: Context, number: String): Boolean {
+        val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
+        val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, emptySet())
+        if (blockedNumbers != null) {
+            return blockedNumbers.contains(number)
+        }
+        return false
+    }
+
+    /**
+     * Checks if a number is marked as spam on CleverDialer.
+     *
+     * @param number The phone number to check.
+     * @return True if the number is marked as spam, false otherwise.
+     */
+    private suspend fun checkCleverDialer(number: String): Boolean {
+        val url = CLEVER_DIALER_URL_TEMPLATE.format(number)
+        return checkUrlForSpam(
+            url,
+            ".front-stars.stars-1, .front-stars.stars-2, .front-stars.stars-3"
+        )
+    }
+
+    /**
+     * Checks if a number is marked as spam on ListaSpam.
+     *
+     * @param number The phone number to check.
+     * @return True if the number is marked as spam, false otherwise.
+     */
+    private suspend fun checkListaSpam(number: String): Boolean {
+        val url = LISTA_SPAM_URL_TEMPLATE.format(number)
+        return checkUrlForSpam(
+            url,
+            ".phone_rating.result-3, .phone_rating.result-2, .phone_rating.result-1"
+        )
+    }
+
+    /**
+     * Checks if a number is marked as spam on Responderono.
+     *
+     * @param number The phone number to check.
+     * @return True if the number is marked as spam, false otherwise.
+     */
+    private suspend fun checkResponderono(number: String): Boolean {
         val url = RESPONDERONO_URL_TEMPLATE.format(number)
+        return checkUrlForSpam(url, ".scoreContainer .score.negative")
+    }
+
+    /**
+     * Checks a URL for spam indicators using a CSS selector.
+     *
+     * @param url The URL to check.
+     * @param cssSelector The CSS selector to use for finding spam indicators.
+     * @return True if spam indicators are found, false otherwise.
+     */
+    private suspend fun checkUrlForSpam(url: String, cssSelector: String): Boolean {
         val request = Request.Builder().url(url).build()
-
-        OkHttpClient().newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                handleNetworkFailure(
-                    context,
-                    "Failed to check number in www.responderono.es",
-                    e,
-                    callback
-                )
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = client.newCall(request).execute()
+                val body = response.body?.string()
+                body?.let {
+                    val doc = Jsoup.parse(it)
+                    doc.select(cssSelector).isNotEmpty()
+                } ?: false
+            } catch (e: IOException) {
+                e.printStackTrace()
+                false
             }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.string()?.let { body ->
-                    val isResponderONoNegative = body.contains(".scoreContainer .score.negative")
-                    callback(isResponderONoNegative)
-                } ?: handleNetworkFailure(
-                    context,
-                    "Empty response from www.responderono.es",
-                    null,
-                    callback
-                )
-            }
-        })
+        }
     }
 
     /**
@@ -161,26 +186,6 @@ class SpamUtils {
             showToast(context, "Incoming call is not spam", Toast.LENGTH_LONG)
         }
         removeSpamNumber(context, number)
-        callback(false)
-    }
-
-    /**
-     * Handles network failures by showing a toast message and logging the error.
-     * @param context Context for accessing resources.
-     * @param message Error message to display.
-     * @param e Exception that occurred (optional).
-     * @param callback Callback function to handle the result.
-     */
-    private fun handleNetworkFailure(
-        context: Context,
-        message: String,
-        e: IOException?,
-        callback: (Boolean) -> Unit
-    ) {
-        Handler(Looper.getMainLooper()).post {
-            showToast(context, message, Toast.LENGTH_LONG)
-        }
-        e?.printStackTrace()
         callback(false)
     }
 
@@ -222,7 +227,7 @@ class SpamUtils {
      * @param message Message to display.
      * @param duration Duration of the toast display.
      */
-    private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
+    private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_LONG) {
         Handler(Looper.getMainLooper()).post {
             Toast.makeText(context, message, duration).show()
         }
@@ -258,33 +263,15 @@ class SpamUtils {
      * @param context Context for creating the notification channel.
      */
     private fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Spam Blocker Channel"
-            val descriptionText = "Notifications for blocked spam numbers"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
-
-            val notificationManager: NotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = "Spam Blocker Channel"
+        val descriptionText = "Notifications for blocked spam numbers"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance).apply {
+            description = descriptionText
         }
-    }
 
-    /**
-     * Parses HTML content to extract spam report data.
-     * @param html HTML content to parse.
-     * @return [SpamData] containing the number of reports and searches.
-     */
-    private fun parseHtmlForSpamReports(html: String): SpamData {
-        val document = Jsoup.parse(html)
-        val elementReports = document.select(".n_reports .result").first()
-        val elementSearches = document.select(".n_search .result").first()
-
-        val reports = elementReports?.text()?.toIntOrNull() ?: 0
-        val searches = elementSearches?.text()?.toIntOrNull() ?: 0
-
-        return SpamData(reports, searches, false)
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }
