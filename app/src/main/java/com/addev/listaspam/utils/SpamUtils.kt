@@ -61,7 +61,7 @@ class SpamUtils {
             val spamCheckers = listOf(
                 ::checkListaSpam,
                 ::checkResponderono,
-                ::checkCleverDialer
+                // ::checkCleverDialer
             )
 
             val isSpam = spamCheckers.any { checker ->
@@ -102,7 +102,7 @@ class SpamUtils {
         val url = CLEVER_DIALER_URL_TEMPLATE.format(number)
         return checkUrlForSpam(
             url,
-            ".front-stars.stars-1, .front-stars.stars-2, .front-stars.stars-3"
+            ".front-stars.stars-1 #star-full-black, .front-stars.stars-2 #star-full-black, .front-stars.stars-3 #star-full-black"
         )
     }
 
@@ -116,7 +116,7 @@ class SpamUtils {
         val url = LISTA_SPAM_URL_TEMPLATE.format(number)
         return checkUrlForSpam(
             url,
-            ".phone_rating.result-3, .phone_rating.result-2, .phone_rating.result-1"
+            ".data_top .phone_rating.result-3, .data_top .phone_rating.result-2, .data_top .phone_rating.result-1, alert-icon-big"
         )
     }
 
@@ -146,7 +146,8 @@ class SpamUtils {
                 val body = response.body?.string()
                 body?.let {
                     val doc = Jsoup.parse(it)
-                    doc.select(cssSelector).isNotEmpty()
+                    val found = doc.select(cssSelector).first() != null
+                    found
                 } ?: false
             } catch (e: IOException) {
                 e.printStackTrace()
