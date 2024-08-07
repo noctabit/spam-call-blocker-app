@@ -42,16 +42,20 @@ class CallLogAdapter(
         private val reportButton: Button = itemView.findViewById(R.id.reportButton)
 
         fun bind(callLog: CallLogEntry, isBlocked: Boolean) {
-            numberTextView.text = "${callLog.number}${if (isBlocked) " (blocked)" else ""}"
+            val number = callLog.number ?: ""
+            val textToShow = if (isBlocked) "$number (blocked)" else number
+            numberTextView.text = textToShow
             dateTextView.text = formatter.format(callLog.date)
             durationTextView.text = "Duration: ${callLog.duration} seconds"
 
             if (isBlocked) {
                 numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+            } else {
+                numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.system_palette_key_color_neutral_light)) // O el color por defecto
             }
 
             reportButton.setOnClickListener {
-                val url = String.format(SpamUtils.REPORT_URL_TEMPLATE, callLog.number)
+                val url = String.format(SpamUtils.REPORT_URL_TEMPLATE, number)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 context.startActivity(intent)
             }
