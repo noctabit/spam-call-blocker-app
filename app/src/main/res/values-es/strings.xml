@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">ListaSpam</string>
+    <string name="success_call_screening_role">¡Éxito al solicitar el rol de filtrado de llamadas!</string>
+    <string name="failed_call_screening_role">Error al solicitar el rol de filtrado de llamadas</string>
+    <string name="telecom_manager_unavailable">El Administrador de Telecomunicaciones no está disponible.</string>
+    <string name="call_screening_role_prompt">Por favor, otorga el rol de filtrado de llamadas.</string>
+    <string name="permissions_required_title">Permisos Requeridos</string>
+    <string name="permissions_required_message">Los siguientes permisos son necesarios para que la aplicación funcione correctamente:\n\n%s\n\nPor favor, ve a los ajustes del sistema y otorga los permisos manualmente.</string>
+    <string name="go_to_settings">Ir a ajustes</string>
+    <string name="permission_read_call_log">Acceso al registro de llamadas</string>
+    <string name="permission_read_phone_state">Acceso al estado del teléfono</string>
+    <string name="permission_read_contacts">Acceso a los contactos</string>
+    <string name="permission_answer_phone_calls">Responder llamadas telefónicas</string>
+    <string name="permission_post_notifications">Notificaciones</string>
+    <string name="blocked_text_format">%1$s (bloqueado)</string>
+    <string name="duration_label">Duración: %1$d segundos</string>
+    <string name="report_url_template">http://example.com/reportar?number=%1$s</string>
+    <string name="incoming_call_not_spam">La llamada entrante no es spam</string>
+    <string name="notification_channel_id">ListaSpam</string>
+    <string name="notification_title_spam_blocked">Número de spam bloqueado</string>
+    <string name="notification_text_spam_blocked">Número de spam bloqueado: %1$s</string>
+    <string name="number_copied_to_clipboard">Número copiado al portapapeles</string>
+</resources>

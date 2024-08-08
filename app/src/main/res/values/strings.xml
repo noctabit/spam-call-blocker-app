@@ -1,7 +1,24 @@
 <resources>
     <string name="app_name">ListaSpam</string>
-    <string name="call_screening_role_prompt">Please grant Call Screening role to this app.</string>
-    <string name="telecom_manager_unavailable">TelecomManager not available.</string>
-    <string name="role_manager_unavailable">RoleManager is not available on this device.</string>
+    <string name="success_call_screening_role">Success requesting role call screening!</string>
+    <string name="failed_call_screening_role">Failed requesting role call screening</string>
+    <string name="telecom_manager_unavailable">Telecom Manager is unavailable.</string>
+    <string name="call_screening_role_prompt">Please grant the call screening role.</string>
+    <string name="permissions_required_title">Permissions Required</string>
+    <string name="permissions_required_message">The following permissions are required for the app to function properly:\n\n%s\n\nPlease go to system settings and grant the permissions manually.</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="permission_read_call_log">Read Call Log</string>
+    <string name="permission_read_phone_state">Read Phone State</string>
+    <string name="permission_read_contacts">Read Contacts</string>
+    <string name="permission_answer_phone_calls">Answer Phone Calls</string>
+    <string name="permission_post_notifications">Post Notifications</string>
+    <string name="blocked_text_format">%1$s (blocked)</string>
+    <string name="duration_label">Duration: %1$d seconds</string>
+    <string name="report_url_template">http://example.com/report?number=%1$s</string>
+    <string name="incoming_call_not_spam">Incoming call is not spam</string>
+    <string name="notification_channel_id">ListaSpam</string>
+    <string name="notification_title_spam_blocked">Spam Number Blocked</string>
+    <string name="notification_text_spam_blocked">Blocked spam number: %1$s</string>
+    <string name="number_copied_to_clipboard">Phone number copied to clipboard</string>
 
 </resources>

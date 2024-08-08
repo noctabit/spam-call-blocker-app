@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.addev.listaspam.R
@@ -43,10 +44,14 @@ class CallLogAdapter(
 
         fun bind(callLog: CallLogEntry, isBlocked: Boolean) {
             val number = callLog.number ?: ""
-            val textToShow = if (isBlocked) "$number (blocked)" else number
+            val textToShow = if (isBlocked) {
+                context.getString(R.string.blocked_text_format, number)
+            } else {
+                number
+            }
             numberTextView.text = textToShow
             dateTextView.text = formatter.format(callLog.date)
-            durationTextView.text = "Duration: ${callLog.duration} seconds"
+            durationTextView.text = context.getString(R.string.duration_label, callLog.duration)
 
             if (isBlocked) {
                 numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
@@ -54,10 +59,20 @@ class CallLogAdapter(
                 numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.system_palette_key_color_neutral_light)) // O el color por defecto
             }
 
+            // Open ListaSpam reporting form in browser
             reportButton.setOnClickListener {
                 val url = String.format(SpamUtils.REPORT_URL_TEMPLATE, number)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 context.startActivity(intent)
+            }
+
+            // Copy number to clipboard
+            itemView.setOnLongClickListener {
+                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = android.content.ClipData.newPlainText("phone number", number)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(context, context.getString(R.string.number_copied_to_clipboard), Toast.LENGTH_SHORT).show()
+                true
             }
         }
     }

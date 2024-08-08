@@ -27,20 +27,12 @@ import com.addev.listaspam.calllog.CallLogAdapter
 import com.addev.listaspam.calllog.getCallLogs
 import com.addev.listaspam.utils.SpamUtils
 
-/**
- * MainActivity for handling permissions and requesting call screening role.
- * Requires Android P (API level 28) or higher.
- *
- * Note: For Android Q (API level 29) or higher, MyCallScreeningService should be used instead.
- */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var intentLauncher: ActivityResultLauncher<Intent>
+    private var permissionDeniedDialog: AlertDialog? = null
 
-    /**
-     * Called when the activity is starting.
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
-     */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,15 +40,10 @@ class MainActivity : AppCompatActivity() {
         setupIntentLauncher()
     }
 
-    /**
-     * Initializes the activity by checking permissions, requesting the call screening role, and refreshing the call logs if the necessary permissions are granted.
-     */
     private fun init() {
         checkPermissionsAndRequest()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requestCallScreeningRole()
-        }
+        requestCallScreeningRole()
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -67,9 +54,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Called when the activity comes to the foreground.
-     */
     override fun onResume() {
         super.onResume()
         init()
@@ -89,9 +73,6 @@ class MainActivity : AppCompatActivity() {
         return sharedPreferences.getStringSet(SpamUtils.BLOCK_NUMBERS_KEY, emptySet()) ?: emptySet()
     }
 
-    /**
-     * Sets up the window insets to ensure proper padding for system bars.
-     */
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -100,33 +81,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Sets up the ActivityResultLauncher for handling the result of requesting the call screening role.
-     */
     private fun setupIntentLauncher() {
         intentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
-                    showToast(this, "Success requesting ROLE_CALL_SCREENING!")
+                    showToast(this, getString(R.string.success_call_screening_role))
                 } else {
-                    showToast(this, "Failed requesting ROLE_CALL_SCREENING")
+                    showToast(this, getString(R.string.failed_call_screening_role))
                 }
             }
     }
 
-    /**
-     * Shows a toast message.
-     * @param context Context for accessing resources.
-     * @param message The message to display in the toast.
-     * @param duration The length of time to show the toast. Default is Toast.LENGTH_SHORT.
-     */
     private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(context, message, duration).show()
     }
 
-    /**
-     * Checks and requests the necessary permissions.
-     */
     private fun checkPermissionsAndRequest() {
         val permissions = mutableListOf(
             Manifest.permission.READ_CALL_LOG,
@@ -145,30 +114,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Shows a dialog to the user when permissions are required but not granted, and requests the missing permissions.
+     * If the dialog is already visible, it will not be shown again.
+     *
+     * @param missingPermissions a list of permissions that are missing.
+     */
+
     private fun showPermissionToastAndRequest(missingPermissions: List<String>) {
         val permissionNames = missingPermissions.map { "- " + getPermissionName(it) }
-        val message =
-            "Los siguientes permisos son necesarios para que la aplicación funcione correctamente:\n\n${
-                permissionNames.joinToString("\n")
-            }\n\nPor favor, ve a los ajustes del sistema y otorga los permisos manualmente."
-        AlertDialog.Builder(this)
-            .setTitle("Permisos requeridos")
+        val message = getString(R.string.permissions_required_message, permissionNames.joinToString("\n"))
+
+        if (permissionDeniedDialog?.isShowing == true) {
+            return
+        }
+
+        permissionDeniedDialog = AlertDialog.Builder(this)
+            .setTitle(R.string.permissions_required_title)
             .setMessage(message)
-            .setPositiveButton("Ir a ajustes") { _, _ ->
+            .setPositiveButton(R.string.go_to_settings) { _, _ ->
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 intent.data = Uri.fromParts("package", packageName, null)
                 startActivity(intent)
             }
-            .show()
+            .setOnDismissListener {
+                permissionDeniedDialog = null
+            }
+            .create()
+        permissionDeniedDialog?.show()
     }
 
     private fun getPermissionName(permission: String): String {
         return when (permission) {
-            Manifest.permission.READ_CALL_LOG -> "Acceso al registro de llamadas"
-            Manifest.permission.READ_PHONE_STATE -> "Acceso al estado del teléfono"
-            Manifest.permission.READ_CONTACTS -> "Acceso a los contactos"
-            Manifest.permission.ANSWER_PHONE_CALLS -> "Responder llamadas telefónicas"
-            Manifest.permission.POST_NOTIFICATIONS -> "Notificaciones"
+            Manifest.permission.READ_CALL_LOG -> getString(R.string.permission_read_call_log)
+            Manifest.permission.READ_PHONE_STATE -> getString(R.string.permission_read_phone_state)
+            Manifest.permission.READ_CONTACTS -> getString(R.string.permission_read_contacts)
+            Manifest.permission.ANSWER_PHONE_CALLS -> getString(R.string.permission_answer_phone_calls)
+            Manifest.permission.POST_NOTIFICATIONS -> getString(R.string.permission_post_notifications)
             else -> permission
         }
     }
@@ -176,15 +158,17 @@ class MainActivity : AppCompatActivity() {
     /**
      * Requests the call screening role.
      */
-    @RequiresApi(Build.VERSION_CODES.Q)
     private fun requestCallScreeningRole() {
-        val telecomManager = ContextCompat.getSystemService(this, TelecomManager::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestRoleForQAndAbove()
+        } else {
+            val telecomManager = ContextCompat.getSystemService(this, TelecomManager::class.java)
 
-        if (telecomManager == null) {
-            showToast(this, getString(R.string.telecom_manager_unavailable))
-            return
+            if (telecomManager == null) {
+                showToast(this, getString(R.string.telecom_manager_unavailable))
+                return
+            }
         }
-        requestRoleForQAndAbove()
     }
 
     /**
@@ -199,20 +183,4 @@ class MainActivity : AppCompatActivity() {
             showToast(this, getString(R.string.call_screening_role_prompt), Toast.LENGTH_LONG)
         }
     }
-
-    /*
-    /**
-     * Requests the call screening role for Android P (API level 28) and below.
-     * @param telecomManager The TelecomManager for managing telecom services.
-     */
-    private fun requestRoleForBelowQ(telecomManager: TelecomManager) {
-        if (telecomManager.defaultDialerPackage == packageName) {
-            showToast(this, getString(R.string.call_screening_role_already_granted))
-        } else {
-            val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
-            startActivity(intent)
-            showToast(this, getString(R.string.call_screening_role_prompt), Toast.LENGTH_LONG)
-        }
-    }
-     */
 }

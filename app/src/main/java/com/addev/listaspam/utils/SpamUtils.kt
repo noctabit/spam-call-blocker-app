@@ -221,7 +221,7 @@ class SpamUtils {
         callback: (isSpam: Boolean) -> Unit
     ) {
         Handler(Looper.getMainLooper()).post {
-            showToast(context, "Incoming call is not spam", Toast.LENGTH_LONG)
+            showToast(context, context.getString(R.string.incoming_call_not_spam), Toast.LENGTH_LONG)
         }
         removeSpamNumber(context, number)
         callback(false)
@@ -278,10 +278,10 @@ class SpamUtils {
      */
     private fun sendNotification(context: Context, number: String) {
         createNotificationChannel(context)
-        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+        val notification = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("Spam Number Blocked")
-            .setContentText("Blocked spam number: $number")
+            .setContentTitle(context.getString(R.string.notification_title_spam_blocked))
+            .setContentText(context.getString(R.string.notification_text_spam_blocked, number))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
@@ -301,8 +301,8 @@ class SpamUtils {
      * @param context Context for creating the notification channel.
      */
     private fun createNotificationChannel(context: Context) {
-        val name = "Spam Blocker Channel"
-        val descriptionText = "Notifications for blocked spam numbers"
+        val name = context.getString(R.string.notification_channel_id)
+        val descriptionText = context.getString(R.string.notification_channel_id)
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance).apply {
             description = descriptionText
