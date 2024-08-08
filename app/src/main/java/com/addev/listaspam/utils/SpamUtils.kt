@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.ContactsContract
@@ -16,7 +15,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.addev.listaspam.R
-import com.addev.listaspam.model.SpamData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,6 +54,10 @@ class SpamUtils {
      */
     fun checkSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
+            if (!isBlockingEnabled(context)) {
+                return@launch
+            }
+
             if (isNumberBlockedLocally(context, number)) {
                 handleSpamNumber(context, number, callback)
                 return@launch
@@ -65,13 +67,24 @@ class SpamUtils {
                 if (isNumberInAgenda(context, number)) {
                     handleNonSpamNumber(context, number, callback)
                     return@launch
+                } else if (shouldBlockNonContacts(context)) {
+                    handleSpamNumber(context, number, callback)
                 }
+
+
             }
 
-            val spamCheckers = listOf(
-                ::checkListaSpam,
-                ::checkResponderono,
-            )
+            // List to hold the functions that should be used
+            val spamCheckers = mutableListOf<suspend (String) -> Boolean>()
+
+            // Add functions based on preferences
+            if (shouldFilterWithListaSpam(context)) {
+                spamCheckers.add(::checkListaSpam)
+            }
+
+            if (shouldFilterWithResponderONo(context)) {
+                spamCheckers.add(::checkResponderono)
+            }
 
             val isSpam = spamCheckers.any { checker ->
                 runCatching { checker(number) }.getOrDefault(false)
@@ -271,38 +284,32 @@ class SpamUtils {
         }
     }
 
-    /**
-     * Sends a notification indicating that a spam number has been blocked.
-     * @param context Context for sending the notification.
-     * @param number Phone number that was blocked.
-     */
     private fun sendNotification(context: Context, number: String) {
         createNotificationChannel(context)
-        val notification = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
+
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED ||
+            !shouldShowNotification(context)
+        ) {
+            // Aquí deberías solicitar el permiso si no está concedido.
+            return
+        }
+
+        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(context.getString(R.string.notification_title_spam_blocked))
             .setContentText(context.getString(R.string.notification_text_spam_blocked, number))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
     }
 
-    /**
-     * Creates a notification channel for spam notifications.
-     * @param context Context for creating the notification channel.
-     */
     private fun createNotificationChannel(context: Context) {
-        val name = context.getString(R.string.notification_channel_id)
-        val descriptionText = context.getString(R.string.notification_channel_id)
+        val name = context.getString(R.string.notification_channel_name)
+        val descriptionText = context.getString(R.string.notification_channel_name)
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance).apply {
             description = descriptionText
@@ -312,4 +319,5 @@ class SpamUtils {
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
 }

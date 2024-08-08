@@ -70,6 +70,7 @@ class MyCallScreeningService : CallScreeningService() {
             details, CallResponse.Builder()
                 .setDisallowCall(true)
                 .setRejectCall(true)
+                .setSkipNotification(true)
                 .build()
         )
     }

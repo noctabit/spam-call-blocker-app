@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Activar/desactivar bloqueo general -->
+    <CheckBoxPreference
+        android:key="pref_enable_blocking"
+        android:title="Activar bloqueo general"
+        android:summary="Habilita o deshabilita el sistema de bloqueo de llamadas en toda la aplicación"
+        android:defaultValue="true" />
+
+    <!-- Filtrar con la base de datos de listaspam.com -->
+    <CheckBoxPreference
+        android:key="pref_filter_lista_spam"
+        android:title="Filtrar con listaspam.com"
+        android:summary="Bloquea llamadas de números de spam incluidos en la base de datos de listaspam.com"
+        android:defaultValue="true" />
+
+    <!-- Filtrar con la base de datos de ResponderONo.es -->
+    <CheckBoxPreference
+        android:key="pref_filter_responder_o_no"
+        android:title="Filtrar con responderono.es"
+        android:summary="Bloquear llamadas de números de spam incluidos en la base de datos de responderono.es"
+        android:defaultValue="true" />
+
+    <!-- Bloquear todos los números que no sean contactos -->
+    <CheckBoxPreference
+        android:key="pref_block_non_contacts"
+        android:title="Bloquear números desconocidos"
+        android:summary="Bloquea todas las llamadas de números que no están en tu lista de contactos"
+        android:defaultValue="false" />
+
+    <!-- Mostrar notificación al bloquear número -->
+    <CheckBoxPreference
+        android:key="pref_show_notification"
+        android:title="Mostrar notificación al bloquear"
+        android:summary="Recibe una notificación cuando un número es bloqueado"
+        android:defaultValue="true" />
+
+</PreferenceScreen>

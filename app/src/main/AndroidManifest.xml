@@ -4,20 +4,12 @@
 
     <uses-feature
         android:name="android.hardware.telephony"
-        android:required="false" />
-
-    <!-- for call -->
+        android:required="false" /> <!-- for call -->
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
-
-    <!-- for contacts -->
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-    <!-- for internet access -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- for posting notifications -->
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" /> <!-- for contacts -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- for internet access -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- for posting notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -29,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ListaSpam"
         tools:targetApi="28">
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

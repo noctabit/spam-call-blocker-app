@@ -16,7 +16,7 @@
     <string name="duration_label">Duración: %1$d segundos</string>
     <string name="report_url_template">http://example.com/reportar?number=%1$s</string>
     <string name="incoming_call_not_spam">La llamada entrante no es spam</string>
-    <string name="notification_channel_id">ListaSpam</string>
+    <string name="notification_channel_name">ListaSpam</string>
     <string name="notification_title_spam_blocked">Número de spam bloqueado</string>
     <string name="notification_text_spam_blocked">Número de spam bloqueado: %1$s</string>
     <string name="number_copied_to_clipboard">Número copiado al portapapeles</string>
