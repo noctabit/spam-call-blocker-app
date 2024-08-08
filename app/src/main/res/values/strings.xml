@@ -21,4 +21,22 @@
     <string name="notification_text_spam_blocked">Blocked spam number: %1$s</string>
     <string name="number_copied_to_clipboard">Phone number copied to clipboard</string>
 
+    <!-- Preferences -->
+
+    <string name="action_settings">Settings</string>
+
+    <string name="pref_enable_blocking_title">Enable General Blocking</string>
+    <string name="pref_enable_blocking_summary">Enables or disables the call blocking system across the entire application</string>
+
+    <string name="pref_filter_lista_spam_title">Filter with listaspam.com</string>
+    <string name="pref_filter_lista_spam_summary">Blocks calls from spam numbers included in the listaspam.com database</string>
+
+    <string name="pref_filter_responder_o_no_title">Filter with responderono.es</string>
+    <string name="pref_filter_responder_o_no_summary">Blocks calls from spam numbers included in the responderono.es database</string>
+
+    <string name="pref_block_non_contacts_title">Block Unknown Numbers</string>
+    <string name="pref_block_non_contacts_summary">Blocks all calls from numbers not in your contact list</string>
+
+    <string name="pref_show_notification_title">Show Notification on call blocking</string>
+    <string name="pref_show_notification_summary">Receive a notification when a call is blocked</string>
 </resources>

@@ -4,36 +4,36 @@
     <!-- Activar/desactivar bloqueo general -->
     <CheckBoxPreference
         android:key="pref_enable_blocking"
-        android:title="Activar bloqueo general"
-        android:summary="Habilita o deshabilita el sistema de bloqueo de llamadas en toda la aplicación"
+        android:title="@string/pref_enable_blocking_title"
+        android:summary="@string/pref_enable_blocking_summary"
         android:defaultValue="true" />
 
     <!-- Filtrar con la base de datos de listaspam.com -->
     <CheckBoxPreference
         android:key="pref_filter_lista_spam"
-        android:title="Filtrar con listaspam.com"
-        android:summary="Bloquea llamadas de números de spam incluidos en la base de datos de listaspam.com"
+        android:title="@string/pref_filter_lista_spam_title"
+        android:summary="@string/pref_filter_lista_spam_summary"
         android:defaultValue="true" />
 
     <!-- Filtrar con la base de datos de ResponderONo.es -->
     <CheckBoxPreference
         android:key="pref_filter_responder_o_no"
-        android:title="Filtrar con responderono.es"
-        android:summary="Bloquear llamadas de números de spam incluidos en la base de datos de responderono.es"
+        android:title="@string/pref_filter_responder_o_no_title"
+        android:summary="@string/pref_filter_responder_o_no_summary"
         android:defaultValue="true" />
 
     <!-- Bloquear todos los números que no sean contactos -->
     <CheckBoxPreference
         android:key="pref_block_non_contacts"
-        android:title="Bloquear números desconocidos"
-        android:summary="Bloquea todas las llamadas de números que no están en tu lista de contactos"
+        android:title="@string/pref_block_non_contacts_title"
+        android:summary="@string/pref_block_non_contacts_summary"
         android:defaultValue="false" />
 
     <!-- Mostrar notificación al bloquear número -->
     <CheckBoxPreference
         android:key="pref_show_notification"
-        android:title="Mostrar notificación al bloquear"
-        android:summary="Recibe una notificación cuando un número es bloqueado"
+        android:title="@string/pref_show_notification_title"
+        android:summary="@string/pref_show_notification_summary"
         android:defaultValue="true" />
 
 </PreferenceScreen>

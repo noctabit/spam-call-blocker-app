@@ -20,4 +20,23 @@
     <string name="notification_title_spam_blocked">Número de spam bloqueado</string>
     <string name="notification_text_spam_blocked">Número de spam bloqueado: %1$s</string>
     <string name="number_copied_to_clipboard">Número copiado al portapapeles</string>
+
+    <!-- Preferences -->
+
+    <string name="action_settings">Ajustes</string>
+
+    <string name="pref_enable_blocking_title">Activar bloqueo general</string>
+    <string name="pref_enable_blocking_summary">Habilita o deshabilita el sistema de bloqueo de llamadas en toda la aplicación</string>
+
+    <string name="pref_filter_lista_spam_title">Filtrar con listaspam.com</string>
+    <string name="pref_filter_lista_spam_summary">Bloquea llamadas de números de spam incluidos en la base de datos de listaspam.com</string>
+
+    <string name="pref_filter_responder_o_no_title">Filtrar con responderono.es</string>
+    <string name="pref_filter_responder_o_no_summary">Bloquear llamadas de números de spam incluidos en la base de datos de responderono.es</string>
+
+    <string name="pref_block_non_contacts_title">Bloquear números desconocidos</string>
+    <string name="pref_block_non_contacts_summary">Bloquea todas las llamadas de números que no están en tu lista de contactos</string>
+
+    <string name="pref_show_notification_title">Mostrar notificación al bloquear llamadas</string>
+    <string name="pref_show_notification_summary">Recibe una notificación cuando una llamada es bloqueada</string>
 </resources>
