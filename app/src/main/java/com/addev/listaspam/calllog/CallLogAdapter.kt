@@ -21,7 +21,7 @@ class CallLogAdapter(
     private val blockedNumbers: Set<String>
 ) : RecyclerView.Adapter<CallLogAdapter.CallLogViewHolder>() {
 
-    val formatter = SimpleDateFormat("dd/MM/yyyy")
+    val formatter = SimpleDateFormat("dd/MM/yyyy HH:ss")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CallLogViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_call_log, parent, false)

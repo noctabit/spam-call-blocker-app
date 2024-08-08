@@ -1,12 +1,16 @@
 package com.addev.listaspam
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.role.RoleManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.telecom.TelecomManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -31,13 +35,7 @@ import com.addev.listaspam.utils.SpamUtils
  */
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        private const val REQUEST_PERMISSION_PHONE_STATE = 1
-    }
-
     private lateinit var intentLauncher: ActivityResultLauncher<Intent>
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: CallLogAdapter
 
     /**
      * Called when the activity is starting.
@@ -47,18 +45,37 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupWindowInsets()
-
         setupIntentLauncher()
+    }
+
+    /**
+     * Initializes the activity by checking permissions, requesting the call screening role, and refreshing the call logs if the necessary permissions are granted.
+     */
+    private fun init() {
         checkPermissionsAndRequest()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             requestCallScreeningRole()
         }
 
-        refreshCallLogs()
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CALL_LOG
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            refreshCallLogs()
+        }
     }
 
-    fun refreshCallLogs() {
+    /**
+     * Called when the activity comes to the foreground.
+     */
+    override fun onResume() {
+        super.onResume()
+        init()
+    }
+
+    private fun refreshCallLogs() {
         val blockedNumbers = getBlockedNumbers()
         val callLogs = getCallLogs(this)
 
@@ -112,28 +129,47 @@ class MainActivity : AppCompatActivity() {
      */
     private fun checkPermissionsAndRequest() {
         val permissions = mutableListOf(
-            android.Manifest.permission.READ_CALL_LOG,
-            android.Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.READ_CALL_LOG,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.ANSWER_PHONE_CALLS,
         )
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            permissions.add(android.Manifest.permission.ANSWER_PHONE_CALLS)
-        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissions.add(android.Manifest.permission.POST_NOTIFICATIONS)
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
         }
-
         val missingPermissions = permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
-
         if (missingPermissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                this,
-                missingPermissions.toTypedArray(),
-                REQUEST_PERMISSION_PHONE_STATE
-            )
+            showPermissionToastAndRequest(missingPermissions)
+        }
+    }
+
+    private fun showPermissionToastAndRequest(missingPermissions: List<String>) {
+        val permissionNames = missingPermissions.map { "- " + getPermissionName(it) }
+        val message =
+            "Los siguientes permisos son necesarios para que la aplicación funcione correctamente:\n\n${
+                permissionNames.joinToString("\n")
+            }\n\nPor favor, ve a los ajustes del sistema y otorga los permisos manualmente."
+        AlertDialog.Builder(this)
+            .setTitle("Permisos requeridos")
+            .setMessage(message)
+            .setPositiveButton("Ir a ajustes") { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.fromParts("package", packageName, null)
+                startActivity(intent)
+            }
+            .show()
+    }
+
+    private fun getPermissionName(permission: String): String {
+        return when (permission) {
+            Manifest.permission.READ_CALL_LOG -> "Acceso al registro de llamadas"
+            Manifest.permission.READ_PHONE_STATE -> "Acceso al estado del teléfono"
+            Manifest.permission.READ_CONTACTS -> "Acceso a los contactos"
+            Manifest.permission.ANSWER_PHONE_CALLS -> "Responder llamadas telefónicas"
+            Manifest.permission.POST_NOTIFICATIONS -> "Notificaciones"
+            else -> permission
         }
     }
 

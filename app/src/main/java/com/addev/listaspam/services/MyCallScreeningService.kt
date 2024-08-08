@@ -18,11 +18,6 @@ class MyCallScreeningService : CallScreeningService() {
 
     private val spamUtils = SpamUtils()
 
-    companion object {
-        private const val SPAM_PREFS = "SPAM_PREFS"
-        private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
-    }
-
     /**
      * Called when an incoming call is being screened.
      * @param details Details of the incoming call.

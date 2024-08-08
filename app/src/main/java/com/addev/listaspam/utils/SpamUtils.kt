@@ -5,13 +5,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.provider.ContactsContract
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.addev.listaspam.R
 import com.addev.listaspam.model.SpamData
 import kotlinx.coroutines.CoroutineScope
@@ -58,10 +61,16 @@ class SpamUtils {
                 return@launch
             }
 
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                if (isNumberInAgenda(context, number)) {
+                    handleNonSpamNumber(context, number, callback)
+                    return@launch
+                }
+            }
+
             val spamCheckers = listOf(
                 ::checkListaSpam,
                 ::checkResponderono,
-                // ::checkCleverDialer
             )
 
             val isSpam = spamCheckers.any { checker ->
@@ -73,6 +82,48 @@ class SpamUtils {
             } else {
                 handleNonSpamNumber(context, number, callback)
             }
+        }
+    }
+
+    /**
+     * Normalizes a phone number by removing all non-digit characters.
+     *
+     * @param number The phone number to normalize.
+     * @return The normalized phone number.
+     */
+    private fun normalizePhoneNumber(number: String): String {
+        return number.replace("\\D".toRegex(), "")
+    }
+
+    /**
+     * Checks if the given number exists in the user's contact list.
+     * Ignores spaces and considers different number prefixes for comparison.
+     *
+     * @param context The context of the caller.
+     * @param number The phone number to check.
+     * @return True if the number is in the user's contact list, false otherwise.
+     */
+    private fun isNumberInAgenda(context: Context, number: String): Boolean {
+        val contentResolver = context.contentResolver
+        val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        val projection = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
+        val normalizedNumber = normalizePhoneNumber(number)
+
+        var cursor: Cursor? = null
+        return try {
+            cursor = contentResolver.query(uri, projection, null, null, null)
+            cursor?.use {
+                val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                while (cursor.moveToNext()) {
+                    val contactNumber = normalizePhoneNumber(cursor.getString(numberIndex))
+                    if (normalizedNumber == contactNumber || normalizedNumber.endsWith(contactNumber) || contactNumber.endsWith(normalizedNumber)) {
+                        return true
+                    }
+                }
+            }
+            false
+        } finally {
+            cursor?.close()
         }
     }
 
@@ -93,20 +144,6 @@ class SpamUtils {
     }
 
     /**
-     * Checks if a number is marked as spam on CleverDialer.
-     *
-     * @param number The phone number to check.
-     * @return True if the number is marked as spam, false otherwise.
-     */
-    private suspend fun checkCleverDialer(number: String): Boolean {
-        val url = CLEVER_DIALER_URL_TEMPLATE.format(number)
-        return checkUrlForSpam(
-            url,
-            ".front-stars.stars-1 #star-full-black, .front-stars.stars-2 #star-full-black, .front-stars.stars-3 #star-full-black"
-        )
-    }
-
-    /**
      * Checks if a number is marked as spam on ListaSpam.
      *
      * @param number The phone number to check.
@@ -116,7 +153,7 @@ class SpamUtils {
         val url = LISTA_SPAM_URL_TEMPLATE.format(number)
         return checkUrlForSpam(
             url,
-            ".data_top .phone_rating.result-3, .data_top .phone_rating.result-2, .data_top .phone_rating.result-1, alert-icon-big"
+            ".data_top .phone_rating.result-3, .data_top .phone_rating.result-2, .data_top .phone_rating.result-1, .alert-icon-big"
         )
     }
 
