@@ -1,10 +1,13 @@
 package com.addev.listaspam.adapter
 
+import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.ContactsContract
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -64,23 +67,22 @@ class CallLogAdapter(
 
         fun bind(callLog: CallLogEntry, isBlocked: Boolean, isWhitelisted: Boolean = false) {
             val number = callLog.number ?: ""
+            val contactName = getContactName(context, number)
             val textToShow = if (isBlocked) {
-                context.getString(R.string.blocked_text_format, number)
+                context.getString(R.string.blocked_text_format, contactName ?: number)
             } else if (isWhitelisted) {
-                context.getString(R.string.whitelisted_text_format, number)
+                context.getString(R.string.whitelisted_text_format, contactName ?: number)
             } else {
-                number
+                contactName ?: number
             }
             numberTextView.text = textToShow
             dateTextView.text = formatter.format(callLog.date)
             durationTextView.text = context.getString(R.string.duration_label, callLog.duration)
 
-            if (isBlocked) {
-                numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
-            } else if (isWhitelisted) {
-                numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark))
-            } else {
-                numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+            when {
+                isBlocked -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+                isWhitelisted -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark))
+                else -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
             }
 
             overflowMenuButton.setOnClickListener {
@@ -149,6 +151,22 @@ class CallLogAdapter(
                 whitelistMenuItem.setTitle(R.string.add_to_whitelist)
             }
         }
+    }
+
+    private fun getContactName(context: Context, phoneNumber: String): String? {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            val contentResolver = context.contentResolver
+            val uri = ContactsContract.PhoneLookup.CONTENT_FILTER_URI.buildUpon().appendPath(phoneNumber).build()
+            val projection = arrayOf(ContactsContract.PhoneLookup.DISPLAY_NAME)
+
+            contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME))
+                }
+            }
+        }
+
+        return null
     }
 
     private fun clipboardAction(number: String) {
