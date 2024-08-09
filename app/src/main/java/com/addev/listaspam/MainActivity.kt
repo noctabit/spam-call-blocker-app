@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
     private var permissionDeniedDialog: AlertDialog? = null
     private var callLogAdapter: CallLogAdapter? =null
     private var recyclerView: RecyclerView? = null
+    private val REQUEST_CODE_PERMISSIONS = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,9 +157,21 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         }
         val missingPermissions = permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.shouldShowRequestPermissionRationale(this, it)
+        }
+        val deniedPermissions = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+                    && !ActivityCompat.shouldShowRequestPermissionRationale(this, it)
         }
         if (missingPermissions.isNotEmpty()) {
-            showPermissionToastAndRequest(missingPermissions)
+            ActivityCompat.requestPermissions(
+                this,
+                missingPermissions.toTypedArray(),
+                REQUEST_CODE_PERMISSIONS
+            )
+        }
+        if (deniedPermissions.isNotEmpty()) {
+            showPermissionToastAndRequest(deniedPermissions)
         }
     }
 
@@ -177,6 +191,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         }
 
         permissionDeniedDialog = AlertDialog.Builder(this)
+            .setCancelable(false)
             .setTitle(R.string.permissions_required_title)
             .setMessage(message)
             .setPositiveButton(R.string.go_to_settings) { _, _ ->

@@ -41,7 +41,7 @@
     <string name="pref_show_notification_summary">Receive a notification when a call is blocked</string>
 
     <!-- item_actions -->
-    <string name="report_in_listaspam_com">Report in listaspam.com</string>
+    <string name="report_in_listaspam_com">Report in ListaSpam</string>
     <string name="search_in_google">Search in Google</string>
     <string name="block">Block</string>
     <string name="add_to_whitelist">Add to whitelist</string>
