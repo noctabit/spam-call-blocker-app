@@ -27,6 +27,7 @@ class SettingsActivity : AppCompatActivity() {
     private val importFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         uri?.let {
             if (importAllSharedPreferences(it)) {
+                updateSettingsContainer()
                 Toast.makeText(this, "Preferencias importadas con éxito", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Error al importar preferencias", Toast.LENGTH_SHORT).show()
@@ -38,10 +39,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.settings_container, SettingsFragment())
-            .commit()
+        updateSettingsContainer()
 
         val exportButton: Button = findViewById(R.id.btn_export)
         val importButton: Button = findViewById(R.id.btn_import)
@@ -53,6 +51,13 @@ class SettingsActivity : AppCompatActivity() {
         importButton.setOnClickListener {
             importFileLauncher.launch(arrayOf("application/json"))
         }
+    }
+
+    private fun updateSettingsContainer() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settings_container, SettingsFragment())
+            .commit()
     }
 
     // Fragmento para cargar las preferencias
