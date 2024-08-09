@@ -13,6 +13,7 @@
     <string name="permission_answer_phone_calls">Answer Phone Calls</string>
     <string name="permission_post_notifications">Post Notifications</string>
     <string name="blocked_text_format">%1$s (blocked)</string>
+    <string name="whitelisted_text_format">%1$s (whitelist)</string>
     <string name="duration_label">Duration: %1$d seconds</string>
     <string name="report_url_template">http://example.com/report?number=%1$s</string>
     <string name="incoming_call_not_spam">Incoming call is not spam</string>
@@ -22,7 +23,6 @@
     <string name="number_copied_to_clipboard">Phone number copied to clipboard</string>
 
     <!-- Preferences -->
-
     <string name="action_settings">Settings</string>
 
     <string name="pref_enable_blocking_title">Enable General Blocking</string>
@@ -39,4 +39,12 @@
 
     <string name="pref_show_notification_title">Show Notification on call blocking</string>
     <string name="pref_show_notification_summary">Receive a notification when a call is blocked</string>
+
+    <!-- item_actions -->
+    <string name="report_in_listaspam_com">Report in listaspam.com</string>
+    <string name="search_in_google">Search in Google</string>
+    <string name="block">Block</string>
+    <string name="add_to_whitelist">Add to whitelist</string>
+    <string name="unblock">Unblock</string>
+    <string name="remove_from_whitelist">Remove from whitelist</string>
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/search_action"
+        android:title="@string/search_in_google" />
+    <item
+        android:id="@+id/report_action"
+        android:title="@string/report_in_listaspam_com" />
+    <item
+        android:id="@+id/block_action"
+        android:title="@string/block" />
+    <item
+        android:id="@+id/whitelist_action"
+        android:title="@string/add_to_whitelist" />
+
+</menu>

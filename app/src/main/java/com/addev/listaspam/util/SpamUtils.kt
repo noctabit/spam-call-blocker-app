@@ -1,8 +1,6 @@
-package com.addev.listaspam.utils
+package com.addev.listaspam.util
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -10,9 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.ContactsContract
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.addev.listaspam.R
 import kotlinx.coroutines.CoroutineScope
@@ -30,13 +25,7 @@ import java.io.IOException
 class SpamUtils {
 
     companion object {
-        const val SPAM_PREFS = "SPAM_PREFS"
-        const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
-        private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL"
-        private const val NOTIFICATION_ID = 1
-
         // URLs
-        const val REPORT_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s#denuncia"
         const val LISTA_SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
         private const val RESPONDERONO_URL_TEMPLATE =
             "https://www.responderono.es/numero-de-telefono/%s"
@@ -58,20 +47,21 @@ class SpamUtils {
                 return@launch
             }
 
-            if (isNumberBlockedLocally(context, number)) {
+            if (isNumberWhitelisted(context, number)) {
+                return@launch
+            }
+
+            if (isNumberBlocked(context, number)) {
                 handleSpamNumber(context, number, callback)
                 return@launch
             }
 
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 if (isNumberInAgenda(context, number)) {
-                    handleNonSpamNumber(context, number, callback)
                     return@launch
                 } else if (shouldBlockNonContacts(context)) {
                     handleSpamNumber(context, number, callback)
                 }
-
-
             }
 
             // List to hold the functions that should be used
@@ -138,22 +128,6 @@ class SpamUtils {
         } finally {
             cursor?.close()
         }
-    }
-
-    /**
-     * Checks if a number is blocked locally in shared preferences.
-     *
-     * @param context The application context.
-     * @param number The phone number to check.
-     * @return True if the number is blocked locally, false otherwise.
-     */
-    private fun isNumberBlockedLocally(context: Context, number: String): Boolean {
-        val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-        val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, emptySet())
-        if (blockedNumbers != null) {
-            return blockedNumbers.contains(number)
-        }
-        return false
     }
 
     /**
@@ -241,38 +215,6 @@ class SpamUtils {
     }
 
     /**
-     * Saves a phone number as spam in SharedPreferences.
-     * @param context Context for accessing resources.
-     * @param number Phone number to save as spam.
-     */
-    private fun saveSpamNumber(context: Context, number: String) {
-        val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-        val blockedNumbers =
-            sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
-        blockedNumbers?.add(number)
-        with(sharedPreferences.edit()) {
-            putStringSet(BLOCK_NUMBERS_KEY, blockedNumbers)
-            apply()
-        }
-    }
-
-    /**
-     * Removes a phone number from spam list in SharedPreferences.
-     * @param context Context for accessing resources.
-     * @param number Phone number to remove from spam list.
-     */
-    private fun removeSpamNumber(context: Context, number: String) {
-        val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-        val blockedNumbers =
-            sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
-        blockedNumbers?.remove(number)
-        with(sharedPreferences.edit()) {
-            putStringSet(BLOCK_NUMBERS_KEY, blockedNumbers)
-            apply()
-        }
-    }
-
-    /**
      * Displays a toast message.
      * @param context Context for displaying the toast.
      * @param message Message to display.
@@ -282,42 +224,6 @@ class SpamUtils {
         Handler(Looper.getMainLooper()).post {
             Toast.makeText(context, message, duration).show()
         }
-    }
-
-    private fun sendNotification(context: Context, number: String) {
-        createNotificationChannel(context)
-
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED ||
-            !shouldShowNotification(context)
-        ) {
-            // Aquí deberías solicitar el permiso si no está concedido.
-            return
-        }
-
-        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(context.getString(R.string.notification_title_spam_blocked))
-            .setContentText(context.getString(R.string.notification_text_spam_blocked, number))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
-
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
-    }
-
-    private fun createNotificationChannel(context: Context) {
-        val name = context.getString(R.string.notification_channel_name)
-        val descriptionText = context.getString(R.string.notification_channel_name)
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance).apply {
-            description = descriptionText
-        }
-
-        val notificationManager: NotificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
     }
 
 }

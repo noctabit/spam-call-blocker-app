@@ -1,4 +1,4 @@
-package com.addev.listaspam.model
+package com.addev.listaspam.fragment
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat

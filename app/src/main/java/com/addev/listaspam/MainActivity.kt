@@ -19,27 +19,35 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.addev.listaspam.calllog.CallLogAdapter
-import com.addev.listaspam.calllog.getCallLogs
-import com.addev.listaspam.utils.SpamUtils
+import com.addev.listaspam.adapter.CallLogAdapter
+import com.addev.listaspam.util.BLOCK_NUMBERS_KEY
+import com.addev.listaspam.util.SPAM_PREFS
+import com.addev.listaspam.util.getCallLogs
+import com.addev.listaspam.util.SpamUtils
+import com.addev.listaspam.util.WHITELIST_NUMBERS_KEY
+import com.addev.listaspam.util.getBlockedNumbers
+import com.addev.listaspam.util.getWhitelistNumbers
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
     private lateinit var intentLauncher: ActivityResultLauncher<Intent>
     private var permissionDeniedDialog: AlertDialog? = null
-
+    private var callLogAdapter: CallLogAdapter? =null
+    private var recyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupWindowInsets()
         setupIntentLauncher()
+
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView?.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -56,6 +64,16 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onItemChanged(number: String) {
+        val positions = mutableListOf<Int>()
+        callLogAdapter?.callLogs?.forEachIndexed { index, callLog ->
+            if (callLog.number == number) {
+                positions.add(index)
+            }
+        }
+        refreshCallLogs(positions)
     }
 
     private fun init() {
@@ -77,18 +95,29 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
-    private fun refreshCallLogs() {
-        val blockedNumbers = getBlockedNumbers()
+    private fun refreshCallLogs(positions: List<Int> = listOf()) {
+        val blockedNumbers = getBlockedNumbers(this)
+        val whitelistNumbers = getWhitelistNumbers(this)
+
         val callLogs = getCallLogs(this)
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = CallLogAdapter(this, callLogs, blockedNumbers)
-    }
+        if (callLogAdapter == null) {
+            callLogAdapter = CallLogAdapter(this, callLogs, blockedNumbers, whitelistNumbers)
+            recyclerView?.adapter = callLogAdapter
+            callLogAdapter?.setOnItemChangedListener(this)
+        } else {
+            callLogAdapter?.callLogs = callLogs
+            callLogAdapter?.blockedNumbers = blockedNumbers
+            callLogAdapter?.whitelistNumbers = whitelistNumbers
+        }
 
-    private fun getBlockedNumbers(): Set<String> {
-        val sharedPreferences = getSharedPreferences(SpamUtils.SPAM_PREFS, Context.MODE_PRIVATE)
-        return sharedPreferences.getStringSet(SpamUtils.BLOCK_NUMBERS_KEY, emptySet()) ?: emptySet()
+        if (positions.isNotEmpty()) {
+            positions.forEach { position ->
+                callLogAdapter?.notifyItemChanged(position)
+            }
+        } else {
+            callLogAdapter?.notifyDataSetChanged()
+        }
     }
 
     private fun setupWindowInsets() {

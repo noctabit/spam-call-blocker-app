@@ -1,4 +1,4 @@
-package com.addev.listaspam.services
+package com.addev.listaspam.service
 
 import android.net.Uri
 import android.os.Build
@@ -7,7 +7,7 @@ import android.telecom.CallScreeningService
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
-import com.addev.listaspam.utils.SpamUtils
+import com.addev.listaspam.util.SpamUtils
 
 /**
  * Call screening service to identify and block spam calls.

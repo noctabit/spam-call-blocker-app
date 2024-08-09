@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp">
@@ -9,9 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/reportButton"
-        android:layout_alignBaseline="@id/reportButton"/>
+        android:textColor="?attr/colorPrimary"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/dateTextView"
@@ -20,7 +20,7 @@
         android:textSize="14sp"
         android:layout_below="@id/numberTextView"
         android:layout_alignParentStart="true"
-        android:layout_alignStart="@id/numberTextView"/>
+        android:layout_alignStart="@id/numberTextView" />
 
     <TextView
         android:id="@+id/durationTextView"
@@ -29,13 +29,15 @@
         android:textSize="14sp"
         android:layout_below="@id/dateTextView"
         android:layout_alignParentStart="true"
-        android:layout_alignStart="@id/numberTextView"/>
+        android:layout_alignStart="@id/numberTextView" />
 
-    <Button
-        android:id="@+id/reportButton"
+    <ImageButton
+        android:id="@+id/overflowMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Report"
+        android:src="@drawable/ic_more_vert"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        app:tint="?attr/colorPrimary" />
 </RelativeLayout>

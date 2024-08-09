@@ -1,5 +1,5 @@
 // CallLogUtils.kt
-package com.addev.listaspam.calllog
+package com.addev.listaspam.util
 
 import android.content.Context
 import android.database.Cursor

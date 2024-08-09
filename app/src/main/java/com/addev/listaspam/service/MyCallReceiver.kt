@@ -1,4 +1,4 @@
-package com.addev.listaspam.services
+package com.addev.listaspam.service
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -8,7 +8,7 @@ import android.os.Build
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
-import com.addev.listaspam.utils.SpamUtils
+import com.addev.listaspam.util.SpamUtils
 
 /**
  * BroadcastReceiver for handling incoming call events and checking for spam numbers.
