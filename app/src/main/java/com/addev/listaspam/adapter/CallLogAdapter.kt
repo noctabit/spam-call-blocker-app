@@ -68,7 +68,7 @@ class CallLogAdapter(
         private val overflowMenuButton = itemView.findViewById<ImageButton>(R.id.overflowMenuButton)
 
         fun bind(callLog: CallLogEntry, isBlocked: Boolean, isWhitelisted: Boolean = false) {
-            val number = callLog.number ?: ""
+            val number = callLog.number ?: "Unknown number"
             val contactName = getContactName(context, number)
             val textToShow = if (isBlocked) {
                 context.getString(R.string.blocked_text_format, contactName ?: number)
@@ -101,6 +101,12 @@ class CallLogAdapter(
                 else -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
             }
 
+            if (number.isNullOrBlank()) {
+                overflowMenuButton.visibility = View.GONE
+                return
+            }
+            
+            overflowMenuButton.visibility = View.VISIBLE
             overflowMenuButton.setOnClickListener {
                 val popupMenu = PopupMenu(itemView.context, overflowMenuButton, Gravity.NO_GRAVITY, android.R.attr.popupMenuStyle, R.style.PopupMenuStyle)
                 popupMenu.inflate(R.menu.item_actions)

@@ -22,7 +22,6 @@ fun sendNotification(context: Context, number: String) {
         ) != PackageManager.PERMISSION_GRANTED ||
         !shouldShowNotification(context)
     ) {
-        // Aquí deberías solicitar el permiso si no está concedido.
         return
     }
 

@@ -14,27 +14,6 @@ import org.json.JSONObject
 import java.io.File
 
 class SettingsActivity : AppCompatActivity() {
-    private val exportFileLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri: Uri? ->
-        uri?.let {
-            if (exportAllSharedPreferences(it)) {
-                Toast.makeText(this, "Preferencias exportadas con éxito", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Error al exportar preferencias", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private val importFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        uri?.let {
-            if (importAllSharedPreferences(it)) {
-                updateSettingsContainer()
-                Toast.makeText(this, "Preferencias importadas con éxito", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Error al importar preferencias", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -64,6 +43,27 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences, rootKey)
+        }
+    }
+
+    private val exportFileLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri: Uri? ->
+        uri?.let {
+            if (exportAllSharedPreferences(it)) {
+                Toast.makeText(this, "Preferencias exportadas con éxito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Error al exportar preferencias", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private val importFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        uri?.let {
+            if (importAllSharedPreferences(it)) {
+                updateSettingsContainer()
+                Toast.makeText(this, "Preferencias importadas con éxito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Error al importar preferencias", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
