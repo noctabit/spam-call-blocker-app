@@ -117,8 +117,6 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
             positions.forEach { position ->
                 callLogAdapter?.notifyItemChanged(position)
             }
-        } else {
-            callLogAdapter?.notifyDataSetChanged()
         }
     }
 
@@ -192,6 +190,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
         permissionDeniedDialog = AlertDialog.Builder(this)
             .setCancelable(false)
+            .setIcon(android.R.drawable.ic_dialog_alert)
             .setTitle(R.string.permissions_required_title)
             .setMessage(message)
             .setPositiveButton(R.string.go_to_settings) { _, _ ->

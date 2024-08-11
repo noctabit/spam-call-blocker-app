@@ -31,6 +31,15 @@
         android:layout_alignParentStart="true"
         android:layout_alignStart="@id/numberTextView" />
 
+    <TextView
+        android:id="@+id/actionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_below="@id/durationTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignStart="@id/numberTextView" />
+
     <ImageButton
         android:id="@+id/overflowMenuButton"
         android:layout_width="wrap_content"

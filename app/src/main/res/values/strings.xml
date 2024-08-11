@@ -22,6 +22,13 @@
     <string name="notification_text_spam_blocked">Blocked spam number: %1$s</string>
     <string name="number_copied_to_clipboard">Phone number copied to clipboard</string>
 
+    <!-- Call types -->
+    <string name="call_incoming">Incoming call</string>
+    <string name="call_missed">Missed call</string>
+    <string name="call_rejected">Rejected call</string>
+    <string name="call_blocked">Blocked call</string>
+    <string name="call_unknown">Unknown</string>
+
     <!-- Preferences -->
     <string name="action_settings">Settings</string>
 
@@ -37,8 +44,15 @@
     <string name="pref_block_non_contacts_title">Block Unknown Numbers</string>
     <string name="pref_block_non_contacts_summary">Blocks all calls from numbers not in your contact list</string>
 
+    <string name="pref_block_hidden_numbers_title">Block Hidden Numbers</string>
+    <string name="pref_block_hidden_numbers_summary">Block all calls from hidden numbers</string>
+
+    <string name="pref_block_international_numbers_title">Block International Numbers</string>
+    <string name="pref_block_international_numbers_summary">Block all calls from a country different from yours</string>
+
     <string name="pref_show_notification_title">Show Notification on call blocking</string>
     <string name="pref_show_notification_summary">Receive a notification when a call is blocked</string>
+
 
     <!-- item_actions -->
     <string name="report_in_listaspam_com">Report in ListaSpam</string>
@@ -47,4 +61,12 @@
     <string name="add_to_whitelist">Add to whitelist</string>
     <string name="unblock">Unblock</string>
     <string name="remove_from_whitelist">Remove from whitelist</string>
+
+    <!-- SpamUtils blocking reasons -->
+    <string name="blocking_disabled">Call blocking is disabled in settings</string>
+    <string name="block_hidden_number">Blocking call because it\'s from a hidden number</string>
+    <string name="block_spam_number">Blocking call because it\'s reported as spam</string>
+    <string name="block_international_call">Blocking call because it\'s an international call</string>
+    <string name="block_already_blocked_number">Blocking call because it\'s from an already blocked number</string>
+    <string name="block_non_contact">Blocking call because it\'s not from a contact in your agenda</string>
 </resources>

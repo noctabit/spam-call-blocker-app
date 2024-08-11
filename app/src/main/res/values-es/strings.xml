@@ -22,6 +22,13 @@
     <string name="notification_text_spam_blocked">Número de spam bloqueado: %1$s</string>
     <string name="number_copied_to_clipboard">Número copiado al portapapeles</string>
 
+    <!-- Call types -->
+    <string name="call_incoming">Llamada entrante</string>
+    <string name="call_missed">Llamada perdida</string>
+    <string name="call_rejected">Llamada rechazada</string>
+    <string name="call_blocked">Llamada bloqueada</string>
+    <string name="call_unknown">Desconocido</string>
+
     <!-- Preferences -->
     <string name="action_settings">Ajustes</string>
 
@@ -37,6 +44,12 @@
     <string name="pref_block_non_contacts_title">Bloquear números desconocidos</string>
     <string name="pref_block_non_contacts_summary">Bloquea todas las llamadas de números que no están en tu lista de contactos</string>
 
+    <string name="pref_block_hidden_numbers_title">Bloquear números ocultos</string>
+    <string name="pref_block_hidden_numbers_summary">Bloquea todas las llamadas de números ocultos</string>
+
+    <string name="pref_block_international_numbers_title">Bloquear números internacionales</string>
+    <string name="pref_block_international_numbers_summary">Bloquea todas las llamadas de un país diferente al tuyo</string>
+
     <string name="pref_show_notification_title">Mostrar notificación al bloquear llamadas</string>
     <string name="pref_show_notification_summary">Recibe una notificación cuando una llamada es bloqueada</string>
 
@@ -47,4 +60,12 @@
     <string name="add_to_whitelist">Añadir a lista blanca</string>
     <string name="unblock">Desbloquear</string>
     <string name="remove_from_whitelist">Eliminar de la lista blanca</string>
+
+    <!-- SpamUtils blocking reasons -->
+    <string name="blocking_disabled">El bloqueo de llamadas está desactivado en la configuración</string>
+    <string name="block_spam_number">Bloqueando llamada porque está reportada como spam</string>
+    <string name="block_hidden_number">Bloqueando llamada porque es de un número oculto</string>
+    <string name="block_international_call">Bloqueando llamada porque es una llamada internacional</string>
+    <string name="block_already_blocked_number">Bloqueando llamada porque es de un número ya bloqueado</string>
+    <string name="block_non_contact">Bloqueando llamada porque no es de un contacto en tu agenda</string>
 </resources>

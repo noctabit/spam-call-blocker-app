@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.CallLog
 import android.provider.ContactsContract
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -63,6 +64,7 @@ class CallLogAdapter(
         private val numberTextView: TextView = itemView.findViewById(R.id.numberTextView)
         private val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         private val durationTextView: TextView = itemView.findViewById(R.id.durationTextView)
+        private val actionTextView: TextView = itemView.findViewById(R.id.actionTextView)
         private val overflowMenuButton = itemView.findViewById<ImageButton>(R.id.overflowMenuButton)
 
         fun bind(callLog: CallLogEntry, isBlocked: Boolean, isWhitelisted: Boolean = false) {
@@ -79,7 +81,21 @@ class CallLogAdapter(
             dateTextView.text = formatter.format(callLog.date)
             durationTextView.text = context.getString(R.string.duration_label, callLog.duration)
 
+            val action = when (callLog.type) {
+                CallLog.Calls.INCOMING_TYPE -> context.getString(R.string.call_incoming)
+                CallLog.Calls.MISSED_TYPE -> context.getString(R.string.call_missed)
+                CallLog.Calls.REJECTED_TYPE -> context.getString(R.string.call_rejected)
+                CallLog.Calls.BLOCKED_TYPE -> context.getString(R.string.call_blocked)
+                else -> context.getString(R.string.call_unknown)
+            }
+
+            actionTextView.text = action
+
             when {
+                callLog.type == CallLog.Calls.BLOCKED_TYPE -> {
+                    numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+                    actionTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+                }
                 isBlocked -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
                 isWhitelisted -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark))
                 else -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))

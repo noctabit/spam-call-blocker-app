@@ -22,6 +22,18 @@
         android:summary="@string/pref_filter_responder_o_no_summary"
         android:defaultValue="true" />
 
+    <CheckBoxPreference
+        android:key="pref_block_hidden_numbers"
+        android:title="@string/pref_block_hidden_numbers_title"
+        android:summary="@string/pref_block_hidden_numbers_summary"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:key="pref_block_international_numbers"
+        android:title="@string/pref_block_international_numbers_title"
+        android:summary="@string/pref_block_international_numbers_summary"
+        android:defaultValue="false" />
+
     <!-- Bloquear todos los números que no sean contactos -->
     <CheckBoxPreference
         android:key="pref_block_non_contacts"

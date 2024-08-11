@@ -12,6 +12,16 @@ fun isBlockingEnabled(context: Context): Boolean {
     return sharedPreferences.getBoolean("pref_enable_blocking", true)
 }
 
+fun shouldBlockHiddenNumbers(context: Context): Boolean {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    return sharedPreferences.getBoolean("pref_block_hidden_numbers", true)
+}
+
+fun shouldBlockInternationalNumbers(context: Context): Boolean {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    return sharedPreferences.getBoolean("pref_block_international_numbers", true)
+}
+
 fun shouldFilterWithListaSpam(context: Context): Boolean {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     return sharedPreferences.getBoolean("pref_filter_lista_spam", true)

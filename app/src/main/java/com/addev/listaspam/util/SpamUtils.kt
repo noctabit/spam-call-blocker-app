@@ -10,6 +10,8 @@ import android.provider.ContactsContract
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.addev.listaspam.R
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.jsoup.Jsoup
 import java.io.IOException
+import java.util.Locale
 
 /**
  * Utility class for handling spam number checks and notifications.
@@ -27,8 +30,10 @@ class SpamUtils {
     companion object {
         // URLs
         const val LISTA_SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
+        const val LISTA_SPAM_CSS_SELECTOR = ".data_top .phone_rating.result-3, .data_top .phone_rating.result-2, .data_top .phone_rating.result-1, .alert-icon-big"
         private const val RESPONDERONO_URL_TEMPLATE =
             "https://www.responderono.es/numero-de-telefono/%s"
+        private const val RESPONDERONO_CSS_SELECTOR = ".scoreContainer .score.negative"
         private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
     }
 
@@ -44,6 +49,13 @@ class SpamUtils {
     fun checkSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             if (!isBlockingEnabled(context)) {
+                showToast(context, context.getString(R.string.blocking_disabled), Toast.LENGTH_LONG)
+                return@launch
+            }
+
+            if (number.isNullOrBlank() && shouldBlockHiddenNumbers(context)) {
+                showToast(context, context.getString(R.string.block_hidden_number), Toast.LENGTH_LONG)
+                handleSpamNumber(context, number, false, callback)
                 return@launch
             }
 
@@ -51,7 +63,14 @@ class SpamUtils {
                 return@launch
             }
 
+            if (isInternationalCall(number) && shouldBlockInternationalNumbers(context)) {
+                showToast(context, context.getString(R.string.block_international_call), Toast.LENGTH_LONG)
+                handleSpamNumber(context, number, false, callback)
+                return@launch
+            }
+
             if (isNumberBlocked(context, number)) {
+                showToast(context, context.getString(R.string.block_already_blocked_number), Toast.LENGTH_LONG)
                 handleSpamNumber(context, number, callback)
                 return@launch
             }
@@ -60,7 +79,9 @@ class SpamUtils {
                 if (isNumberInAgenda(context, number)) {
                     return@launch
                 } else if (shouldBlockNonContacts(context)) {
-                    handleSpamNumber(context, number, callback)
+                    showToast(context, context.getString(R.string.block_non_contact), Toast.LENGTH_LONG)
+                    handleSpamNumber(context, number, false, callback)
+                    return@launch
                 }
             }
 
@@ -81,10 +102,36 @@ class SpamUtils {
             }
 
             if (isSpam) {
+                showToast(context, context.getString(R.string.block_non_contact), Toast.LENGTH_LONG)
                 handleSpamNumber(context, number, callback)
             } else {
                 handleNonSpamNumber(context, number, callback)
             }
+        }
+    }
+
+
+    fun isInternationalCall(phoneNumber: String): Boolean {
+        // Get an instance of PhoneNumberUtil
+        val phoneNumberUtil = PhoneNumberUtil.getInstance()
+
+        try {
+            // Parse the phone number
+            val parsedNumber: Phonenumber.PhoneNumber = phoneNumberUtil.parse(phoneNumber, null)
+
+            // Get the country code of the parsed number
+            val phoneCountryCode = parsedNumber.countryCode
+
+            // Get the device's country code based on locale
+            val deviceCountryCode = PhoneNumberUtil.getInstance()
+                .getCountryCodeForRegion(Locale.getDefault().country)
+
+            // Check if the country codes are different
+            return phoneCountryCode != deviceCountryCode
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
         }
     }
 
@@ -140,7 +187,7 @@ class SpamUtils {
         val url = LISTA_SPAM_URL_TEMPLATE.format(number)
         return checkUrlForSpam(
             url,
-            ".data_top .phone_rating.result-3, .data_top .phone_rating.result-2, .data_top .phone_rating.result-1, .alert-icon-big"
+            LISTA_SPAM_CSS_SELECTOR
         )
     }
 
@@ -152,7 +199,7 @@ class SpamUtils {
      */
     private suspend fun checkResponderono(number: String): Boolean {
         val url = RESPONDERONO_URL_TEMPLATE.format(number)
-        return checkUrlForSpam(url, ".scoreContainer .score.negative")
+        return checkUrlForSpam(url, RESPONDERONO_CSS_SELECTOR)
     }
 
     /**
@@ -191,7 +238,24 @@ class SpamUtils {
         number: String,
         callback: (isSpam: Boolean) -> Unit
     ) {
-        saveSpamNumber(context, number)
+        handleSpamNumber(context, number, true, callback)
+    }
+
+    /**
+     * Handles the scenario when a phone number is identified as spam.
+     * @param context Context for accessing resources.
+     * @param number Phone number identified as spam.
+     * @param callback Callback function to handle the result.
+     */
+    private fun handleSpamNumber(
+        context: Context,
+        number: String,
+        saveNumber: Boolean,
+        callback: (isSpam: Boolean) -> Unit
+    ) {
+        if (saveNumber) {
+            saveSpamNumber(context, number)
+        }
         sendNotification(context, number)
         callback(true)
     }
