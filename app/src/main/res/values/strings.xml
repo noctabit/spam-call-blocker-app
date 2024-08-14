@@ -16,10 +16,9 @@
     <string name="whitelisted_text_format">%1$s (whitelist)</string>
     <string name="duration_label">Duration: %1$d seconds</string>
     <string name="report_url_template">http://example.com/report?number=%1$s</string>
-    <string name="incoming_call_not_spam">Incoming call is not spam</string>
+    <string name="incoming_call_not_spam">The incoming call appears not to be spam</string>
     <string name="notification_channel_name">ListaSpam</string>
-    <string name="notification_title_spam_blocked">Spam Number Blocked</string>
-    <string name="notification_text_spam_blocked">Blocked spam number: %1$s</string>
+    <string name="notification_title_spam_blocked">Call blocked: %1$s</string>
     <string name="number_copied_to_clipboard">Phone number copied to clipboard</string>
 
     <!-- Call types -->
@@ -63,10 +62,13 @@
     <string name="remove_from_whitelist">Remove from whitelist</string>
 
     <!-- SpamUtils blocking reasons -->
+    <string name="block_reason_long">Call blocked:</string>
+    <string name="block_reason">Reason:</string>
     <string name="blocking_disabled">Call blocking is disabled in settings</string>
-    <string name="block_hidden_number">Blocking call because it\'s from a hidden number</string>
-    <string name="block_spam_number">Blocking call because it\'s reported as spam</string>
-    <string name="block_international_call">Blocking call because it\'s an international call</string>
-    <string name="block_already_blocked_number">Blocking call because it\'s from an already blocked number</string>
-    <string name="block_non_contact">Blocking call because it\'s not from a contact in your agenda</string>
+    <string name="block_hidden_number">Hidden number</string>
+    <string name="block_spam_number">Reported as spam</string>
+    <string name="block_international_call">International call</string>
+    <string name="block_already_blocked_number">Blocked number</string>
+    <string name="block_non_contact">Not a contact</string>
+    <string name="about">About</string>
 </resources>

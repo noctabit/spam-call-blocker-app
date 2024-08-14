@@ -26,6 +26,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.addev.listaspam.adapter.CallLogAdapter
+import com.addev.listaspam.adapter.CallLogAdapter.Companion.REPORT_URL_TEMPLATE
 import com.addev.listaspam.util.BLOCK_NUMBERS_KEY
 import com.addev.listaspam.util.SPAM_PREFS
 import com.addev.listaspam.util.getCallLogs
@@ -40,7 +41,11 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
     private var permissionDeniedDialog: AlertDialog? = null
     private var callLogAdapter: CallLogAdapter? =null
     private var recyclerView: RecyclerView? = null
-    private val REQUEST_CODE_PERMISSIONS = 1
+
+    companion object {
+        private const val REQUEST_CODE_PERMISSIONS = 1
+        private const val ABOUT_LINK = "https://github.com/adamff-dev/lista-spam-call-blocker-app";
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +67,11 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
             R.id.action_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
+                true
+            }
+            R.id.action_about -> {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_LINK))
+                this.startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

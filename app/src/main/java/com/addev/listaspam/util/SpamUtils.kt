@@ -35,6 +35,9 @@ class SpamUtils {
             "https://www.responderono.es/numero-de-telefono/%s"
         private const val RESPONDERONO_CSS_SELECTOR = ".scoreContainer .score.negative"
         private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
+
+        private const val USER_AGENT =
+            "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36"
     }
 
     private val client = OkHttpClient()
@@ -54,8 +57,7 @@ class SpamUtils {
             }
 
             if (number.isNullOrBlank() && shouldBlockHiddenNumbers(context)) {
-                showToast(context, context.getString(R.string.block_hidden_number), Toast.LENGTH_LONG)
-                handleSpamNumber(context, number, false, callback)
+                handleSpamNumber(context, number, false, context.getString(R.string.block_hidden_number), callback)
                 return@launch
             }
 
@@ -64,14 +66,12 @@ class SpamUtils {
             }
 
             if (isInternationalCall(number) && shouldBlockInternationalNumbers(context)) {
-                showToast(context, context.getString(R.string.block_international_call), Toast.LENGTH_LONG)
-                handleSpamNumber(context, number, false, callback)
+                handleSpamNumber(context, number, false, context.getString(R.string.block_international_call), callback)
                 return@launch
             }
 
             if (isNumberBlocked(context, number)) {
-                showToast(context, context.getString(R.string.block_already_blocked_number), Toast.LENGTH_LONG)
-                handleSpamNumber(context, number, callback)
+                handleSpamNumber(context, number, context.getString(R.string.block_already_blocked_number), callback)
                 return@launch
             }
 
@@ -79,8 +79,7 @@ class SpamUtils {
                 if (isNumberInAgenda(context, number)) {
                     return@launch
                 } else if (shouldBlockNonContacts(context)) {
-                    showToast(context, context.getString(R.string.block_non_contact), Toast.LENGTH_LONG)
-                    handleSpamNumber(context, number, false, callback)
+                    handleSpamNumber(context, number, false, context.getString(R.string.block_non_contact), callback)
                     return@launch
                 }
             }
@@ -102,8 +101,7 @@ class SpamUtils {
             }
 
             if (isSpam) {
-                showToast(context, context.getString(R.string.block_non_contact), Toast.LENGTH_LONG)
-                handleSpamNumber(context, number, callback)
+                handleSpamNumber(context, number, context.getString(R.string.block_spam_number), callback)
             } else {
                 handleNonSpamNumber(context, number, callback)
             }
@@ -210,7 +208,9 @@ class SpamUtils {
      * @return True if spam indicators are found, false otherwise.
      */
     private suspend fun checkUrlForSpam(url: String, cssSelector: String): Boolean {
-        val request = Request.Builder().url(url).build()
+        val request = Request.Builder()
+            .header("User-Agent", USER_AGENT)
+            .url(url).build()
         return withContext(Dispatchers.IO) {
             try {
                 val response = client.newCall(request).execute()
@@ -236,9 +236,10 @@ class SpamUtils {
     private fun handleSpamNumber(
         context: Context,
         number: String,
+        reason: String,
         callback: (isSpam: Boolean) -> Unit
     ) {
-        handleSpamNumber(context, number, true, callback)
+        handleSpamNumber(context, number, true, reason, callback)
     }
 
     /**
@@ -251,12 +252,15 @@ class SpamUtils {
         context: Context,
         number: String,
         saveNumber: Boolean,
+        reason: String,
         callback: (isSpam: Boolean) -> Unit
     ) {
+        showToast(context, context.getString(R.string.block_reason_long) + " " + reason, Toast.LENGTH_LONG)
+
         if (saveNumber) {
             saveSpamNumber(context, number)
         }
-        sendNotification(context, number)
+        sendNotification(context, number, reason)
         callback(true)
     }
 

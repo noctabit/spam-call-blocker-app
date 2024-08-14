@@ -16,10 +16,9 @@
     <string name="whitelisted_text_format">%1$s (whitelist)</string>
     <string name="duration_label">Duración: %1$d segundos</string>
     <string name="report_url_template">http://example.com/reportar?number=%1$s</string>
-    <string name="incoming_call_not_spam">La llamada entrante no es spam</string>
+    <string name="incoming_call_not_spam">La llamada entrante parece que no es spam</string>
     <string name="notification_channel_name">ListaSpam</string>
-    <string name="notification_title_spam_blocked">Número de spam bloqueado</string>
-    <string name="notification_text_spam_blocked">Número de spam bloqueado: %1$s</string>
+    <string name="notification_title_spam_blocked">Llamada bloqueada: %1$s</string>
     <string name="number_copied_to_clipboard">Número copiado al portapapeles</string>
 
     <!-- Call types -->
@@ -31,6 +30,7 @@
 
     <!-- Preferences -->
     <string name="action_settings">Ajustes</string>
+    <string name="about">Acerca de</string>
 
     <string name="pref_enable_blocking_title">Activar bloqueo general</string>
     <string name="pref_enable_blocking_summary">Habilita o deshabilita el sistema de bloqueo de llamadas en toda la aplicación</string>
@@ -39,7 +39,7 @@
     <string name="pref_filter_lista_spam_summary">Bloquea llamadas de números de spam incluidos en la base de datos de listaspam.com</string>
 
     <string name="pref_filter_responder_o_no_title">Filtrar con responderono.es</string>
-    <string name="pref_filter_responder_o_no_summary">Bloquear llamadas de números de spam incluidos en la base de datos de responderono.es</string>
+    <string name="pref_filter_responder_o_no_summary">Bloquea llamadas de números de spam incluidos en la base de datos de responderono.es</string>
 
     <string name="pref_block_non_contacts_title">Bloquear números desconocidos</string>
     <string name="pref_block_non_contacts_summary">Bloquea todas las llamadas de números que no están en tu lista de contactos</string>
@@ -63,9 +63,11 @@
 
     <!-- SpamUtils blocking reasons -->
     <string name="blocking_disabled">El bloqueo de llamadas está desactivado en la configuración</string>
-    <string name="block_spam_number">Bloqueando llamada porque está reportada como spam</string>
-    <string name="block_hidden_number">Bloqueando llamada porque es de un número oculto</string>
-    <string name="block_international_call">Bloqueando llamada porque es una llamada internacional</string>
-    <string name="block_already_blocked_number">Bloqueando llamada porque es de un número ya bloqueado</string>
-    <string name="block_non_contact">Bloqueando llamada porque no es de un contacto en tu agenda</string>
+    <string name="block_reason_long">Llamada bloqueada:</string>
+    <string name="block_reason">Motivo:</string>
+    <string name="block_spam_number">Reportado como spam</string>
+    <string name="block_hidden_number">Número oculto</string>
+    <string name="block_international_call">Llamada internacional</string>
+    <string name="block_already_blocked_number">Número bloqueado</string>
+    <string name="block_non_contact">No es un contacto</string>
 </resources>

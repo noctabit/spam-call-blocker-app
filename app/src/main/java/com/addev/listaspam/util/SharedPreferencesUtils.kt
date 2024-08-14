@@ -19,7 +19,7 @@ fun shouldBlockHiddenNumbers(context: Context): Boolean {
 
 fun shouldBlockInternationalNumbers(context: Context): Boolean {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_block_international_numbers", true)
+    return sharedPreferences.getBoolean("pref_block_international_numbers", false)
 }
 
 fun shouldFilterWithListaSpam(context: Context): Boolean {

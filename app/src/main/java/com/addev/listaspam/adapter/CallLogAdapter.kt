@@ -91,14 +91,18 @@ class CallLogAdapter(
 
             actionTextView.text = action
 
+            if (callLog.type == CallLog.Calls.BLOCKED_TYPE) {
+                actionTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+            } else {
+                actionTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+            }
+
             when {
-                callLog.type == CallLog.Calls.BLOCKED_TYPE -> {
-                    numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
-                    actionTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
-                }
                 isBlocked -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
                 isWhitelisted -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark))
-                else -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+                else -> {
+                    numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+                }
             }
 
             if (number.isNullOrBlank()) {
