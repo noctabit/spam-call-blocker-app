@@ -30,7 +30,7 @@ class SpamUtils {
     companion object {
         // URLs
         const val LISTA_SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
-        const val LISTA_SPAM_CSS_SELECTOR = ".data_top .phone_rating.result-3, .data_top .phone_rating.result-2, .data_top .phone_rating.result-1, .alert-icon-big"
+        const val LISTA_SPAM_CSS_SELECTOR = ".rate-and-owner .phone_rating:not(.result-4):not(.result-5)"
         private const val RESPONDERONO_URL_TEMPLATE =
             "https://www.responderono.es/numero-de-telefono/%s"
         private const val RESPONDERONO_CSS_SELECTOR = ".scoreContainer .score.negative"
@@ -65,11 +65,6 @@ class SpamUtils {
                 return@launch
             }
 
-            if (isInternationalCall(number) && shouldBlockInternationalNumbers(context)) {
-                handleSpamNumber(context, number, false, context.getString(R.string.block_international_call), callback)
-                return@launch
-            }
-
             if (isNumberBlocked(context, number)) {
                 handleSpamNumber(context, number, context.getString(R.string.block_already_blocked_number), callback)
                 return@launch
@@ -82,6 +77,11 @@ class SpamUtils {
                     handleSpamNumber(context, number, false, context.getString(R.string.block_non_contact), callback)
                     return@launch
                 }
+            }
+
+            if (isInternationalCall(number) && shouldBlockInternationalNumbers(context)) {
+                handleSpamNumber(context, number, false, context.getString(R.string.block_international_call), callback)
+                return@launch
             }
 
             // List to hold the functions that should be used
