@@ -163,13 +163,14 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
         }
-        val missingPermissions = permissions.filter {
+        val notGrantedPermissions = permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.shouldShowRequestPermissionRationale(this, it)
         }
-        val deniedPermissions = permissions.filter {
-            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-                    && !ActivityCompat.shouldShowRequestPermissionRationale(this, it)
+        val missingPermissions = notGrantedPermissions.filter {
+            !ActivityCompat.shouldShowRequestPermissionRationale(this, it)
+        }
+        val deniedPermissions = notGrantedPermissions.filter {
+            ActivityCompat.shouldShowRequestPermissionRationale(this, it)
         }
         if (missingPermissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
@@ -191,7 +192,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
      */
 
     private fun showPermissionToastAndRequest(missingPermissions: List<String>) {
-        val permissionNames = missingPermissions.map { "- " + getPermissionName(it) }
+        val permissionNames = missingPermissions.map { "• " + getPermissionName(it) }
         val message = getString(R.string.permissions_required_message, permissionNames.joinToString("\n"))
 
         if (permissionDeniedDialog?.isShowing == true) {
