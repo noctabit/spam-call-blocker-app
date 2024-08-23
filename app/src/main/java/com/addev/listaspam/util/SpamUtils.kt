@@ -109,7 +109,7 @@ class SpamUtils {
     }
 
 
-    fun isInternationalCall(phoneNumber: String): Boolean {
+    private fun isInternationalCall(phoneNumber: String): Boolean {
         // Get an instance of PhoneNumberUtil
         val phoneNumberUtil = PhoneNumberUtil.getInstance()
 
