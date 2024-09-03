@@ -48,5 +48,5 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        app:tint="?attr/colorPrimary" />
+        app:tint="?attr/colorSecondary" />
 </RelativeLayout>
