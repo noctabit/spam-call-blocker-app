@@ -111,8 +111,6 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         val blockedNumbers = getBlockedNumbers(this)
         val whitelistNumbers = getWhitelistNumbers(this)
 
-
-        showToast(this, "GETTING CALL LOGS")
         val callLogs = getCallLogs(this)
 
         if (callLogAdapter == null) {

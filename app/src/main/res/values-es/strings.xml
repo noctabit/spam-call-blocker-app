@@ -70,4 +70,6 @@
     <string name="block_international_call">Llamada internacional</string>
     <string name="block_already_blocked_number">Número bloqueado</string>
     <string name="block_non_contact">No es un contacto</string>
+    <string name="export_config">Exportar configuración y listas</string>
+    <string name="import_config">Importar configuración y listas</string>
 </resources>

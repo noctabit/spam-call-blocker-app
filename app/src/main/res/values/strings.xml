@@ -71,4 +71,6 @@
     <string name="block_already_blocked_number">Blocked number</string>
     <string name="block_non_contact">Not a contact</string>
     <string name="about">About</string>
+    <string name="export_config">Export settings and lists</string>
+    <string name="import_config">Import settings and lists</string>
 </resources>

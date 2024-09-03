@@ -24,15 +24,15 @@
                 android:id="@+id/btn_export"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Exportar configuración y listas" />
+                android:text="@string/export_config" />
 
             <Button
                 android:id="@+id/btn_import"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Importar configuración y listas"
+                android:text="@string/import_config"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16px" />
+                android:layout_marginBottom="16dp" />
 
             <FrameLayout
                 android:id="@+id/settings_container"
