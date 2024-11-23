@@ -49,7 +49,7 @@ class SpamUtils {
      * @param number The phone number to check.
      * @param callback A function to be called with the result (true if spam, false otherwise).
      */
-    fun checkSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit) {
+    fun checkSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit = {}) {
         CoroutineScope(Dispatchers.IO).launch {
             if (!isBlockingEnabled(context)) {
                 showToast(context, context.getString(R.string.blocking_disabled), Toast.LENGTH_LONG)

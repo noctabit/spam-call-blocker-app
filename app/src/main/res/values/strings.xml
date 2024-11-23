@@ -73,4 +73,8 @@
     <string name="about">About</string>
     <string name="export_config">Export settings and lists</string>
     <string name="import_config">Import settings and lists</string>
+    <string name="test_number">Test number</string>
+    <string name="aceptar">Accept</string>
+    <string name="cancelar">Cancel</string>
+    <string name="type_number">Please, type a valid number</string>
 </resources>

@@ -12,8 +12,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.telecom.TelecomManager
+import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
     private var permissionDeniedDialog: AlertDialog? = null
     private var callLogAdapter: CallLogAdapter? =null
     private var recyclerView: RecyclerView? = null
+
+    private val spamUtils = SpamUtils()
 
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 1
@@ -74,8 +78,38 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
                 this.startActivity(intent)
                 true
             }
+            R.id.test_number -> {
+                showNumberInputDialog()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+
+    private fun showNumberInputDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.test_number))
+
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_PHONE // Para números telefónicos
+        builder.setView(input)
+
+        builder.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
+            val number = input.text.toString().trim()
+            if (number.isNotEmpty()) {
+                spamUtils.checkSpamNumber(this, number)
+            } else {
+                Toast.makeText(this, getString(R.string.type_number), Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
     }
 
     override fun onItemChanged(number: String) {
@@ -142,7 +176,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
     private fun setupIntentLauncher() {
         intentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == Activity.RESULT_OK) {
+                if (it.resultCode == RESULT_OK) {
                     showToast(this, getString(R.string.success_call_screening_role))
                 } else {
                     showToast(this, getString(R.string.failed_call_screening_role))
@@ -249,7 +283,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
      */
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun requestRoleForQAndAbove() {
-        val roleManager = getSystemService(Context.ROLE_SERVICE) as RoleManager
+        val roleManager = getSystemService(ROLE_SERVICE) as RoleManager
         if (!roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
             intentLauncher.launch(intent)
