@@ -32,6 +32,11 @@ fun shouldFilterWithResponderONo(context: Context): Boolean {
     return sharedPreferences.getBoolean("pref_filter_responder_o_no", true)
 }
 
+fun shouldFilterWithCleverdialer(context: Context): Boolean {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    return sharedPreferences.getBoolean("pref_filter_cleverdialer", false)
+}
+
 fun shouldBlockNonContacts(context: Context): Boolean {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     return sharedPreferences.getBoolean("pref_block_non_contacts", false)

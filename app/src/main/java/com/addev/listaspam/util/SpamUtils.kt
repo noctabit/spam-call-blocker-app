@@ -21,6 +21,7 @@ import okhttp3.Request
 import org.jsoup.Jsoup
 import java.io.IOException
 import java.util.Locale
+import java.util.logging.Logger
 
 /**
  * Utility class for handling spam number checks and notifications.
@@ -35,6 +36,7 @@ class SpamUtils {
             "https://www.responderono.es/numero-de-telefono/%s"
         private const val RESPONDERONO_CSS_SELECTOR = ".scoreContainer .score.negative"
         private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
+        private const val CLEVER_DIALER_CSS_SELECTOR = ".front-stars:not(.star-rating .stars-4, .star-rating .stars-5):not(.page_speed_767712278), .circle-spam"
 
         private const val USER_AGENT =
             "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36"
@@ -56,27 +58,15 @@ class SpamUtils {
                 return@launch
             }
 
-            if (number.isNullOrBlank() && shouldBlockHiddenNumbers(context)) {
+            if (number.isBlank() && shouldBlockHiddenNumbers(context)) {
                 handleSpamNumber(context, number, false, context.getString(R.string.block_hidden_number), callback)
                 return@launch
             }
 
-            if (isNumberWhitelisted(context, number)) {
+            if (isNumberWhitelisted(context, number) ||
+                isNumberBlocked(context, number) ||
+                isContactOrShouldBlockNonContacts(context, number)) {
                 return@launch
-            }
-
-            if (isNumberBlocked(context, number)) {
-                handleSpamNumber(context, number, context.getString(R.string.block_already_blocked_number), callback)
-                return@launch
-            }
-
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                if (isNumberInAgenda(context, number)) {
-                    return@launch
-                } else if (shouldBlockNonContacts(context)) {
-                    handleSpamNumber(context, number, false, context.getString(R.string.block_non_contact), callback)
-                    return@launch
-                }
             }
 
             if (isInternationalCall(number) && shouldBlockInternationalNumbers(context)) {
@@ -84,21 +74,8 @@ class SpamUtils {
                 return@launch
             }
 
-            // List to hold the functions that should be used
-            val spamCheckers = mutableListOf<suspend (String) -> Boolean>()
-
-            // Add functions based on preferences
-            if (shouldFilterWithListaSpam(context)) {
-                spamCheckers.add(::checkListaSpam)
-            }
-
-            if (shouldFilterWithResponderONo(context)) {
-                spamCheckers.add(::checkResponderono)
-            }
-
-            val isSpam = spamCheckers.any { checker ->
-                runCatching { checker(number) }.getOrDefault(false)
-            }
+            val spamCheckers = buildSpamCheckers(context)
+            val isSpam = spamCheckers.any { checker -> runCatching { checker(number) }.getOrDefault(false) }
 
             if (isSpam) {
                 handleSpamNumber(context, number, context.getString(R.string.block_spam_number), callback)
@@ -108,6 +85,24 @@ class SpamUtils {
         }
     }
 
+    private fun isContactOrShouldBlockNonContacts(context: Context, number: String): Boolean {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            if (isNumberInAgenda(context, number)) return true
+            if (shouldBlockNonContacts(context)) {
+                handleSpamNumber(context, number, false, context.getString(R.string.block_non_contact), {})
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun buildSpamCheckers(context: Context): List<suspend (String) -> Boolean> {
+        val spamCheckers = mutableListOf<suspend (String) -> Boolean>()
+        if (shouldFilterWithListaSpam(context)) spamCheckers.add(::checkListaSpam)
+        if (shouldFilterWithResponderONo(context)) spamCheckers.add(::checkResponderono)
+        if (shouldFilterWithCleverdialer(context)) spamCheckers.add(::checkCleverdialer)
+        return spamCheckers
+    }
 
     private fun isInternationalCall(phoneNumber: String): Boolean {
         // Get an instance of PhoneNumberUtil
@@ -155,11 +150,13 @@ class SpamUtils {
         val contentResolver = context.contentResolver
         val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
+        val selection = "${ContactsContract.CommonDataKinds.Phone.NUMBER} LIKE ? OR ${ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER} LIKE ?"
         val normalizedNumber = normalizePhoneNumber(number)
+        val selectionArgs = arrayOf("%$normalizedNumber%", "%$normalizedNumber%")
 
         var cursor: Cursor? = null
         return try {
-            cursor = contentResolver.query(uri, projection, null, null, null)
+            cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
             cursor?.use {
                 val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                 while (cursor.moveToNext()) {
@@ -201,6 +198,17 @@ class SpamUtils {
     }
 
     /**
+     * Checks if a number is marked as spam on Cleverdialer.
+     *
+     * @param number The phone number to check.
+     * @return True if the number is marked as spam, false otherwise.
+     */
+    private suspend fun checkCleverdialer(number: String): Boolean {
+        val url = CLEVER_DIALER_URL_TEMPLATE.format(number)
+        return checkUrlForSpam(url, CLEVER_DIALER_CSS_SELECTOR)
+    }
+
+    /**
      * Checks a URL for spam indicators using a CSS selector.
      *
      * @param url The URL to check.
@@ -210,18 +218,18 @@ class SpamUtils {
     private suspend fun checkUrlForSpam(url: String, cssSelector: String): Boolean {
         val request = Request.Builder()
             .header("User-Agent", USER_AGENT)
-            .url(url).build()
+            .url(url)
+            .build()
+
         return withContext(Dispatchers.IO) {
             try {
-                val response = client.newCall(request).execute()
-                val body = response.body?.string()
-                body?.let {
-                    val doc = Jsoup.parse(it)
-                    val found = doc.select(cssSelector).first() != null
-                    found
-                } ?: false
+                client.newCall(request).execute().use { response ->
+                    val body = response.body?.string() ?: return@withContext false
+                    val doc = Jsoup.parse(body)
+                    doc.select(cssSelector).isNotEmpty()
+                }
             } catch (e: IOException) {
-                e.printStackTrace()
+                Logger.getLogger("checkUrlForSpam").warning("Error checking URL: $url with error ${e.message}")
                 false
             }
         }

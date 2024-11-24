@@ -40,6 +40,9 @@
     <string name="pref_filter_responder_o_no_title">Filter with responderono.es</string>
     <string name="pref_filter_responder_o_no_summary">Blocks calls from spam numbers included in the responderono.es database</string>
 
+    <string name="pref_filter_cleverdialer_title">Filter with cleverdialer.es</string>
+    <string name="pref_filter_cleverdialer_summary">Blocks calls from spam numbers included in the cleverdialer.es database</string>
+
     <string name="pref_block_non_contacts_title">Block Unknown Numbers</string>
     <string name="pref_block_non_contacts_summary">Blocks all calls from numbers not in your contact list</string>
 

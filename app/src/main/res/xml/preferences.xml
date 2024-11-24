@@ -25,6 +25,13 @@
 
     <CheckBoxPreference
         app:iconSpaceReserved="false"
+        android:key="pref_filter_cleverdialer"
+        android:title="@string/pref_filter_cleverdialer_title"
+        android:summary="@string/pref_filter_cleverdialer_summary"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        app:iconSpaceReserved="false"
         android:key="pref_block_non_contacts"
         android:title="@string/pref_block_non_contacts_title"
         android:summary="@string/pref_block_non_contacts_summary"

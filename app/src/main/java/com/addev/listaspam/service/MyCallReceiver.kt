@@ -17,7 +17,6 @@ import com.addev.listaspam.util.SpamUtils
  * Note: This class will not work on Android Q (API level 29) or higher due to changes in privacy permissions.
  * For Android Q or higher, use MyCallScreeningService instead.
  */
-@RequiresApi(Build.VERSION_CODES.P)
 class MyCallReceiver : BroadcastReceiver() {
 
     companion object {

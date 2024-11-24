@@ -41,6 +41,9 @@
     <string name="pref_filter_responder_o_no_title">Filtrar con responderono.es</string>
     <string name="pref_filter_responder_o_no_summary">Bloquea llamadas de números de spam incluidos en la base de datos de responderono.es</string>
 
+    <string name="pref_filter_cleverdialer_title">Filtrar con cleverdialer.es</string>
+    <string name="pref_filter_cleverdialer_summary">Bloquea llamadas de números de spam incluidos en la base de datos de cleverdialer.es</string>
+
     <string name="pref_block_non_contacts_title">Bloquear números desconocidos</string>
     <string name="pref_block_non_contacts_summary">Bloquea todas las llamadas de números que no están en tu lista de contactos</string>
 
