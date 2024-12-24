@@ -13,7 +13,13 @@ import com.addev.listaspam.R
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL"
 private const val NOTIFICATION_ID = 1
 
-fun sendNotification(context: Context, number: String, reason: String) {
+fun sendBlockedCallNotification(context: Context, number: String, reason: String) {
+    sendNotification(context,
+        context.getString(R.string.notification_title_spam_blocked, number),
+        context.getString(R.string.block_reason) + " " + reason)
+}
+
+fun sendNotification(context: Context, title: String, message: String) {
     createNotificationChannel(context)
 
     if (ActivityCompat.checkSelfPermission(
@@ -27,8 +33,8 @@ fun sendNotification(context: Context, number: String, reason: String) {
 
     val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle(context.getString(R.string.notification_title_spam_blocked, number))
-        .setContentText(context.getString(R.string.block_reason) + " " + reason)
+        .setContentTitle(title)
+        .setContentText(message)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .build()
 

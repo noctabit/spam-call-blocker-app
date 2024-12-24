@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.CallLog
 import android.provider.ContactsContract
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +46,7 @@ class CallLogAdapter(
         const val REPORT_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s#denuncia"
     }
 
-    private val formatter = SimpleDateFormat("dd/MM/yyyy HH:ss")
+    private val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
     private var onItemChangedListener: OnItemChangedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CallLogViewHolder {
@@ -101,7 +102,7 @@ class CallLogAdapter(
                 isBlocked -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
                 isWhitelisted -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark))
                 else -> {
-                    numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+                    numberTextView.setTextColor(ContextCompat.getColor(context, R.color.textColor))
                 }
             }
 

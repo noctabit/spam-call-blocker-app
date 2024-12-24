@@ -36,7 +36,7 @@ class SpamUtils {
             "https://www.responderono.es/numero-de-telefono/%s"
         private const val RESPONDERONO_CSS_SELECTOR = ".scoreContainer .score.negative"
         private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
-        private const val CLEVER_DIALER_CSS_SELECTOR = ".front-stars:not(.star-rating .stars-4, .star-rating .stars-5):not(.page_speed_767712278), .circle-spam"
+        private const val CLEVER_DIALER_CSS_SELECTOR = "body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam"
 
         private const val USER_AGENT =
             "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36"
@@ -80,7 +80,8 @@ class SpamUtils {
             if (isSpam) {
                 handleSpamNumber(context, number, context.getString(R.string.block_spam_number), callback)
             } else {
-                handleNonSpamNumber(context, number, callback)
+                handleNonSpamNumber(context, number)
+                return@launch
             }
         }
     }
@@ -268,7 +269,7 @@ class SpamUtils {
         if (saveNumber) {
             saveSpamNumber(context, number)
         }
-        sendNotification(context, number, reason)
+        sendBlockedCallNotification(context, number, reason)
         callback(true)
     }
 
@@ -280,14 +281,15 @@ class SpamUtils {
      */
     private fun handleNonSpamNumber(
         context: Context,
-        number: String,
-        callback: (isSpam: Boolean) -> Unit
+        number: String
     ) {
-        Handler(Looper.getMainLooper()).post {
-            showToast(context, context.getString(R.string.incoming_call_not_spam), Toast.LENGTH_LONG)
+        CoroutineScope(Dispatchers.Main).launch {
+            sendNotification(
+                context,
+                context.getString(R.string.call_incoming),
+                context.getString(R.string.incoming_call_not_spam))
+            removeSpamNumber(context, number)
         }
-        removeSpamNumber(context, number)
-        callback(false)
     }
 
     /**
