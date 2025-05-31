@@ -38,6 +38,9 @@ class SpamUtils {
         private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
         private const val CLEVER_DIALER_CSS_SELECTOR = "body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam"
 
+        private const val SPAM_PREFS = "SPAM_PREFS"
+        private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
+
         private const val USER_AGENT =
             "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36"
     }
@@ -55,6 +58,15 @@ class SpamUtils {
         CoroutineScope(Dispatchers.IO).launch {
             if (!isBlockingEnabled(context)) {
                 showToast(context, context.getString(R.string.blocking_disabled), Toast.LENGTH_LONG)
+                return@launch
+            }
+
+            val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
+            val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, null)
+
+            // End call if the number is already blocked
+            if (blockedNumbers?.contains(number) == true) {
+                handleSpamNumber(context, number, false, context.getString(R.string.block_already_blocked_number), callback)
                 return@launch
             }
 
@@ -99,7 +111,12 @@ class SpamUtils {
 
     private fun buildSpamCheckers(context: Context): List<suspend (String) -> Boolean> {
         val spamCheckers = mutableListOf<suspend (String) -> Boolean>()
-        if (shouldFilterWithListaSpam(context)) spamCheckers.add(::checkListaSpam)
+
+        // ListaSpam
+        val listaSpamApi = shouldFilterWithListaSpamApi(context)
+        if (listaSpamApi) spamCheckers.add(::checkListaSpamApi)
+        if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi) spamCheckers.add(::checkListaSpam)
+
         if (shouldFilterWithResponderONo(context)) spamCheckers.add(::checkResponderono)
         if (shouldFilterWithCleverdialer(context)) spamCheckers.add(::checkCleverdialer)
         return spamCheckers
@@ -171,6 +188,10 @@ class SpamUtils {
         } finally {
             cursor?.close()
         }
+    }
+
+    private fun checkListaSpamApi(number: String): Boolean {
+        return ApiUtils.checkListaSpamApi(number);
     }
 
     /**
@@ -283,11 +304,14 @@ class SpamUtils {
         context: Context,
         number: String
     ) {
+        showToast(context, context.getString(R.string.incoming_call_not_spam))
+
         CoroutineScope(Dispatchers.Main).launch {
             sendNotification(
                 context,
                 context.getString(R.string.call_incoming),
-                context.getString(R.string.incoming_call_not_spam))
+                context.getString(R.string.incoming_call_not_spam),
+                10000)
             removeSpamNumber(context, number)
         }
     }
