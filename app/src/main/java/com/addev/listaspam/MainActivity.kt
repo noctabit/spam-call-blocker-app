@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 1
-        private const val ABOUT_LINK = "https://github.com/adamff-dev/lista-spam-call-blocker-app";
+        private const val ABOUT_LINK = "https://github.com/adamff-dev/spain-spam-call-blocker-app";
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -266,23 +266,6 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
      * Requests the call screening role.
      */
     private fun requestCallScreeningRole() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requestRoleForQAndAbove()
-        } else {
-            val telecomManager = ContextCompat.getSystemService(this, TelecomManager::class.java)
-
-            if (telecomManager == null) {
-                showToast(this, getString(R.string.telecom_manager_unavailable))
-                return
-            }
-        }
-    }
-
-    /**
-     * Requests the call screening role for Android Q (API level 29) and above.
-     */
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun requestRoleForQAndAbove() {
         val roleManager = getSystemService(ROLE_SERVICE) as RoleManager
         if (!roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
