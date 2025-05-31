@@ -22,9 +22,14 @@ fun shouldBlockInternationalNumbers(context: Context): Boolean {
     return sharedPreferences.getBoolean("pref_block_international_numbers", false)
 }
 
-fun shouldFilterWithListaSpam(context: Context): Boolean {
+fun shouldFilterWithListaSpamApi(context: Context): Boolean {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_filter_lista_spam", true)
+    return sharedPreferences.getBoolean("pref_filter_lista_spam_api", true)
+}
+
+fun shouldFilterWithListaSpamScraper(context: Context): Boolean {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    return sharedPreferences.getBoolean("pref_filter_lista_spam_scraper", false)
 }
 
 fun shouldFilterWithResponderONo(context: Context): Boolean {
