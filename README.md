@@ -6,10 +6,12 @@ Call Blocker App is a Kotlin-based application designed to help you manage and b
 
 Here are some screenshots of the Call Blocker App in action:
 
-<img src="https://i.imgur.com/YwmFXBh.jpeg" alt="Main screen" width="300">  
-<img src="https://i.imgur.com/2ezJn7k.jpeg" alt="Phone number options" width="300">  
-<img src="https://i.imgur.com/hvniKjX.jpeg" alt="Settings" width="300">  
-<img src="https://i.imgur.com/tWkV5Vk.jpeg" alt="More settings" width="300">
+<div style="display: flex; gap: 10px;">
+  <img src="https://i.imgur.com/YwmFXBh.jpeg" alt="Main screen" width="300">  
+  <img src="https://i.imgur.com/2ezJn7k.jpeg" alt="Phone number options" width="300">  
+  <img src="https://i.imgur.com/hvniKjX.jpeg" alt="Settings" width="300">  
+  <img src="https://i.imgur.com/tWkV5Vk.jpeg" alt="More settings" width="300">
+</div>
 
 ## Features
 
