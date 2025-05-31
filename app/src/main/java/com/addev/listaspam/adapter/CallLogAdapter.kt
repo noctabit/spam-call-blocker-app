@@ -106,7 +106,7 @@ class CallLogAdapter(
                 }
             }
 
-            if (number.isNullOrBlank()) {
+            if (number.isBlank()) {
                 overflowMenuButton.visibility = View.GONE
                 return
             }
