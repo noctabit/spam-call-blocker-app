@@ -20,6 +20,10 @@ fun sendBlockedCallNotification(context: Context, number: String, reason: String
 }
 
 fun sendNotification(context: Context, title: String, message: String) {
+    sendNotification(context, title, message, 0);
+}
+
+fun sendNotification(context: Context, title: String, message: String, durationMs: Long) {
     createNotificationChannel(context)
 
     if (ActivityCompat.checkSelfPermission(
@@ -31,12 +35,17 @@ fun sendNotification(context: Context, title: String, message: String) {
         return
     }
 
-    val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+    val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setSmallIcon(R.mipmap.ic_launcher)
         .setContentTitle(title)
         .setContentText(message)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .build()
+
+    if (durationMs != 0L) {
+        builder.setTimeoutAfter(durationMs)
+    }
+
+    val notification = builder.build()
 
     NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
 }
