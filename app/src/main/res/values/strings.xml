@@ -34,8 +34,11 @@
     <string name="pref_enable_blocking_title">Enable General Blocking</string>
     <string name="pref_enable_blocking_summary">Enables or disables the call blocking system across the entire application</string>
 
-    <string name="pref_filter_lista_spam_title">Filter with listaspam.com</string>
-    <string name="pref_filter_lista_spam_summary">(Recommended) Blocks calls from spam numbers included in the listaspam.com database</string>
+    <string name="pref_filter_lista_spam_title">Filter using listaspam.com (API)</string>
+    <string name="pref_filter_lista_spam_summary">(Recommended) Blocks calls from numbers flagged as spam via the listaspam.com API</string>
+
+    <string name="pref_filter_lista_spam_scraper_title">Filter using listaspam.com (Scraper)</string>
+    <string name="pref_filter_lista_spam_scraper_summary">(Deprecated) Blocks calls from numbers flagged as spam via the listaspam.com scraper method</string>
 
     <string name="pref_filter_responder_o_no_title">Filter with responderono.es</string>
     <string name="pref_filter_responder_o_no_summary">Blocks calls from spam numbers included in the responderono.es database</string>
