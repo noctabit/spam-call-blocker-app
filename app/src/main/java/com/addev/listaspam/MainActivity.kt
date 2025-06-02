@@ -102,20 +102,16 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
     }
 
     private fun setLanguage() {
-        val systemLanguage = Locale.getDefault().language
+        val systemLanguage = Locale.getDefault().language.lowercase()
         val supportedLanguages = setOf(
-            "EN", "ES", "FR", "DE", "IT", "RU", "SV", "PL", "PT",
-            "NL", "NO", "CZ", "ID", "ZH", "JA", "HE", "TR", "HU",
-            "FI", "DA", "TH", "GK", "SK", "RO"
+            "en", "es", "fr", "de", "it", "ru", "sv", "pl", "pt",
+            "nl", "no", "cz", "id", "zh", "ja", "he", "tr", "hu",
+            "fi", "da", "th", "gk", "sk", "ro"
         )
 
-        val finalLang = if (supportedLanguages.contains(systemLanguage)) {
-            systemLanguage
-        } else {
-            "EN"
-        }
+        val finalLang = if (supportedLanguages.contains(systemLanguage)) systemLanguage else "en"
 
-        setListaSpamApiLang(this, finalLang)
+        setListaSpamApiLang(this, finalLang.uppercase())
     }
 
     private fun showNumberInputDialog() {
