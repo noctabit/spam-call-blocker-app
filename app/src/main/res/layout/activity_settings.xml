@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -22,17 +20,21 @@
 
             <Button
                 android:id="@+id/btn_export"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/export_config" />
+                android:text="@string/export_config"
+                android:drawableStart="@drawable/ic_export"
+                android:drawablePadding="8dp" />
 
             <Button
                 android:id="@+id/btn_import"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/import_config"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:drawableStart="@drawable/ic_import"
+                android:drawablePadding="8dp" />
 
             <FrameLayout
                 android:id="@+id/settings_container"
