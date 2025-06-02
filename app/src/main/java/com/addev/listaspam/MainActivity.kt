@@ -1,7 +1,6 @@
 package com.addev.listaspam
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.role.RoleManager
 import android.content.Context
@@ -11,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.telecom.TelecomManager
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
@@ -19,7 +17,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -28,27 +25,28 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.addev.listaspam.adapter.CallLogAdapter
-import com.addev.listaspam.adapter.CallLogAdapter.Companion.REPORT_URL_TEMPLATE
-import com.addev.listaspam.util.BLOCK_NUMBERS_KEY
-import com.addev.listaspam.util.SPAM_PREFS
-import com.addev.listaspam.util.getCallLogs
+import com.addev.listaspam.service.UpdateChecker
 import com.addev.listaspam.util.SpamUtils
-import com.addev.listaspam.util.WHITELIST_NUMBERS_KEY
 import com.addev.listaspam.util.getBlockedNumbers
+import com.addev.listaspam.util.getCallLogs
 import com.addev.listaspam.util.getWhitelistNumbers
+import com.addev.listaspam.util.setListaSpamApiLang
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
     private lateinit var intentLauncher: ActivityResultLauncher<Intent>
     private var permissionDeniedDialog: AlertDialog? = null
-    private var callLogAdapter: CallLogAdapter? =null
+    private var callLogAdapter: CallLogAdapter? = null
     private var recyclerView: RecyclerView? = null
 
     private val spamUtils = SpamUtils()
 
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 1
-        private const val ABOUT_LINK = "https://github.com/adamff-dev/spain-spam-call-blocker-app";
+        private const val GITHUB_USER = "adamff-dev"
+        private const val GITHUB_REPO = "spam-call-blocker-app"
+        private const val ABOUT_LINK = "https://github.com/$GITHUB_USER/$GITHUB_REPO"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +57,9 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView?.layoutManager = LinearLayoutManager(this)
+
+        setLanguage()
+        checkUpdates()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -73,19 +74,49 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
                 startActivity(intent)
                 true
             }
+
             R.id.action_about -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_LINK))
                 this.startActivity(intent)
                 true
             }
+
             R.id.test_number -> {
                 showNumberInputDialog()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun checkUpdates() {
+        Thread {
+            val checker = UpdateChecker(
+                context = this,
+                githubUser = GITHUB_USER,
+                githubRepo = GITHUB_REPO
+            )
+            checker.checkForUpdateSync()
+        }.start()
+    }
+
+    private fun setLanguage() {
+        val systemLanguage = Locale.getDefault().language
+        val supportedLanguages = setOf(
+            "EN", "ES", "FR", "DE", "IT", "RU", "SV", "PL", "PT",
+            "NL", "NO", "CZ", "ID", "ZH", "JA", "HE", "TR", "HU",
+            "FI", "DA", "TH", "GK", "SK", "RO"
+        )
+
+        val finalLang = if (supportedLanguages.contains(systemLanguage)) {
+            systemLanguage
+        } else {
+            "EN"
+        }
+
+        setListaSpamApiLang(this, finalLang)
+    }
 
     private fun showNumberInputDialog() {
         val builder = AlertDialog.Builder(this)
@@ -228,7 +259,8 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
     private fun showPermissionToastAndRequest(missingPermissions: List<String>) {
         val permissionNames = missingPermissions.map { "• " + getPermissionName(it) }
-        val message = getString(R.string.permissions_required_message, permissionNames.joinToString("\n"))
+        val message =
+            getString(R.string.permissions_required_message, permissionNames.joinToString("\n"))
 
         if (permissionDeniedDialog?.isShowing == true) {
             return
