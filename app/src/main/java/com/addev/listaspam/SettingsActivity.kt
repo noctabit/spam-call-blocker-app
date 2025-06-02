@@ -24,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
         val importButton: Button = findViewById(R.id.btn_import)
 
         exportButton.setOnClickListener {
-            exportFileLauncher.launch("backup_prefs.json")
+            exportFileLauncher.launch("spam_call_blocker_prefs.json")
         }
 
         importButton.setOnClickListener {
