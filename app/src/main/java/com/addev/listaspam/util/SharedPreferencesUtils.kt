@@ -27,6 +27,16 @@ fun shouldFilterWithListaSpamApi(context: Context): Boolean {
     return sharedPreferences.getBoolean("pref_filter_lista_spam_api", true)
 }
 
+fun getListaSpamApiLang(context: Context): String? {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    return sharedPreferences.getString("pref_language", null)?.uppercase()
+}
+
+fun setListaSpamApiLang(context: Context, languageCode: String) {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    sharedPreferences.edit().putString("pref_language", languageCode.uppercase()).apply()
+}
+
 fun shouldFilterWithListaSpamScraper(context: Context): Boolean {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     return sharedPreferences.getBoolean("pref_filter_lista_spam_scraper", false)
