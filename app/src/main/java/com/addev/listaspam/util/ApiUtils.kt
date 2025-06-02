@@ -22,13 +22,13 @@ object ApiUtils {
      * @param number The phone number to check, in international format.
      * @return `true` if the number has an average rating lower than 3 (i.e., bad or dangerous), otherwise `false`.
      */
-    fun checkListaSpamApi(number: String): Boolean {
+    fun checkListaSpamApi(number: String, lang: String): Boolean {
         val formBody = FormBody.Builder()
             .add("user_type", "free")
             .add("api_key", API_KEY)
             .add("phone", number)
             .add("_action", "_get_info_for_phone")
-            .add("lang", "ES")
+            .add("lang", lang)
             .build()
 
         val request = Request.Builder()
