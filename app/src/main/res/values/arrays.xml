@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="language_names">
+        <item>English</item>           <!-- en -->
+        <item>Español</item>           <!-- es -->
+        <item>Français</item>          <!-- fr -->
+        <item>Deutsch</item>           <!-- de -->
+        <item>Italiano</item>          <!-- it -->
+        <item>ру́сский</item>          <!-- ru -->
+        <item>Svenska</item>           <!-- sv -->
+        <item>Polski</item>            <!-- pl -->
+        <item>Português</item>         <!-- pt -->
+        <item>Nederlands</item>        <!-- nl -->
+        <item>Norsk</item>             <!-- no -->
+        <item>Čeština</item>           <!-- cz -->
+        <item>Indonesia</item>         <!-- id -->
+        <item>国语</item>               <!-- zh -->
+        <item>日本語</item>             <!-- ja -->
+        <item>עִבְרִית</item>           <!-- he -->
+        <item>Türkçe</item>            <!-- tr -->
+        <item>Magyar</item>            <!-- hu -->
+        <item>Suomi</item>             <!-- fi -->
+        <item>Dansk</item>             <!-- da -->
+        <item>ภาษาไทย</item>           <!-- th -->
+        <item>ελληνικά</item>          <!-- gk -->
+        <item>Slovenčina</item>        <!-- sk -->
+        <item>Românește</item>         <!-- ro -->
+    </string-array>
+
+    <string-array name="language_values">
+        <item>EN</item>
+        <item>ES</item>
+        <item>FR</item>
+        <item>DE</item>
+        <item>IT</item>
+        <item>RU</item>
+        <item>SV</item>
+        <item>PL</item>
+        <item>PT</item>
+        <item>NL</item>
+        <item>NO</item>
+        <item>CZ</item>
+        <item>ID</item>
+        <item>ZH</item>
+        <item>JA</item>
+        <item>HE</item>
+        <item>TR</item>
+        <item>HU</item>
+        <item>FI</item>
+        <item>DA</item>
+        <item>TH</item>
+        <item>GK</item>
+        <item>SK</item>
+        <item>RO</item>
+    </string-array>
+</resources>
