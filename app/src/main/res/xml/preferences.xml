@@ -2,68 +2,96 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_enable_blocking"
-        android:title="@string/pref_enable_blocking_title"
-        android:summary="@string/pref_enable_blocking_summary"
-        android:defaultValue="true" />
+    <!-- General Blocking Settings -->
+    <PreferenceCategory android:title="General Blocking Settings" app:iconSpaceReserved="false">
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_filter_lista_spam"
-        android:title="@string/pref_filter_lista_spam_title"
-        android:summary="@string/pref_filter_lista_spam_summary"
-        android:defaultValue="true" />
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_enable_blocking"
+            android:title="@string/pref_enable_blocking_title"
+            android:summary="@string/pref_enable_blocking_summary"
+            android:defaultValue="true" />
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_filter_lista_spam_scraper"
-        android:title="@string/pref_filter_lista_spam_scraper_title"
-        android:summary="@string/pref_filter_lista_spam_scraper_summary"
-        android:defaultValue="true" />
+    </PreferenceCategory>
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_filter_responder_o_no"
-        android:title="@string/pref_filter_responder_o_no_title"
-        android:summary="@string/pref_filter_responder_o_no_summary"
-        android:defaultValue="false" />
+    <!-- Spam Number Filters -->
+    <PreferenceCategory android:title="Spam Number Filters" app:iconSpaceReserved="false">
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_filter_cleverdialer"
-        android:title="@string/pref_filter_cleverdialer_title"
-        android:summary="@string/pref_filter_cleverdialer_summary"
-        android:defaultValue="false" />
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_filter_lista_spam"
+            android:title="@string/pref_filter_lista_spam_title"
+            android:summary="@string/pref_filter_lista_spam_summary"
+            android:defaultValue="true" />
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_block_non_contacts"
-        android:title="@string/pref_block_non_contacts_title"
-        android:summary="@string/pref_block_non_contacts_summary"
-        android:defaultValue="false" />
+        <ListPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_language"
+            android:title="@string/pref_filter_lista_spam_api_language_title"
+            android:summary="@string/pref_filter_lista_spam_api_language_summary"
+            android:entries="@array/language_names"
+            android:entryValues="@array/language_values"
+            android:defaultValue="system" />
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_block_hidden_numbers"
-        android:title="@string/pref_block_hidden_numbers_title"
-        android:summary="@string/pref_block_hidden_numbers_summary"
-        android:defaultValue="true" />
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_filter_lista_spam_scraper"
+            android:title="@string/pref_filter_lista_spam_scraper_title"
+            android:summary="@string/pref_filter_lista_spam_scraper_summary"
+            android:defaultValue="true" />
 
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_block_international_numbers"
-        android:title="@string/pref_block_international_numbers_title"
-        android:summary="@string/pref_block_international_numbers_summary"
-        android:defaultValue="false" />
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_filter_responder_o_no"
+            android:title="@string/pref_filter_responder_o_no_title"
+            android:summary="@string/pref_filter_responder_o_no_summary"
+            android:defaultValue="false" />
 
-    <!-- Mostrar notificación al bloquear número -->
-    <CheckBoxPreference
-        app:iconSpaceReserved="false"
-        android:key="pref_show_notification"
-        android:title="@string/pref_show_notification_title"
-        android:summary="@string/pref_show_notification_summary"
-        android:defaultValue="true" />
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_filter_cleverdialer"
+            android:title="@string/pref_filter_cleverdialer_title"
+            android:summary="@string/pref_filter_cleverdialer_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <!-- Other Blocking Options -->
+    <PreferenceCategory android:title="Other Blocking Options" app:iconSpaceReserved="false">
+
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_block_non_contacts"
+            android:title="@string/pref_block_non_contacts_title"
+            android:summary="@string/pref_block_non_contacts_summary"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_block_hidden_numbers"
+            android:title="@string/pref_block_hidden_numbers_title"
+            android:summary="@string/pref_block_hidden_numbers_summary"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_block_international_numbers"
+            android:title="@string/pref_block_international_numbers_title"
+            android:summary="@string/pref_block_international_numbers_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <!-- Notifications -->
+    <PreferenceCategory android:title="Notifications" app:iconSpaceReserved="false">
+
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_show_notification"
+            android:title="@string/pref_show_notification_title"
+            android:summary="@string/pref_show_notification_summary"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
