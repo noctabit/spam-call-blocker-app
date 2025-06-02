@@ -11,7 +11,7 @@ android {
         applicationId = "com.addev.listaspam"
         minSdk = 29
         targetSdk = 34
-        versionCode = 1
+        versionCode = 9
         versionName = "2.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -33,6 +33,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs (for IzzyOnDroid/F-Droid)
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles (for Google Play)
+        includeInBundle = false
     }
 }
 
