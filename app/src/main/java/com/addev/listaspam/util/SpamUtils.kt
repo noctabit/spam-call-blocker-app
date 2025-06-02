@@ -2,6 +2,7 @@ package com.addev.listaspam.util
 
 import android.Manifest
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Handler
@@ -114,7 +115,11 @@ class SpamUtils {
 
         // ListaSpam
         val listaSpamApi = shouldFilterWithListaSpamApi(context)
-        if (listaSpamApi) spamCheckers.add(::checkListaSpamApi)
+        if (listaSpamApi) {
+            spamCheckers.add { number ->
+                ApiUtils.checkListaSpamApi(number, getListaSpamApiLang(context) ?: "EN")
+            }
+        }
         if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi) spamCheckers.add(::checkListaSpam)
 
         if (shouldFilterWithResponderONo(context)) spamCheckers.add(::checkResponderono)
@@ -188,10 +193,6 @@ class SpamUtils {
         } finally {
             cursor?.close()
         }
-    }
-
-    private fun checkListaSpamApi(number: String): Boolean {
-        return ApiUtils.checkListaSpamApi(number);
     }
 
     /**
@@ -298,7 +299,6 @@ class SpamUtils {
      * Handles the scenario when a phone number is not identified as spam.
      * @param context Context for accessing resources.
      * @param number Phone number identified as not spam.
-     * @param callback Callback function to handle the result.
      */
     private fun handleNonSpamNumber(
         context: Context,
