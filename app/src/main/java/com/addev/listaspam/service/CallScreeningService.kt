@@ -11,10 +11,8 @@ import com.addev.listaspam.util.SpamUtils
 
 /**
  * Call screening service to identify and block spam calls.
- * Requires Android Q (API level 29) or higher.
  */
-@RequiresApi(Build.VERSION_CODES.Q)
-class MyCallScreeningService : CallScreeningService() {
+class CallScreeningService : CallScreeningService() {
 
     private val spamUtils = SpamUtils()
 
