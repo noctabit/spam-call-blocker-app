@@ -6,42 +6,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="16dp">
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btn_export"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:text="@string/export_config"
+            android:icon="@drawable/ic_export"
+            android:drawablePadding="8dp" />
 
-            <Button
-                android:id="@+id/btn_export"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/export_config"
-                android:drawableStart="@drawable/ic_export"
-                android:drawablePadding="8dp" />
+        <Button
+            android:id="@+id/btn_import"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/import_config"
+            android:layout_marginTop="16dp"
+            android:icon="@drawable/ic_import"
+            android:drawablePadding="8dp" />
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_import"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/import_config"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:drawableStart="@drawable/ic_import"
-                android:drawablePadding="8dp" />
-
-            <FrameLayout
-                android:id="@+id/settings_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-    </ScrollView>
+    <FrameLayout
+        android:id="@+id/settings_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
