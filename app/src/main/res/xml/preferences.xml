@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- General Blocking Settings -->
-    <PreferenceCategory android:title="General Blocking Settings" app:iconSpaceReserved="false">
+    <PreferenceCategory
+        android:title="@string/pref_category_general_blocking"
+        app:iconSpaceReserved="false" >
 
         <CheckBoxPreference
             app:iconSpaceReserved="false"
@@ -15,7 +17,9 @@
     </PreferenceCategory>
 
     <!-- Spam Number Filters -->
-    <PreferenceCategory android:title="Spam Number Filters" app:iconSpaceReserved="false">
+    <PreferenceCategory
+        android:title="@string/pref_category_spam_filters"
+        app:iconSpaceReserved="false" >
 
         <CheckBoxPreference
             app:iconSpaceReserved="false"
@@ -57,7 +61,9 @@
     </PreferenceCategory>
 
     <!-- Other Blocking Options -->
-    <PreferenceCategory android:title="Other Blocking Options" app:iconSpaceReserved="false">
+    <PreferenceCategory
+        android:title="@string/pref_category_other_options"
+        app:iconSpaceReserved="false" >
 
         <CheckBoxPreference
             app:iconSpaceReserved="false"
@@ -83,7 +89,9 @@
     </PreferenceCategory>
 
     <!-- Notifications -->
-    <PreferenceCategory android:title="Notifications" app:iconSpaceReserved="false">
+    <PreferenceCategory
+        android:title="@string/pref_category_notifications"
+        app:iconSpaceReserved="false" >
 
         <CheckBoxPreference
             app:iconSpaceReserved="false"
