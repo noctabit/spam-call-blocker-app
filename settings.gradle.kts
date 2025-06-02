@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ListaSpam"
+rootProject.name = "Spam Call Blocker"
 include(":app")
  

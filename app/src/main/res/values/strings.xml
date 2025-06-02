@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ListaSpam</string>
+    <string name="app_name">Spam Call Blocker</string>
     <string name="success_call_screening_role">Success requesting role call screening!</string>
     <string name="failed_call_screening_role">Failed requesting role call screening</string>
     <string name="telecom_manager_unavailable">Telecom Manager is unavailable.</string>
@@ -17,7 +17,7 @@
     <string name="duration_label">Duration: %1$d seconds</string>
     <string name="report_url_template">http://example.com/report?number=%1$s</string>
     <string name="incoming_call_not_spam">The incoming call appears not to be spam</string>
-    <string name="notification_channel_name">ListaSpam</string>
+    <string name="notification_channel_name">Spam Call Blocker</string>
     <string name="notification_title_spam_blocked">Call blocked: %1$s</string>
     <string name="number_copied_to_clipboard">Phone number copied to clipboard</string>
 
@@ -30,36 +30,43 @@
 
     <!-- Preferences -->
     <string name="action_settings">Settings</string>
+    <string name="about">About</string>
 
-    <string name="pref_enable_blocking_title">Enable General Blocking</string>
-    <string name="pref_enable_blocking_summary">Enables or disables the call blocking system across the entire application</string>
+    <!-- General Blocking Settings -->
+    <string name="pref_enable_blocking_title">Enable Blocking</string>
+    <string name="pref_enable_blocking_summary">Enable or disable call blocking functionality</string>
 
-    <string name="pref_filter_lista_spam_title">Filter using listaspam.com (API)</string>
-    <string name="pref_filter_lista_spam_summary">(Recommended) Blocks calls from numbers flagged as spam via the listaspam.com API</string>
+    <!-- Spam Number Filters -->
+    <string name="pref_filter_lista_spam_title">API unknownphone.com</string>
+    <string name="pref_filter_lista_spam_summary">[🌐] (Recommended) Blocks calls from spam numbers listed in unknownphone.com API</string>
 
-    <string name="pref_filter_lista_spam_scraper_title">Filter using listaspam.com (Scraper)</string>
-    <string name="pref_filter_lista_spam_scraper_summary">(Deprecated) Blocks calls from numbers flagged as spam via the listaspam.com scraper method</string>
+    <string name="pref_filter_lista_spam_api_language_title">unknownphone.com API Language</string>
+    <string name="pref_filter_lista_spam_api_language_summary">Select the language for searches in the unknownphone.com API (affects results)</string>
 
-    <string name="pref_filter_responder_o_no_title">Filter with responderono.es</string>
-    <string name="pref_filter_responder_o_no_summary">Blocks calls from spam numbers included in the responderono.es database</string>
+    <string name="pref_filter_lista_spam_scraper_title">listaspam.com Scraper</string>
+    <string name="pref_filter_lista_spam_scraper_summary">[🇪🇸] (Deprecated) Blocks calls from spam numbers listed on listaspam.es website</string>
 
-    <string name="pref_filter_cleverdialer_title">Filter with cleverdialer.es</string>
-    <string name="pref_filter_cleverdialer_summary">Blocks calls from spam numbers included in the cleverdialer.es database</string>
+    <string name="pref_filter_responder_o_no_title">responderono.es Scraper</string>
+    <string name="pref_filter_responder_o_no_summary">[🇪🇸] Blocks calls from spam numbers listed on responderono.es website</string>
 
-    <string name="pref_block_non_contacts_title">Block Unknown Numbers</string>
-    <string name="pref_block_non_contacts_summary">Blocks all calls from numbers not in your contact list</string>
+    <string name="pref_filter_cleverdialer_title">cleverdialer.es Scraper</string>
+    <string name="pref_filter_cleverdialer_summary">[🇪🇸] Blocks calls from spam numbers listed on cleverdialer.es website</string>
+
+    <!-- Other Blocking Options -->
+    <string name="pref_block_non_contacts_title">Block Non-Contacts</string>
+    <string name="pref_block_non_contacts_summary">Block calls from numbers not saved in contacts</string>
 
     <string name="pref_block_hidden_numbers_title">Block Hidden Numbers</string>
-    <string name="pref_block_hidden_numbers_summary">Block all calls from hidden numbers</string>
+    <string name="pref_block_hidden_numbers_summary">Block calls from hidden or private numbers</string>
 
-    <string name="pref_block_international_numbers_title">Block International Numbers</string>
-    <string name="pref_block_international_numbers_summary">Block all calls from a country different from yours</string>
+    <string name="pref_block_international_numbers_title">Block International Calls</string>
+    <string name="pref_block_international_numbers_summary">Block calls from other countries</string>
 
-    <string name="pref_show_notification_title">Show Notification on call blocking</string>
-    <string name="pref_show_notification_summary">Receive a notification when a call is blocked</string>
+    <!-- Notifications -->
+    <string name="pref_show_notification_title">Show Notification on Block</string>
+    <string name="pref_show_notification_summary">Display a notification when a call is blocked</string>
 
-
-    <!-- item_actions -->
+    <!-- Call item actions  -->
     <string name="report_in_listaspam_com">Report in ListaSpam</string>
     <string name="search_in_google">Search in Google</string>
     <string name="block">Block</string>
@@ -76,11 +83,14 @@
     <string name="block_international_call">International call</string>
     <string name="block_already_blocked_number">Blocked number</string>
     <string name="block_non_contact">Not a contact</string>
-    <string name="about">About</string>
     <string name="export_config">Export settings and lists</string>
     <string name="import_config">Import settings and lists</string>
     <string name="test_number">Test number</string>
     <string name="aceptar">Accept</string>
     <string name="cancelar">Cancel</string>
     <string name="type_number">Please, type a valid number</string>
+
+    <!-- Updates -->
+    <string name="update_available_title">Update Available</string>
+    <string name="update_available_message">There is a new version: %1$s\nDo you want to download it?</string>
 </resources>
