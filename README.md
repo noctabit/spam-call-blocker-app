@@ -1,6 +1,6 @@
 # Call Blocker App
 
-Call Blocker App is a Kotlin-based application designed to help you manage and block unwanted incoming calls while maintaining a whitelist of approved contacts. It uses web scraping to enhance the call-blocking experience by integrating real-time data from popular spam-detection Spanish websites.
+Call Blocker App is a Kotlin-based application designed to help you manage and block unwanted incoming calls while maintaining a whitelist of approved contacts. It integrates multiple spam detection sources, including real-time web scraping and an external API with multi-country support.
 
 ## Screenshots
 
@@ -15,16 +15,27 @@ Here are some screenshots of the Call Blocker App in action:
 
 ## Features
 
+- **Multi-Language Number Lookup via UnknownPhone API**: Lookup phone numbers internationally using the UnknownPhone API, supporting the following country numbers:
+  ```
+  United States, UK, Spain, France, Germany, Italy,
+  Russia, Sweden, Poland, Portugal, Netherlands,
+  Norway, Czech Republic, Indonesia, China, Japan,
+  Israel, Turkey, Hungary, Finland, Denmark,
+  Thailand, Greece, Slovakia, Romania
+  ```
 - **Block and Unblock Numbers**: Easily block or unblock specific phone numbers.
 - **Whitelist Management**: Maintain a whitelist of phone numbers that are always allowed to reach you.
 - **Web-Based Number Lookup**: Automatically look up phone numbers using two trusted Spanish websites:
   - [www.listaspam.com](https://www.listaspam.com)
   - [www.responderono.es](https://www.responderono.es)
+  - [www.cleverdialer.es](https://www.cleverdialer.es)
 - **Real-Time Web Scraping**: Leverage web scraping techniques to gather real-time information on whether a number should be blocked.
+- **Automatic App Updates**: The app checks for updates upon launch and prompts the user to install them if available.
 
 ## Settings
 
 - **General Blocking**: Toggle to enable or disable call blocking.
+- **Filter by UnknownPhone API**: Use UnknownPhone API to check numbers based on selected language.
 - **Filter by ListaSpam**: Enable filtering based on data from www.listaspam.com.
 - **Filter by Responderono**: Enable filtering based on data from www.responderono.es.
 - **Block Unknown Numbers**: Option to block all numbers not saved in your contacts.
@@ -36,7 +47,16 @@ Here are some screenshots of the Call Blocker App in action:
 
 ## How It Works
 
-The app uses the JSoup library for web scraping, which allows it to retrieve and parse HTML data from www.listaspam.com and www.responderono.es. This data is then processed to determine whether an incoming call should be blocked or not.
+The app combines multiple data sources to determine if an incoming call should be blocked:
+
+- UnknownPhone API Integration
+Sends a POST request with the phone number and selected language to the UnknownPhone API, returning a rating indicating whether the number is likely spam. Numbers with an average rating below 3 (bad or dangerous) are blocked automatically.
+
+- Web Scraping with JSoup
+Scrapes listas spam and responderono websites in real time to gather fresh data on suspicious numbers.
+
+- User Preferences
+Uses your configured settings (whitelist, block unknown, hidden, or international numbers) to customize blocking behavior.
 
 ## Data Management
 
