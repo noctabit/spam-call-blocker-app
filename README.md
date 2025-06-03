@@ -11,6 +11,7 @@ Here are some screenshots of the Call Blocker App in action:
   <img src="https://i.imgur.com/QnbalOh.png" alt="Phone number options" width="300">  
   <img src="https://i.imgur.com/QeC3Kg8.png" alt="Settings" width="300">  
   <img src="https://i.imgur.com/I4tDolO.png" alt="More settings" width="300">
+  <img src="https://i.imgur.com/T2DdbPY.png" alt="Report dialog" width="300">
 </div>
 
 ## Features
@@ -37,6 +38,7 @@ Here are some screenshots of the Call Blocker App in action:
   ```
 - **Block and Unblock Numbers**: Easily block or unblock specific phone numbers.
 - **Whitelist Management**: Maintain a whitelist of phone numbers that are always allowed to reach you.
+- **Report Dialog**: Built-in system to report suspicious or safe numbers.
 - **Web-Based Number Lookup**: Automatically look up phone numbers using two trusted Spanish websites:
   - [www.listaspam.com](https://www.listaspam.com)
   - [www.responderono.es](https://www.responderono.es)
