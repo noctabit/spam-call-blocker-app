@@ -44,6 +44,16 @@ Here are some screenshots of the Call Blocker App in action:
 - **Real-Time Web Scraping**: Leverage web scraping techniques to gather real-time information on whether a number should be blocked.
 - **Automatic App Updates**: The app checks for updates upon launch and prompts the user to install them if available.
 
+## Contribution
+
+We welcome contributions of any kind — code, documentation, bug reports, or feature suggestions.
+
+If you find this project helpful and want to support its development, consider making a donation.
+
+Your support helps keep the project active and maintained. Thank you! 🙌
+
+<a target="_blank" href="https://www.buymeacoffee.com/rSiZtB3"><img style="width: 200px" src="https://i.imgur.com/KCk0bxY.png" /></a>
+
 ## Settings
 
 - **General Blocking**: Toggle to enable or disable call blocking.
