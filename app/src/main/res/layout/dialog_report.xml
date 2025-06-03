@@ -59,7 +59,7 @@
             android:id="@+id/reportTargetsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¿Dónde deseas reportar?"
+            android:text="@string/where_to_report"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />

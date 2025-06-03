@@ -114,6 +114,7 @@
     <string name="report_title">Reportar número</string>
     <string name="report_label">Describe el motivo</string>
     <string name="report_hint">Explicación breve</string>
+    <string name="where_to_report">¿Dónde desea reportar?</string>
     <string name="report_spam">Es spam</string>
     <string name="report_not_spam">NO es spam</string>
     <string name="accept">Enviar</string>
