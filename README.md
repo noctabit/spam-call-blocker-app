@@ -23,6 +23,18 @@ Here are some screenshots of the Call Blocker App in action:
   Israel, Turkey, Hungary, Finland, Denmark,
   Thailand, Greece, Slovakia, Romania
   ```
+- **Multi-Country Number Lookup via Tellows API**: Lookup phone numbers internationally using the Tellows API, supporting the following country numbers:
+  ```
+  Germany, Saudi Arabia, Algeria, Argentina, Australia,
+  Austria, Belgium, Belarus, Brazil, Chile, China, Colombia,
+  South Korea, Denmark, Egypt, United Arab Emirates, Slovenia,
+  Spain, Philippines, Finland, France, Greece, Hungary, India,
+  Indonesia, Iran, Ireland, Israel, Italy, Japan, Mexico,
+  Nigeria, Norway, New Zealand, Netherlands, Pakistan, Peru,
+  Poland, Portugal, United Kingdom, Czech Republic, Hong Kong,
+  Russia, Singapore, South Africa, Sweden, Switzerland, Taiwan,
+  Turkey, Ukraine, USA/Canada, Venezuela
+  ```
 - **Block and Unblock Numbers**: Easily block or unblock specific phone numbers.
 - **Whitelist Management**: Maintain a whitelist of phone numbers that are always allowed to reach you.
 - **Web-Based Number Lookup**: Automatically look up phone numbers using two trusted Spanish websites:
@@ -36,6 +48,7 @@ Here are some screenshots of the Call Blocker App in action:
 
 - **General Blocking**: Toggle to enable or disable call blocking.
 - **Filter by UnknownPhone API**: Use UnknownPhone API to check numbers based on selected language.
+- **Filter by Tellows API**: Use Tellows API to check numbers based on selected country.
 - **Filter by ListaSpam**: Enable filtering based on data from www.listaspam.com.
 - **Filter by Responderono**: Enable filtering based on data from www.responderono.es.
 - **Block Unknown Numbers**: Option to block all numbers not saved in your contacts.
@@ -44,19 +57,6 @@ Here are some screenshots of the Call Blocker App in action:
 - **Notifications**: Receive a notification whenever a call is blocked.
 - **Export Preferences**: Export all app settings and blocked/whitelisted numbers.
 - **Import Preferences**: Import previously exported settings and number lists.
-
-## How It Works
-
-The app combines multiple data sources to determine if an incoming call should be blocked:
-
-- UnknownPhone API Integration
-Sends a POST request with the phone number and selected language to the UnknownPhone API, returning a rating indicating whether the number is likely spam. Numbers with an average rating below 3 (bad or dangerous) are blocked automatically.
-
-- Web Scraping with JSoup
-Scrapes listas spam and responderono websites in real time to gather fresh data on suspicious numbers.
-
-- User Preferences
-Uses your configured settings (whitelist, block unknown, hidden, or international numbers) to customize blocking behavior.
 
 ## Data Management
 
