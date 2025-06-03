@@ -53,7 +53,7 @@ object ApiUtils {
             val bodyString = response.body?.string() ?: return false
 
             val avgRating =
-                JSONObject(bodyString).optString("avg_ratings").toIntOrNull() ?: return false
+                JSONObject(bodyString).optString("avg_ratings").toFloatOrNull() ?: return false
 
             // Average ratings:
             // 5 - safe
@@ -107,7 +107,6 @@ object ApiUtils {
 
         return try {
             val response = client.newCall(request).execute()
-            Log.d("com.addev.listaspam", response.toString())
             response.isSuccessful
         } catch (e: Exception) {
             false
@@ -131,7 +130,7 @@ object ApiUtils {
             .url(url)
             .get()
             .header("Connection", "Keep-Alive")
-            .header("Host", "www.tellows.de")
+            .header("Host", TELLOWS_API_URL)
             .header("User-Agent", "Dalvik/2.1.0 (Linux; U; Android 6.0; I14 Pro Max Build/MRA58K)")
             .build()
 
@@ -143,12 +142,9 @@ object ApiUtils {
 
             val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(bodyString.byteInputStream())
-            Log.d("com.addev.listaspam", "parsed")
-
 
             val scoreNode = xml.getElementsByTagName("score").item(0)
             val score = scoreNode?.textContent?.toIntOrNull() ?: return false
-            Log.d("com.addev.listaspam", score.toString())
 
             // Tellows scores: 1 (safe) to 9 (very dangerous)
             score >= 7
@@ -179,9 +175,19 @@ object ApiUtils {
     ): Boolean {
         val userScore = if (isSpam) 9 else 1
 
-        val url = "https://www.tellows.de/basic/num/$phone" +
-                "?xml=1&partner=androidapp&apikey=koE5hjkOwbHnmcADqZuqqq2" +
-                "&createcomment=1&country=$lang&lang=$lang&user_auth=&user_email="
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host(TELLOWS_API_URL)
+            .addPathSegments("basic/num/$phone")
+            .addQueryParameter("xml", "1")
+            .addQueryParameter("partner", "androidapp")
+            .addQueryParameter("apikey", TELLOWS_API_KEY)
+            .addQueryParameter("createcomment", "1")
+            .addQueryParameter("country", lang)
+            .addQueryParameter("lang", lang)
+            .addQueryParameter("user_auth", "")
+            .addQueryParameter("user_email", "")
+            .build()
 
         val formBody = FormBody.Builder()
             .add("caller", phone)
@@ -197,7 +203,7 @@ object ApiUtils {
             .header("Accept-Encoding", "gzip")
             .header("Connection", "Keep-Alive")
             .header("Content-Type", "application/x-www-form-urlencoded")
-            .header("Host", "www.tellows.de")
+            .header("Host", TELLOWS_API_URL)
             .header("User-Agent", "Dalvik/2.1.0 (Linux; U; Android 6.0; I14 Pro Max Build/MRA58K)")
             .build()
 
