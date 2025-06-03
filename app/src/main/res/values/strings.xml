@@ -112,7 +112,8 @@
 
     <!-- Reports -->
     <string name="report_title">Report Number</string>
-    <string name="report_hint">Describe the reason</string>
+    <string name="report_label">Describe the reason</string>
+    <string name="report_hint">Brief explanation</string>
     <string name="report_spam">It is spam</string>
     <string name="report_not_spam">It is NOT spam</string>
     <string name="accept">Submit</string>
@@ -122,4 +123,5 @@
     <string name="report_success_prefix">Report sent to</string>
     <string name="and">and</string>
     <string name="report_failure">Report could not be sent</string>
+    <string name="select_at_least_one_provider">Select at least one provider</string>
 </resources>
