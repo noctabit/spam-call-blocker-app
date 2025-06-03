@@ -7,6 +7,9 @@
         android:id="@+id/action_about"
         android:title="@string/about" />
     <item
+        android:id="@+id/donate"
+        android:title="@string/donate" />
+    <item
         android:id="@+id/test_number"
         android:title="@string/test_number" />
 </menu>

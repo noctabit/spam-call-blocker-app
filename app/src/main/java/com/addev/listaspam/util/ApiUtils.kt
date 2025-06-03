@@ -1,6 +1,5 @@
 package com.addev.listaspam.util
 
-import android.util.Log
 import okhttp3.FormBody
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient

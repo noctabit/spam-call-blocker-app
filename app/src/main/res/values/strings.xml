@@ -31,6 +31,7 @@
     <!-- Preferences -->
     <string name="action_settings">Settings</string>
     <string name="about">About</string>
+    <string name="donate">Donate</string>
 
     <!-- Preferences Sections -->
     <string name="pref_category_general_blocking">General</string>
@@ -81,7 +82,8 @@
     <string name="pref_show_notification_summary">Display a notification when a call is blocked</string>
 
     <!-- Call item actions  -->
-    <string name="report_in_listaspam_com">Report in ListaSpam</string>
+    <string name="open_in_lista_spam_com">Open in ListaSpam</string>
+    <string name="open_in_unknown_phone_com">Open in UnknownPhone</string>
     <string name="search_in_google">Search in Google</string>
     <string name="block">Block</string>
     <string name="add_to_whitelist">Add to whitelist</string>
@@ -107,4 +109,17 @@
     <!-- Updates -->
     <string name="update_available_title">Update Available</string>
     <string name="update_available_message">There is a new version: %1$s\nDo you want to download it?</string>
+
+    <!-- Reports -->
+    <string name="report_title">Report Number</string>
+    <string name="report_hint">Describe the reason</string>
+    <string name="report_spam">It is spam</string>
+    <string name="report_not_spam">It is NOT spam</string>
+    <string name="accept">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="report_validation_message">Must contain at least 2 words and 5 letters.</string>
+    <string name="report_radio_validation">Please select whether it is spam or not.</string>
+    <string name="report_success_prefix">Report sent to</string>
+    <string name="and">and</string>
+    <string name="report_failure">Report could not be sent</string>
 </resources>

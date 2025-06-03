@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         private const val GITHUB_USER = "adamff-dev"
         private const val GITHUB_REPO = "spam-call-blocker-app"
         private const val ABOUT_LINK = "https://github.com/$GITHUB_USER/$GITHUB_REPO"
+        private const val DONATE_LINK = "https://buymeacoffee.com/rsiztb3"
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +83,12 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
             R.id.action_about -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_LINK))
+                this.startActivity(intent)
+                true
+            }
+
+            R.id.donate -> {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DONATE_LINK))
                 this.startActivity(intent)
                 true
             }
@@ -119,7 +127,8 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         if (getTellowsApiCountry(this) != null) return
 
         val systemCountry = Locale.getDefault().country.lowercase()
-        val supportedCountries = resources.getStringArray(R.array.entryvalues_region_preference).toSet()
+        val supportedCountries =
+            resources.getStringArray(R.array.entryvalues_region_preference).toSet()
 
         val finalCountry = if (supportedCountries.contains(systemCountry)) systemCountry else "us"
         setTellowsApiCountry(this, finalCountry)
