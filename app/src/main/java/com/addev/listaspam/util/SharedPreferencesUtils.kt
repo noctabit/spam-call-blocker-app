@@ -37,6 +37,21 @@ fun setListaSpamApiLang(context: Context, languageCode: String) {
     sharedPreferences.edit().putString("pref_language", languageCode.uppercase()).apply()
 }
 
+fun shouldFilterWithTellowsApi(context: Context): Boolean {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    return sharedPreferences.getBoolean("pref_filter_tellows_api", true)
+}
+
+fun getTellowsApiCountry(context: Context): String? {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    return sharedPreferences.getString("pref_tellows_country", null)?.lowercase()
+}
+
+fun setTellowsApiCountry(context: Context, countryCode: String) {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    sharedPreferences.edit().putString("pref_tellows_country", countryCode.lowercase()).apply()
+}
+
 fun shouldFilterWithListaSpamScraper(context: Context): Boolean {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     return sharedPreferences.getBoolean("pref_filter_lista_spam_scraper", false)

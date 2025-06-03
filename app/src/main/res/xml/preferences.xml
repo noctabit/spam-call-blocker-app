@@ -18,7 +18,7 @@
 
     <!-- Spam Number Filters -->
     <PreferenceCategory
-        android:title="@string/pref_category_spam_filters"
+        android:title="Unknownphone API"
         app:iconSpaceReserved="false" >
 
         <CheckBoxPreference
@@ -34,8 +34,35 @@
             android:title="@string/pref_filter_lista_spam_api_language_title"
             android:summary="@string/pref_filter_lista_spam_api_language_summary"
             android:entries="@array/language_names"
-            android:entryValues="@array/language_values"
-            android:defaultValue="system" />
+            android:entryValues="@array/language_values" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Tellows API"
+        app:iconSpaceReserved="false" >
+
+        <CheckBoxPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_tellows_api"
+            android:title="@string/pref_filter_tellows_title"
+            android:summary="@string/pref_filter_tellows_summary"
+            android:defaultValue="true" />
+
+        <ListPreference
+            app:iconSpaceReserved="false"
+            android:key="pref_tellows_country"
+            android:title="@string/pref_filter_tellows_api_country_title"
+            android:summary="@string/pref_filter_tellows_api_country_summary"
+            android:entries="@array/entries_region_preference"
+            android:entryValues="@array/entryvalues_region_preference" />
+
+    </PreferenceCategory>
+
+    <!-- Spam Number Filters -->
+    <PreferenceCategory
+        android:title="Scrapers"
+        app:iconSpaceReserved="false" >
 
         <CheckBoxPreference
             app:iconSpaceReserved="false"

@@ -120,6 +120,14 @@ class SpamUtils {
                 ApiUtils.checkListaSpamApi(number, getListaSpamApiLang(context) ?: "EN")
             }
         }
+
+        val tellowsApi = shouldFilterWithTellowsApi(context)
+        if (tellowsApi) {
+            spamCheckers.add { number ->
+                ApiUtils.checkTellowsSpamApi(number, getTellowsApiCountry(context) ?: "us")
+            }
+        }
+
         if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi) spamCheckers.add(::checkListaSpam)
 
         if (shouldFilterWithResponderONo(context)) spamCheckers.add(::checkResponderono)

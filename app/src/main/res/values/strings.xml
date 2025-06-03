@@ -42,13 +42,21 @@
     <string name="pref_enable_blocking_title">Enable Blocking</string>
     <string name="pref_enable_blocking_summary">Enable or disable call blocking functionality</string>
 
-    <!-- Spam Number Filters -->
-    <string name="pref_filter_lista_spam_title">API unknownphone.com</string>
+    <!-- API Unknownphone -->
+    <string name="pref_filter_lista_spam_title">API Unknownphone</string>
     <string name="pref_filter_lista_spam_summary">[🌐] (Recommended) Blocks calls from spam numbers listed in unknownphone.com API</string>
 
     <string name="pref_filter_lista_spam_api_language_title">unknownphone.com API Language</string>
     <string name="pref_filter_lista_spam_api_language_summary">Select the language for searches in the unknownphone.com API (affects results)</string>
 
+    <!-- API Tellows -->
+    <string name="pref_filter_tellows_title">Tellows API</string>
+    <string name="pref_filter_tellows_summary">[🌐] (Recommended) Blocks calls from spam numbers listed in the Tellows API</string>
+
+    <string name="pref_filter_tellows_api_country_title">Tellows API Country</string>
+    <string name="pref_filter_tellows_api_country_summary">Select the country for searches in the Tellows API (affects results)</string>
+
+    <!-- Spam Number Filters -->
     <string name="pref_filter_lista_spam_scraper_title">listaspam.com Scraper</string>
     <string name="pref_filter_lista_spam_scraper_summary">[🇪🇸] (Deprecated) Blocks calls from spam numbers listed on listaspam.es website</string>
 

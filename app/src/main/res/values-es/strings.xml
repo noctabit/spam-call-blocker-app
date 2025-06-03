@@ -42,13 +42,21 @@
     <string name="pref_enable_blocking_title">Activar bloqueo</string>
     <string name="pref_enable_blocking_summary">Habilitar o deshabilitar la función de bloqueo de llamadas</string>
 
-    <!-- Spam Number Filters -->
-    <string name="pref_filter_lista_spam_title">API unknownphone.com</string>
+    <!-- API Unknownphone -->
+    <string name="pref_filter_lista_spam_title">API Unknownphone</string>
     <string name="pref_filter_lista_spam_summary">[🌐] (Recomendado) Bloquea llamadas de números spam incluidos en la API unknownphone.com</string>
 
     <string name="pref_filter_lista_spam_api_language_title">Idioma API unknownphone.com</string>
-    <string name="pref_filter_lista_spam_api_language_summary">Seleccione el idioma para realizar las búsquedas en la API de unknownphone.com (afecta los resultados)</string>
+    <string name="pref_filter_lista_spam_api_language_summary">Seleccione el idioma para realizar las búsquedas en la API de unknownphone.com (afecta a los resultados)</string>
 
+    <!-- API Tellows -->
+    <string name="pref_filter_tellows_title">API Tellows</string>
+    <string name="pref_filter_tellows_summary">[🌐] (Recomendado) Bloquea llamadas de números spam listados en la API de Tellows</string>
+
+    <string name="pref_filter_tellows_api_country_title">País API Tellows</string>
+    <string name="pref_filter_tellows_api_country_summary">Seleccione el país para las búsquedas en la API de Tellows (afecta a los resultados)</string>
+
+    <!-- Spam Number Filters -->
     <string name="pref_filter_lista_spam_scraper_title">Scraper listaspam.com</string>
     <string name="pref_filter_lista_spam_scraper_summary">[🇪🇸] (Obsoleto) Bloquea llamadas de números spam incluidos en la web listaspam.es</string>
 

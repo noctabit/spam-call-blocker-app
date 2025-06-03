@@ -26,7 +26,6 @@
         <item>Slovenčina</item>        <!-- sk -->
         <item>Românește</item>         <!-- ro -->
     </string-array>
-
     <string-array name="language_values">
         <item>EN</item>
         <item>ES</item>
@@ -52,5 +51,113 @@
         <item>GK</item>
         <item>SK</item>
         <item>RO</item>
+    </string-array>
+    <string-array name="entryvalues_region_preference">
+        <item>de</item>
+        <item>sa</item>
+        <item>dz</item>
+        <item>ar</item>
+        <item>au</item>
+        <item>at</item>
+        <item>be</item>
+        <item>by</item>
+        <item>br</item>
+        <item>cl</item>
+        <item>cn</item>
+        <item>co</item>
+        <item>kr</item>
+        <item>dk</item>
+        <item>eg</item>
+        <item>ae</item>
+        <item>si</item>
+        <item>es</item>
+        <item>ph</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>gr</item>
+        <item>hu</item>
+        <item>in</item>
+        <item>id</item>
+        <item>ir</item>
+        <item>ie</item>
+        <item>il</item>
+        <item>it</item>
+        <item>jp</item>
+        <item>mx</item>
+        <item>ng</item>
+        <item>no</item>
+        <item>nz</item>
+        <item>nl</item>
+        <item>pk</item>
+        <item>pe</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>gb</item>
+        <item>cz</item>
+        <item>hk</item>
+        <item>ru</item>
+        <item>sg</item>
+        <item>za</item>
+        <item>se</item>
+        <item>ch</item>
+        <item>tw</item>
+        <item>tr</item>
+        <item>ua</item>
+        <item>us</item>
+        <item>ve</item>
+    </string-array>
+    <string-array name="entries_region_preference">
+        <item>Deutschland</item>                   <!-- Germany -->
+        <item>المملكة العربية السعودية</item>       <!-- Saudi Arabia -->
+        <item>الجزائر</item>                       <!-- Algeria -->
+        <item>Argentina</item>                     <!-- Argentina (Spanish) -->
+        <item>Australia</item>                     <!-- Australia (English) -->
+        <item>Österreich</item>                    <!-- Austria -->
+        <item>België</item>                        <!-- Belgium (Dutch) -->
+        <item>Беларусь</item>                      <!-- Belarus -->
+        <item>Brasil</item>                        <!-- Brazil (Portuguese) -->
+        <item>Chile</item>                         <!-- Chile (Spanish) -->
+        <item>中国</item>                          <!-- China (Simplified Chinese) -->
+        <item>Colombia</item>                      <!-- Colombia (Spanish) -->
+        <item>대한민국</item>                       <!-- South Korea -->
+        <item>Danmark</item>                       <!-- Denmark -->
+        <item>مصر</item>                          <!-- Egypt -->
+        <item>دولة الإمارات العربية المتحدة</item> <!-- United Arab Emirates -->
+        <item>Slovenija</item>                     <!-- Slovenia -->
+        <item>España</item>                        <!-- Spain (Spanish) -->
+        <item>Pilipinas</item>                     <!-- Philippines (Filipino) -->
+        <item>Suomi</item>                         <!-- Finland -->
+        <item>France</item>                        <!-- France (French) -->
+        <item>Ελλάδα</item>                        <!-- Greece -->
+        <item>Magyarország</item>                  <!-- Hungary -->
+        <item>भारत</item>                          <!-- India (Hindi) -->
+        <item>Indonesia</item>                     <!-- Indonesia -->
+        <item>ایران</item>                         <!-- Iran -->
+        <item>Éire</item>                          <!-- Ireland (Irish) -->
+        <item>ישראל</item>                         <!-- Israel (Hebrew) -->
+        <item>Italia</item>                        <!-- Italy -->
+        <item>日本</item>                          <!-- Japan -->
+        <item>México</item>                       <!-- Mexico (Spanish) -->
+        <item>Nigeria</item>                       <!-- Nigeria (English) -->
+        <item>Norge</item>                         <!-- Norway -->
+        <item>New Zealand</item>                   <!-- New Zealand (English) -->
+        <item>Nederland</item>                     <!-- Netherlands -->
+        <item>پاکستان</item>                       <!-- Pakistan (Urdu) -->
+        <item>Perú</item>                         <!-- Peru (Spanish) -->
+        <item>Polska</item>                        <!-- Poland -->
+        <item>Portugal</item>                      <!-- Portugal -->
+        <item>United Kingdom</item>                <!-- United Kingdom (English) -->
+        <item>Česká republika</item>               <!-- Czech Republic -->
+        <item>香港</item>                          <!-- Hong Kong (Chinese) -->
+        <item>Россия</item>                        <!-- Russia -->
+        <item>Singapore</item>                     <!-- Singapore (English) -->
+        <item>South Africa</item>                  <!-- South Africa (English, many official languages) -->
+        <item>Sverige</item>                       <!-- Sweden -->
+        <item>Schweiz</item>                       <!-- Switzerland (German) -->
+        <item>臺灣</item>                          <!-- Taiwan -->
+        <item>Türkiye</item>                       <!-- Turkey -->
+        <item>Україна</item>                      <!-- Ukraine -->
+        <item>USA / Canada</item>                  <!-- USA/Canada (English) -->
+        <item>Venezuela</item>                     <!-- Venezuela (Spanish) -->
     </string-array>
 </resources>
