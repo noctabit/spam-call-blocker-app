@@ -2,7 +2,6 @@ package com.addev.listaspam.util
 
 import android.Manifest
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Handler
@@ -15,7 +14,10 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -32,12 +34,14 @@ class SpamUtils {
     companion object {
         // URLs
         const val LISTA_SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
-        const val LISTA_SPAM_CSS_SELECTOR = ".rate-and-owner .phone_rating:not(.result-4):not(.result-5)"
+        const val LISTA_SPAM_CSS_SELECTOR =
+            ".rate-and-owner .phone_rating:not(.result-4):not(.result-5)"
         private const val RESPONDERONO_URL_TEMPLATE =
             "https://www.responderono.es/numero-de-telefono/%s"
         private const val RESPONDERONO_CSS_SELECTOR = ".scoreContainer .score.negative"
         private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
-        private const val CLEVER_DIALER_CSS_SELECTOR = "body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam"
+        private const val CLEVER_DIALER_CSS_SELECTOR =
+            "body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam"
 
         private const val SPAM_PREFS = "SPAM_PREFS"
         private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
@@ -55,7 +59,11 @@ class SpamUtils {
      * @param number The phone number to check.
      * @param callback A function to be called with the result (true if spam, false otherwise).
      */
-    fun checkSpamNumber(context: Context, number: String, callback: (isSpam: Boolean) -> Unit = {}) {
+    fun checkSpamNumber(
+        context: Context,
+        number: String,
+        callback: (isSpam: Boolean) -> Unit = {}
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             if (!isBlockingEnabled(context)) {
                 showToast(context, context.getString(R.string.blocking_disabled), Toast.LENGTH_LONG)
@@ -67,31 +75,57 @@ class SpamUtils {
 
             // End call if the number is already blocked
             if (blockedNumbers?.contains(number) == true) {
-                handleSpamNumber(context, number, false, context.getString(R.string.block_already_blocked_number), callback)
+                handleSpamNumber(
+                    context,
+                    number,
+                    false,
+                    context.getString(R.string.block_already_blocked_number),
+                    callback
+                )
                 return@launch
             }
 
             if (number.isBlank() && shouldBlockHiddenNumbers(context)) {
-                handleSpamNumber(context, number, false, context.getString(R.string.block_hidden_number), callback)
+                handleSpamNumber(
+                    context,
+                    number,
+                    false,
+                    context.getString(R.string.block_hidden_number),
+                    callback
+                )
                 return@launch
             }
 
             if (isNumberWhitelisted(context, number) ||
                 isNumberBlocked(context, number) ||
-                isContactOrShouldBlockNonContacts(context, number)) {
+                isContactOrShouldBlockNonContacts(context, number)
+            ) {
                 return@launch
             }
 
             if (isInternationalCall(number) && shouldBlockInternationalNumbers(context)) {
-                handleSpamNumber(context, number, false, context.getString(R.string.block_international_call), callback)
+                handleSpamNumber(
+                    context,
+                    number,
+                    false,
+                    context.getString(R.string.block_international_call),
+                    callback
+                )
                 return@launch
             }
 
-            val spamCheckers = buildSpamCheckers(context)
-            val isSpam = spamCheckers.any { checker -> runCatching { checker(number) }.getOrDefault(false) }
+            val spamCheckers: List<suspend (String) -> Boolean> = buildSpamCheckers(context)
+            val isSpam = runBlocking {
+                isSpamRace(spamCheckers, number)
+            }
 
             if (isSpam) {
-                handleSpamNumber(context, number, context.getString(R.string.block_spam_number), callback)
+                handleSpamNumber(
+                    context,
+                    number,
+                    context.getString(R.string.block_spam_number),
+                    callback
+                )
             } else {
                 handleNonSpamNumber(context, number)
                 return@launch
@@ -99,11 +133,49 @@ class SpamUtils {
         }
     }
 
+    /**
+     * Runs a list of suspend functions in parallel to check if a number is spam.
+     *
+     * Launches all checks simultaneously and returns `true` as soon as
+     * any function returns `true`. At that point, it cancels all other running tasks.
+     * If none return `true`, it returns `false`.
+     *
+     * @param spamCheckers List of suspend functions that take a number (String) and return a Boolean indicating spam status.
+     * @param number The number (String) to be evaluated by the spam checkers.
+     * @return `true` if at least one function determines the number is spam; `false` otherwise.
+     */
+    private suspend fun isSpamRace(
+        spamCheckers: List<suspend (String) -> Boolean>,
+        number: String
+    ): Boolean = coroutineScope {
+        val deferreds = spamCheckers.map { checker ->
+            async {
+                runCatching { checker(number) }.getOrDefault(false)
+            }
+        }
+        for (deferred in deferreds) {
+            if (deferred.await()) {
+                deferreds.forEach { if (it != deferred) it.cancel() }
+                return@coroutineScope true
+            }
+        }
+        return@coroutineScope false
+    }
+
     private fun isContactOrShouldBlockNonContacts(context: Context, number: String): Boolean {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_CONTACTS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             if (isNumberInAgenda(context, number)) return true
             if (shouldBlockNonContacts(context)) {
-                handleSpamNumber(context, number, false, context.getString(R.string.block_non_contact), {})
+                handleSpamNumber(
+                    context,
+                    number,
+                    false,
+                    context.getString(R.string.block_non_contact),
+                    {})
                 return true
             }
         }
@@ -181,7 +253,8 @@ class SpamUtils {
         val contentResolver = context.contentResolver
         val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val projection = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
-        val selection = "${ContactsContract.CommonDataKinds.Phone.NUMBER} LIKE ? OR ${ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER} LIKE ?"
+        val selection =
+            "${ContactsContract.CommonDataKinds.Phone.NUMBER} LIKE ? OR ${ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER} LIKE ?"
         val normalizedNumber = normalizePhoneNumber(number)
         val selectionArgs = arrayOf("%$normalizedNumber%", "%$normalizedNumber%")
 
@@ -189,10 +262,14 @@ class SpamUtils {
         return try {
             cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
             cursor?.use {
-                val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val numberIndex =
+                    cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                 while (cursor.moveToNext()) {
                     val contactNumber = normalizePhoneNumber(cursor.getString(numberIndex))
-                    if (normalizedNumber == contactNumber || normalizedNumber.endsWith(contactNumber) || contactNumber.endsWith(normalizedNumber)) {
+                    if (normalizedNumber == contactNumber || normalizedNumber.endsWith(contactNumber) || contactNumber.endsWith(
+                            normalizedNumber
+                        )
+                    ) {
                         return true
                     }
                 }
@@ -260,7 +337,8 @@ class SpamUtils {
                     doc.select(cssSelector).isNotEmpty()
                 }
             } catch (e: IOException) {
-                Logger.getLogger("checkUrlForSpam").warning("Error checking URL: $url with error ${e.message}")
+                Logger.getLogger("checkUrlForSpam")
+                    .warning("Error checking URL: $url with error ${e.message}")
                 false
             }
         }
@@ -294,7 +372,11 @@ class SpamUtils {
         reason: String,
         callback: (isSpam: Boolean) -> Unit
     ) {
-        showToast(context, context.getString(R.string.block_reason_long) + " " + reason, Toast.LENGTH_LONG)
+        showToast(
+            context,
+            context.getString(R.string.block_reason_long) + " " + reason,
+            Toast.LENGTH_LONG
+        )
 
         if (saveNumber) {
             saveSpamNumber(context, number)
@@ -319,7 +401,8 @@ class SpamUtils {
                 context,
                 context.getString(R.string.call_incoming),
                 context.getString(R.string.incoming_call_not_spam),
-                10000)
+                10000
+            )
             removeSpamNumber(context, number)
         }
     }

@@ -35,8 +35,7 @@ class UpdateChecker(
     fun checkForUpdateSync() {
         try {
             val request = Request.Builder()
-                .url("https://api.github.com/repos/$githubUser/$githubRepo/releases/latest")
-                .build()
+                .url("https://api.github.com/repos/$githubUser/$githubRepo/releases/latest").build()
 
             val response = client.newCall(request).execute()
 
@@ -54,13 +53,11 @@ class UpdateChecker(
             val currentVersion = getCurrentVersion()
 
             if (isUpdateAvailable(currentVersion, latestTag)) {
-                showAlert(
-                    context.getString(R.string.update_available_title),
+                showAlert(context.getString(R.string.update_available_title),
                     context.getString(R.string.update_available_message, latestTag),
                     positiveAction = {
                         redirectToGitHubReleasePage(context, downloadUrl)
-                    }
-                )
+                    })
 
             }
 
@@ -76,12 +73,9 @@ class UpdateChecker(
 
     private fun showAlert(title: String, message: String, positiveAction: (() -> Unit)? = null) {
         Handler(Looper.getMainLooper()).post {
-            AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(message)
+            AlertDialog.Builder(context).setTitle(title).setMessage(message)
                 .setPositiveButton(R.string.aceptar) { _, _ -> positiveAction?.invoke() }
-                .setNegativeButton(R.string.cancelar, null)
-                .show()
+                .setNegativeButton(R.string.cancelar, null).show()
         }
     }
 

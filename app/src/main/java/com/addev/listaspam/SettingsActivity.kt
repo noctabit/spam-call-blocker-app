@@ -46,26 +46,32 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private val exportFileLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri: Uri? ->
-        uri?.let {
-            if (exportAllSharedPreferences(it)) {
-                Toast.makeText(this, "Preferencias exportadas con éxito", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Error al exportar preferencias", Toast.LENGTH_SHORT).show()
+    private val exportFileLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri: Uri? ->
+            uri?.let {
+                if (exportAllSharedPreferences(it)) {
+                    Toast.makeText(this, "Preferencias exportadas con éxito", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(this, "Error al exportar preferencias", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
-    }
 
-    private val importFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        uri?.let {
-            if (importAllSharedPreferences(it)) {
-                updateSettingsContainer()
-                Toast.makeText(this, "Preferencias importadas con éxito", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Error al importar preferencias", Toast.LENGTH_SHORT).show()
+    private val importFileLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            uri?.let {
+                if (importAllSharedPreferences(it)) {
+                    updateSettingsContainer()
+                    Toast.makeText(this, "Preferencias importadas con éxito", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(this, "Error al importar preferencias", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
-    }
 
     private fun exportAllSharedPreferences(uri: Uri): Boolean {
         return try {
@@ -85,6 +91,7 @@ class SettingsActivity : AppCompatActivity() {
                             val jsonArray = JSONArray(value)
                             prefJsonObject.put(key, jsonArray)
                         }
+
                         else -> prefJsonObject.put(key, value)
                     }
                 }
@@ -129,6 +136,7 @@ class SettingsActivity : AppCompatActivity() {
                                 }
                                 editor.putStringSet(key, set)
                             }
+
                             is Int -> editor.putInt(key, value)
                             is Long -> editor.putLong(key, value)
                             is Float -> editor.putFloat(key, value)
@@ -164,9 +172,11 @@ class SettingsActivity : AppCompatActivity() {
                                 }
                             }
                         }
+
                         is Int, is Long, is Float, is Boolean, is String -> {
                             // Tipos válidos, no hacer nada
                         }
+
                         else -> {
                             return false
                         }

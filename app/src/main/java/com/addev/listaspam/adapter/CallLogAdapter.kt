@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.CallLog
 import android.provider.ContactsContract
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,12 +21,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.addev.listaspam.R
 import com.addev.listaspam.util.CallLogEntry
-import com.addev.listaspam.util.SpamUtils
 import com.addev.listaspam.util.addNumberToWhitelist
 import com.addev.listaspam.util.removeSpamNumber
 import com.addev.listaspam.util.removeWhitelistNumber
 import com.addev.listaspam.util.saveSpamNumber
 import java.text.SimpleDateFormat
+import java.util.Locale
 
 class CallLogAdapter(
     private val context: Context,
@@ -41,12 +40,18 @@ class CallLogAdapter(
     }
 
     companion object {
-        // URLs
         const val GOOGLE_URL_TEMPLATE = "https://www.google.com/search?q=%s"
         const val REPORT_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s#denuncia"
     }
 
-    private val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+    private val locale = Locale.getDefault()
+
+    private val formatter: SimpleDateFormat = if (locale.language == "en") {
+        SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", locale)
+    } else {
+        SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale)
+    }
+
     private var onItemChangedListener: OnItemChangedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CallLogViewHolder {
@@ -56,7 +61,11 @@ class CallLogAdapter(
 
     override fun onBindViewHolder(holder: CallLogViewHolder, position: Int) {
         val callLog = callLogs[position]
-        holder.bind(callLog, blockedNumbers.contains(callLog.number), whitelistNumbers.contains(callLog.number))
+        holder.bind(
+            callLog,
+            blockedNumbers.contains(callLog.number),
+            whitelistNumbers.contains(callLog.number)
+        )
     }
 
     override fun getItemCount(): Int = callLogs.size
@@ -93,14 +102,36 @@ class CallLogAdapter(
             actionTextView.text = action
 
             if (callLog.type == CallLog.Calls.BLOCKED_TYPE) {
-                actionTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
+                actionTextView.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        android.R.color.holo_red_light
+                    )
+                )
             } else {
-                actionTextView.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
+                actionTextView.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        android.R.color.darker_gray
+                    )
+                )
             }
 
             when {
-                isBlocked -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
-                isWhitelisted -> numberTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_dark))
+                isBlocked -> numberTextView.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        android.R.color.holo_red_light
+                    )
+                )
+
+                isWhitelisted -> numberTextView.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        android.R.color.holo_blue_dark
+                    )
+                )
+
                 else -> {
                     numberTextView.setTextColor(ContextCompat.getColor(context, R.color.textColor))
                 }
@@ -110,10 +141,16 @@ class CallLogAdapter(
                 overflowMenuButton.visibility = View.GONE
                 return
             }
-            
+
             overflowMenuButton.visibility = View.VISIBLE
             overflowMenuButton.setOnClickListener {
-                val popupMenu = PopupMenu(itemView.context, overflowMenuButton, Gravity.NO_GRAVITY, android.R.attr.popupMenuStyle, R.style.PopupMenuStyle)
+                val popupMenu = PopupMenu(
+                    itemView.context,
+                    overflowMenuButton,
+                    Gravity.NO_GRAVITY,
+                    android.R.attr.popupMenuStyle,
+                    R.style.PopupMenuStyle
+                )
                 popupMenu.inflate(R.menu.item_actions)
 
                 setDynamicTitles(popupMenu, isBlocked, isWhitelisted)
@@ -124,10 +161,12 @@ class CallLogAdapter(
                             searchAction(number)
                             true
                         }
+
                         R.id.report_action -> {
                             reportAction(number)
                             true
                         }
+
                         R.id.whitelist_action -> {
                             if (isWhitelisted) {
                                 removeWhitelistNumber(context, number)
@@ -137,6 +176,7 @@ class CallLogAdapter(
                             onItemChangedListener?.onItemChanged(number)
                             true
                         }
+
                         R.id.block_action -> {
                             if (isBlocked) {
                                 removeSpamNumber(context, number)
@@ -146,6 +186,7 @@ class CallLogAdapter(
                             onItemChangedListener?.onItemChanged(number)
                             true
                         }
+
                         else -> false
                     }
                 }
@@ -181,9 +222,15 @@ class CallLogAdapter(
     }
 
     private fun getContactName(context: Context, phoneNumber: String): String? {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_CONTACTS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             val contentResolver = context.contentResolver
-            val uri = ContactsContract.PhoneLookup.CONTENT_FILTER_URI.buildUpon().appendPath(phoneNumber).build()
+            val uri =
+                ContactsContract.PhoneLookup.CONTENT_FILTER_URI.buildUpon().appendPath(phoneNumber)
+                    .build()
             val projection = arrayOf(ContactsContract.PhoneLookup.DISPLAY_NAME)
 
             contentResolver.query(uri, projection, null, null, null)?.use { cursor ->

@@ -14,9 +14,11 @@ private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL"
 private const val NOTIFICATION_ID = 1
 
 fun sendBlockedCallNotification(context: Context, number: String, reason: String) {
-    sendNotification(context,
+    sendNotification(
+        context,
         context.getString(R.string.notification_title_spam_blocked, number),
-        context.getString(R.string.block_reason) + " " + reason)
+        context.getString(R.string.block_reason) + " " + reason
+    )
 }
 
 fun sendNotification(context: Context, title: String, message: String) {
@@ -27,18 +29,14 @@ fun sendNotification(context: Context, title: String, message: String, durationM
     createNotificationChannel(context)
 
     if (ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) != PackageManager.PERMISSION_GRANTED ||
-        !shouldShowNotification(context)
+            context, Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED || !shouldShowNotification(context)
     ) {
         return
     }
 
     val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-        .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle(title)
-        .setContentText(message)
+        .setSmallIcon(R.mipmap.ic_launcher).setContentTitle(title).setContentText(message)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
 
     if (durationMs != 0L) {

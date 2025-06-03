@@ -108,14 +108,10 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
     private fun setLanguage() {
         if (getListaSpamApiLang(this) != null) return
 
-        val systemLanguage = Locale.getDefault().language.lowercase()
-        val supportedLanguages = setOf(
-            "en", "es", "fr", "de", "it", "ru", "sv", "pl", "pt",
-            "nl", "no", "cz", "id", "zh", "ja", "he", "tr", "hu",
-            "fi", "da", "th", "gk", "sk", "ro"
-        )
+        val systemLanguage = Locale.getDefault().language.uppercase()
+        val supportedLanguages = resources.getStringArray(R.array.language_values).toSet()
 
-        val finalLang = if (supportedLanguages.contains(systemLanguage)) systemLanguage else "en"
+        val finalLang = if (supportedLanguages.contains(systemLanguage)) systemLanguage else "EN"
         setListaSpamApiLang(this, finalLang.uppercase())
     }
 
@@ -123,14 +119,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         if (getTellowsApiCountry(this) != null) return
 
         val systemCountry = Locale.getDefault().country.lowercase()
-        val supportedCountries = setOf(
-            "de", "sa", "dz", "ar", "au", "at", "be", "by", "br", "cl",
-            "cn", "co", "kr", "dk", "eg", "ae", "si", "es", "ph", "fi",
-            "fr", "gr", "hu", "in", "id", "ir", "ie", "il", "it", "jp",
-            "mx", "ng", "no", "nz", "nl", "pk", "pe", "pl", "pt", "gb",
-            "cz", "hk", "ru", "sg", "za", "se", "ch", "tw", "tr", "ua",
-            "us", "ve"
-        )
+        val supportedCountries = resources.getStringArray(R.array.entryvalues_region_preference).toSet()
 
         val finalCountry = if (supportedCountries.contains(systemCountry)) systemCountry else "us"
         setTellowsApiCountry(this, finalCountry)
