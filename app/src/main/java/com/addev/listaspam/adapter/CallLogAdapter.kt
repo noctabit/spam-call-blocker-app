@@ -1,7 +1,6 @@
 package com.addev.listaspam.adapter
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -14,28 +13,19 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
-import android.widget.ProgressBar
-import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.addev.listaspam.R
-import com.addev.listaspam.util.ApiUtils
 import com.addev.listaspam.util.CallLogEntry
+import com.addev.listaspam.util.ReportDialogManager
 import com.addev.listaspam.util.addNumberToWhitelist
-import com.addev.listaspam.util.getListaSpamApiLang
-import com.addev.listaspam.util.getTellowsApiCountry
 import com.addev.listaspam.util.removeSpamNumber
 import com.addev.listaspam.util.removeWhitelistNumber
 import com.addev.listaspam.util.saveSpamNumber
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -299,97 +289,7 @@ class CallLogAdapter(
     }
 
     private fun openReportAlert(number: String) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_report, null)
-        val messageEditText = dialogView.findViewById<EditText>(R.id.messageEditText)
-        val spamRadio = dialogView.findViewById<RadioButton>(R.id.radioSpam)
-        val noSpamRadio = dialogView.findViewById<RadioButton>(R.id.radioNoSpam)
-
-        messageEditText.hint = context.getString(R.string.report_hint)
-        spamRadio.text = context.getString(R.string.report_spam)
-        noSpamRadio.text = context.getString(R.string.report_not_spam)
-
-        AlertDialog.Builder(context)
-            .setTitle(context.getString(R.string.report_title))
-            .setView(dialogView)
-            .setPositiveButton(context.getString(R.string.accept), null)
-            .setNegativeButton(context.getString(R.string.cancel), null)
-            .create()
-            .also { alertDialog ->
-                alertDialog.setOnShowListener {
-                    val button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                    button.setOnClickListener {
-                        val message = messageEditText.text.toString().trim()
-                        val wordCount = message.split("\\s+".toRegex()).size
-                        val charCount = message.replace("\\s".toRegex(), "").length
-
-                        if (wordCount < 2 || charCount < 10) {
-                            messageEditText.error =
-                                context.getString(R.string.report_validation_message)
-                            return@setOnClickListener
-                        }
-
-                        if (!spamRadio.isChecked && !noSpamRadio.isChecked) {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.report_radio_validation),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            return@setOnClickListener
-                        }
-
-                        val progressBar = dialogView.findViewById<ProgressBar>(R.id.progressBar)
-                        progressBar.visibility = View.VISIBLE
-                        button.isEnabled = false // Disable button to prevent duplicate submissions
-
-                        // Launch background work
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val reportedTo = mutableListOf<String>()
-
-                            getListaSpamApiLang(context)?.let {
-                                if (ApiUtils.reportToUnknownPhone(
-                                        number,
-                                        message,
-                                        spamRadio.isChecked,
-                                        it
-                                    )
-                                ) {
-                                    reportedTo.add("UnknownPhone")
-                                }
-                            }
-
-                            getTellowsApiCountry(context)?.let {
-                                if (ApiUtils.reportToTellows(
-                                        number,
-                                        message,
-                                        spamRadio.isChecked,
-                                        it
-                                    )
-                                ) {
-                                    reportedTo.add("Tellows")
-                                }
-                            }
-
-                            val reportMessage = if (reportedTo.isNotEmpty()) {
-                                context.getString(R.string.report_success_prefix) + " " + reportedTo.joinToString(
-                                    context.getString(R.string.report_title)
-                                )
-                            } else {
-                                context.getString(R.string.report_failure)
-                            }
-
-                            // Switch to main thread to show Toast and dismiss dialog
-                            withContext(Dispatchers.Main) {
-                                progressBar.visibility = View.GONE
-                                button.isEnabled = true
-                                Toast.makeText(context, reportMessage, Toast.LENGTH_SHORT).show()
-                                alertDialog.dismiss()
-                            }
-                        }
-                    }
-                }
-            }
-            .show()
+        val reportDialogManager = ReportDialogManager(context)
+        reportDialogManager.show(number)
     }
-
-
 }
