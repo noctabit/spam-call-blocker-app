@@ -7,75 +7,59 @@ const val SPAM_PREFS = "SPAM_PREFS"
 const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
 const val WHITELIST_NUMBERS_KEY = "WHITELIST_NUMBERS"
 
-fun isBlockingEnabled(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_enable_blocking", true)
+private fun getPrefs(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
+
+private fun getBooleanPref(context: Context, key: String, defaultValue: Boolean): Boolean =
+    getPrefs(context).getBoolean(key, defaultValue)
+
+private fun getStringPref(context: Context, key: String): String? =
+    getPrefs(context).getString(key, null)
+
+private fun setStringPref(context: Context, key: String, value: String) {
+    getPrefs(context).edit().putString(key, value).apply()
 }
 
-fun shouldBlockHiddenNumbers(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_block_hidden_numbers", true)
-}
+fun isBlockingEnabled(context: Context): Boolean =
+    getBooleanPref(context, "pref_enable_blocking", true)
 
-fun shouldBlockInternationalNumbers(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_block_international_numbers", false)
-}
+fun shouldBlockHiddenNumbers(context: Context): Boolean =
+    getBooleanPref(context, "pref_block_hidden_numbers", true)
 
-fun shouldFilterWithListaSpamApi(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_filter_lista_spam_api", true)
-}
+fun shouldBlockInternationalNumbers(context: Context): Boolean =
+    getBooleanPref(context, "pref_block_international_numbers", false)
 
-fun getListaSpamApiLang(context: Context): String? {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getString("pref_language", null)?.uppercase()
-}
+fun shouldFilterWithListaSpamApi(context: Context): Boolean =
+    getBooleanPref(context, "pref_filter_lista_spam_api", true)
 
-fun setListaSpamApiLang(context: Context, languageCode: String) {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    sharedPreferences.edit().putString("pref_language", languageCode.uppercase()).apply()
-}
+fun getListaSpamApiLang(context: Context): String? =
+    getStringPref(context, "pref_language")?.uppercase()
 
-fun shouldFilterWithTellowsApi(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_filter_tellows_api", true)
-}
+fun setListaSpamApiLang(context: Context, languageCode: String) =
+    setStringPref(context, "pref_language", languageCode.uppercase())
 
-fun getTellowsApiCountry(context: Context): String? {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getString("pref_tellows_country", null)?.lowercase()
-}
+fun shouldFilterWithTellowsApi(context: Context): Boolean =
+    getBooleanPref(context, "pref_filter_tellows_api", true)
 
-fun setTellowsApiCountry(context: Context, countryCode: String) {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    sharedPreferences.edit().putString("pref_tellows_country", countryCode.lowercase()).apply()
-}
+fun getTellowsApiCountry(context: Context): String? =
+    getStringPref(context, "pref_tellows_country")?.lowercase()
 
-fun shouldFilterWithListaSpamScraper(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_filter_lista_spam_scraper", false)
-}
+fun setTellowsApiCountry(context: Context, countryCode: String) =
+    setStringPref(context, "pref_tellows_country", countryCode.lowercase())
 
-fun shouldFilterWithResponderONo(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_filter_responder_o_no", false)
-}
+fun shouldFilterWithListaSpamScraper(context: Context): Boolean =
+    getBooleanPref(context, "pref_filter_lista_spam_scraper", false)
 
-fun shouldFilterWithCleverdialer(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_filter_cleverdialer", false)
-}
+fun shouldFilterWithResponderONo(context: Context): Boolean =
+    getBooleanPref(context, "pref_filter_responder_o_no", false)
 
-fun shouldBlockNonContacts(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_block_non_contacts", false)
-}
+fun shouldFilterWithCleverdialer(context: Context): Boolean =
+    getBooleanPref(context, "pref_filter_cleverdialer", false)
 
-fun shouldShowNotification(context: Context): Boolean {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    return sharedPreferences.getBoolean("pref_show_notification", true)
-}
+fun shouldBlockNonContacts(context: Context): Boolean =
+    getBooleanPref(context, "pref_block_non_contacts", false)
+
+fun shouldShowNotification(context: Context): Boolean =
+    getBooleanPref(context, "pref_show_notification", true)
 
 /**
  * Saves a phone number as spam in SharedPreferences by adding it to the blocked numbers set.
@@ -90,7 +74,8 @@ fun saveSpamNumber(context: Context, number: String) {
 
     // Get the SharedPreferences and update the blocked numbers set
     val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-    val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
+    val blockedNumbers =
+        sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
     blockedNumbers?.add(number)
 
     // Save the updated blocked numbers set to SharedPreferences
@@ -109,7 +94,8 @@ fun saveSpamNumber(context: Context, number: String) {
 fun removeSpamNumber(context: Context, number: String) {
     // Get the SharedPreferences and update the blocked numbers set
     val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-    val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
+    val blockedNumbers =
+        sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
     blockedNumbers?.remove(number)
 
     // Save the updated blocked numbers set to SharedPreferences
@@ -132,7 +118,8 @@ fun addNumberToWhitelist(context: Context, number: String) {
 
     // Get the SharedPreferences and update the whitelist numbers set
     val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-    val whitelistNumbers = sharedPreferences.getStringSet(WHITELIST_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
+    val whitelistNumbers =
+        sharedPreferences.getStringSet(WHITELIST_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
     whitelistNumbers?.add(number)
 
     // Save the updated whitelist numbers set to SharedPreferences
@@ -151,7 +138,8 @@ fun addNumberToWhitelist(context: Context, number: String) {
 fun removeWhitelistNumber(context: Context, number: String) {
     // Get the SharedPreferences and update the whitelist numbers set
     val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-    val whitelistNumbers = sharedPreferences.getStringSet(WHITELIST_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
+    val whitelistNumbers =
+        sharedPreferences.getStringSet(WHITELIST_NUMBERS_KEY, mutableSetOf())?.toMutableSet()
     whitelistNumbers?.remove(number)
 
     // Save the updated whitelist numbers set to SharedPreferences
