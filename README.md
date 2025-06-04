@@ -16,36 +16,21 @@ Here are some screenshots of the Call Blocker App in action:
 
 ## Features
 
-- **Multi-Language Number Lookup via UnknownPhone API**: Lookup phone numbers internationally using the UnknownPhone API, supporting the following country numbers:
-  ```
-  United States, UK, Spain, France, Germany, Italy,
-  Russia, Sweden, Poland, Portugal, Netherlands,
-  Norway, Czech Republic, Indonesia, China, Japan,
-  Israel, Turkey, Hungary, Finland, Denmark,
-  Thailand, Greece, Slovakia, Romania
-  ```
-- **Multi-Country Number Lookup via Tellows API**: Lookup phone numbers internationally using the Tellows API, supporting the following country numbers:
-  ```
-  Germany, Saudi Arabia, Algeria, Argentina, Australia,
-  Austria, Belgium, Belarus, Brazil, Chile, China, Colombia,
-  South Korea, Denmark, Egypt, United Arab Emirates, Slovenia,
-  Spain, Philippines, Finland, France, Greece, Hungary, India,
-  Indonesia, Iran, Ireland, Israel, Italy, Japan, Mexico,
-  Nigeria, Norway, New Zealand, Netherlands, Pakistan, Peru,
-  Poland, Portugal, United Kingdom, Czech Republic, Hong Kong,
-  Russia, Singapore, South Africa, Sweden, Switzerland, Taiwan,
-  Turkey, Ukraine, USA/Canada, Venezuela
-  ```
-- **STIR/SHAKEN Verification**: Support for blocking calls based on STIR/SHAKEN levels
 - **Block and Unblock Numbers**: Easily block or unblock specific phone numbers.
 - **Whitelist Management**: Maintain a whitelist of phone numbers that are always allowed to reach you.
-- **Auto-Mute Option**: Choose to automatically mute incoming spam calls instead of blocking them completely.
-- **Report Dialog**: Built-in system to report suspicious or safe numbers.
-- **Web-Based Number Lookup**: Automatically look up phone numbers using two trusted Spanish websites:
+- **Advanced Blocking Options**: Multiple blocking criteria available:
+  - Block calls from hidden numbers
+  - Block calls from numbers not in contacts
+  - Block international calls
+- **Multi-Language Number Lookup via UnknownPhone API**: Lookup phone numbers internationally using the UnknownPhone API.
+- **Multi-Country Number Lookup via Tellows API**: Lookup phone numbers internationally using the Tellows API.
+- **Web-Based Number Lookup**: Automatically look up phone numbers using trusted Spanish websites:
   - [www.listaspam.com](https://www.listaspam.com)
   - [www.responderono.es](https://www.responderono.es)
   - [www.cleverdialer.es](https://www.cleverdialer.es)
-- **Real-Time Web Scraping**: Leverage web scraping techniques to gather real-time information on whether a number should be blocked.
+- **STIR/SHAKEN Verification**: Support for blocking calls based on STIR/SHAKEN levels.
+- **Auto-Mute Option**: Choose to automatically mute incoming spam calls instead of blocking them completely.
+- **Report Dialog**: Built-in system to report suspicious or safe numbers.
 - **Automatic App Updates**: The app checks for updates upon launch and prompts the user to install them if available.
 
 ## Contribution
@@ -92,10 +77,6 @@ This app is designed with user privacy in mind. All data is stored locally on th
 2. Enable installation from unknown sources in your device settings.
 3. Install the app and grant necessary permissions for call management and internet access.
 
-## Contributing
-
-We welcome contributions to this app! Please, feel free to upload your pull requests, report bugs, or suggest new features.
-
 ## License
 
-This app is released under the MIT License. See the LICENSE file for more details.
+This app is released under the GPLv3 License. See the LICENSE file for more details.
