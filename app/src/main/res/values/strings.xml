@@ -77,6 +77,12 @@
     <string name="pref_block_international_numbers_title">Block International Calls</string>
     <string name="pref_block_international_numbers_summary">Block calls from other countries</string>
 
+    <string name="pref_block_stir_shaken_risk_title">Block STIR/SHAKEN Calls</string>
+    <string name="pref_block_stir_shaken_risk_summary">Block calls marked as potentially fraudulent by the STIR/SHAKEN system (Android 11+ only, available in some countries and carriers)</string>
+
+    <string name="pref_mute_instead_of_block_title">Mute Instead of Block</string>
+    <string name="pref_mute_instead_of_block_summary">Mute incoming spam calls instead of blocking them completely</string>
+
     <!-- Notifications -->
     <string name="pref_show_notification_title">Show Notification on Block</string>
     <string name="pref_show_notification_summary">Display a notification when a call is blocked</string>
@@ -94,6 +100,7 @@
     <string name="block_reason_long">Call blocked:</string>
     <string name="block_reason">Reason:</string>
     <string name="blocking_disabled">Call blocking is disabled in settings</string>
+    <string name="block_stir_shaken_risk">STIR/SHAKEN - likely spoofed call</string>
     <string name="block_hidden_number">Hidden number</string>
     <string name="block_spam_number">Reported as spam</string>
     <string name="block_international_call">International call</string>

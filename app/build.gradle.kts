@@ -10,9 +10,10 @@ android {
     defaultConfig {
         applicationId = "com.addev.listaspam"
         minSdk = 29
+        //noinspection OldTargetApi
         targetSdk = 34
-        versionCode = 14
-        versionName = "2.2.3"
+        versionCode = 15
+        versionName = "2.2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

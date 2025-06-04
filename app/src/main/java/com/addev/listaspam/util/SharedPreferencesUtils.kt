@@ -61,6 +61,12 @@ fun shouldBlockNonContacts(context: Context): Boolean =
 fun shouldShowNotification(context: Context): Boolean =
     getBooleanPref(context, "pref_show_notification", true)
 
+fun shouldFilterWithStirShaken(context: Context): Boolean =
+    getBooleanPref(context, "pref_block_stir_shaken_risk", false)
+
+fun shouldMuteInsteadOfBlocking(context: Context): Boolean =
+    getBooleanPref(context, "pref_mute_instead_of_block", false)
+
 /**
  * Saves a phone number as spam in SharedPreferences by adding it to the blocked numbers set.
  * Also removes the number from the whitelist if present.

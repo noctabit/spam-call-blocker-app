@@ -4,9 +4,14 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.ContactsContract
+import android.telecom.Call
+import android.telecom.TelecomManager
+import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.addev.listaspam.R
@@ -48,23 +53,54 @@ class SpamUtils {
 
         private const val USER_AGENT =
             "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36"
+
+        object VerificationStatus {
+            const val FAILED = 2
+        }
     }
 
     private val client = OkHttpClient()
 
     /**
+     * Extracts the raw phone number from the call details.
+     * @param details Details of the incoming call.
+     * @return Raw phone number as a String.
+     */
+    private fun getRawPhoneNumber(details: Call.Details): String? {
+        return when {
+            details.handle != null -> details.handle.schemeSpecificPart
+            details.gatewayInfo?.originalAddress != null -> details.gatewayInfo.originalAddress.schemeSpecificPart
+            details.intentExtras != null -> {
+                var uri =
+                    details.intentExtras.getParcelable<Uri>(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS)
+                if (uri == null) {
+                    uri =
+                        details.intentExtras.getParcelable<Uri>(TelephonyManager.EXTRA_INCOMING_NUMBER)
+                }
+                uri?.schemeSpecificPart
+            }
+
+            else -> null
+        }
+    }
+
+    /**
      * Checks if a given phone number is spam by checking local blocklist and online databases.
      *
      * @param context The application context.
-     * @param number The phone number to check.
+     * @param phoneNumber The phone number to check.
+     * @param details Call details
      * @param callback A function to be called with the result (true if spam, false otherwise).
      */
     fun checkSpamNumber(
         context: Context,
-        number: String,
+        phoneNumber: String?,
+        details: Call.Details?,
         callback: (isSpam: Boolean) -> Unit = {}
     ) {
         CoroutineScope(Dispatchers.IO).launch {
+            val number = if (details != null) getRawPhoneNumber(details) else phoneNumber;
+
             if (!isBlockingEnabled(context)) {
                 showToast(context, context.getString(R.string.blocking_disabled), Toast.LENGTH_LONG)
                 return@launch
@@ -72,6 +108,21 @@ class SpamUtils {
 
             val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
             val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, null)
+
+            if (number.isNullOrBlank()) {
+                if (shouldBlockHiddenNumbers(context)) {
+                    handleSpamNumber(
+                        context,
+                        "",
+                        false,
+                        context.getString(R.string.block_hidden_number),
+                        callback
+                    )
+                    return@launch
+                } else {
+                    return@launch
+                }
+            }
 
             // End call if the number is already blocked
             if (blockedNumbers?.contains(number) == true) {
@@ -85,12 +136,16 @@ class SpamUtils {
                 return@launch
             }
 
-            if (number.isBlank() && shouldBlockHiddenNumbers(context)) {
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                shouldFilterWithStirShaken(context) &&
+                details?.callerNumberVerificationStatus == VerificationStatus.FAILED
+            ) {
                 handleSpamNumber(
                     context,
                     number,
                     false,
-                    context.getString(R.string.block_hidden_number),
+                    context.getString(R.string.block_stir_shaken_risk),
                     callback
                 )
                 return@launch

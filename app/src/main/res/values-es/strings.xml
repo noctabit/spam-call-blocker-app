@@ -77,6 +77,9 @@
     <string name="pref_block_international_numbers_title">Bloquear llamadas internacionales</string>
     <string name="pref_block_international_numbers_summary">Bloquear llamadas de otros países</string>
 
+    <string name="pref_block_stir_shaken_risk_title">Bloquear llamadas STIR/SHAKEN</string>
+    <string name="pref_block_stir_shaken_risk_summary">Bloquear llamadas marcadas como potencialmente fraudulentas por el sistema STIR/SHAKEN (solo Android 11+, disponible en algunos países y operadoras)</string>
+
     <!-- Notifications -->
     <string name="pref_show_notification_title">Mostrar notificación al bloquear</string>
     <string name="pref_show_notification_summary">Mostrar una notificación cuando se bloquee una llamada</string>
@@ -92,6 +95,7 @@
 
     <!-- SpamUtils blocking reasons -->
     <string name="blocking_disabled">El bloqueo de llamadas está desactivado en la configuración</string>
+    <string name="block_stir_shaken_risk">STIR/SHAKEN - llamada probablemente suplantada</string>
     <string name="block_reason_long">Llamada bloqueada:</string>
     <string name="block_reason">Motivo:</string>
     <string name="block_spam_number">Reportado como spam</string>

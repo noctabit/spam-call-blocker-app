@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         builder.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
             val number = input.text.toString().trim()
             if (number.isNotEmpty()) {
-                spamUtils.checkSpamNumber(this, number)
+                spamUtils.checkSpamNumber(this, number, null)
             } else {
                 Toast.makeText(this, getString(R.string.type_number), Toast.LENGTH_SHORT).show()
             }

@@ -36,8 +36,10 @@ Here are some screenshots of the Call Blocker App in action:
   Russia, Singapore, South Africa, Sweden, Switzerland, Taiwan,
   Turkey, Ukraine, USA/Canada, Venezuela
   ```
+- **STIR/SHAKEN Verification**: Support for blocking calls based on STIR/SHAKEN levels
 - **Block and Unblock Numbers**: Easily block or unblock specific phone numbers.
 - **Whitelist Management**: Maintain a whitelist of phone numbers that are always allowed to reach you.
+- **Auto-Mute Option**: Choose to automatically mute incoming spam calls instead of blocking them completely.
 - **Report Dialog**: Built-in system to report suspicious or safe numbers.
 - **Web-Based Number Lookup**: Automatically look up phone numbers using two trusted Spanish websites:
   - [www.listaspam.com](https://www.listaspam.com)
