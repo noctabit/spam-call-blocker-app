@@ -35,6 +35,9 @@
 
     <!-- Preferences Sections -->
     <string name="pref_category_general_blocking">General</string>
+    <string name="pref_category_unknown_phone_api">Unknownphone API 🌐</string>
+    <string name="pref_category_tellows_api">Tellows API 🌐</string>
+    <string name="pref_category_scrapers_es">Scrapers 🇪🇸</string>
     <string name="pref_category_spam_filters">Spam Number Filters</string>
     <string name="pref_category_other_options">Other Blocking Options</string>
     <string name="pref_category_notifications">Notifications</string>
@@ -45,27 +48,27 @@
 
     <!-- API Unknownphone -->
     <string name="pref_filter_lista_spam_title">API Unknownphone</string>
-    <string name="pref_filter_lista_spam_summary">[🌐] (Recommended) Blocks calls from spam numbers listed in unknownphone.com API</string>
+    <string name="pref_filter_lista_spam_summary">(Recommended) Blocks calls from spam numbers listed in unknownphone.com API</string>
 
     <string name="pref_filter_lista_spam_api_language_title">unknownphone.com API Language</string>
     <string name="pref_filter_lista_spam_api_language_summary">Select the language for searches in the unknownphone.com API (affects results)</string>
 
     <!-- API Tellows -->
     <string name="pref_filter_tellows_title">Tellows API</string>
-    <string name="pref_filter_tellows_summary">[🌐] (Recommended) Blocks calls from spam numbers listed in the Tellows API</string>
+    <string name="pref_filter_tellows_summary">(Recommended) Blocks calls from spam numbers listed in the Tellows API</string>
 
     <string name="pref_filter_tellows_api_country_title">Tellows API Country</string>
     <string name="pref_filter_tellows_api_country_summary">Select the country for searches in the Tellows API (affects results)</string>
 
     <!-- Spam Number Filters -->
     <string name="pref_filter_lista_spam_scraper_title">listaspam.com Scraper</string>
-    <string name="pref_filter_lista_spam_scraper_summary">[🇪🇸] (Deprecated) Blocks calls from spam numbers listed on listaspam.es website</string>
+    <string name="pref_filter_lista_spam_scraper_summary">(Deprecated) Blocks calls from spam numbers listed on listaspam.es website</string>
 
     <string name="pref_filter_responder_o_no_title">responderono.es Scraper</string>
-    <string name="pref_filter_responder_o_no_summary">[🇪🇸] Blocks calls from spam numbers listed on responderono.es website</string>
+    <string name="pref_filter_responder_o_no_summary">Blocks calls from spam numbers listed on responderono.es website</string>
 
     <string name="pref_filter_cleverdialer_title">cleverdialer.es Scraper</string>
-    <string name="pref_filter_cleverdialer_summary">[🇪🇸] Blocks calls from spam numbers listed on cleverdialer.es website</string>
+    <string name="pref_filter_cleverdialer_summary">Blocks calls from spam numbers listed on cleverdialer.es website</string>
 
     <!-- Other Blocking Options -->
     <string name="pref_block_non_contacts_title">Block Non-Contacts</string>
@@ -132,4 +135,11 @@
     <string name="and">and</string>
     <string name="report_failure">Report could not be sent</string>
     <string name="select_at_least_one_provider">Select at least one provider</string>
+
+    <!-- Import/export -->
+    <string name="preferences_import_success">Preferences imported successfully</string>
+    <string name="preferences_import_error">Error importing preferences</string>
+    <string name="invalid_json_file">The JSON file is not valid</string>
+    <string name="preferences_export_success">Preferences exported successfully</string>
+    <string name="preferences_export_error">Error exporting preferences</string>
 </resources>

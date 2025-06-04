@@ -18,7 +18,7 @@
 
     <!-- Spam Number Filters -->
     <PreferenceCategory
-        android:title="Unknownphone API"
+        android:title="@string/pref_category_unknown_phone_api"
         app:iconSpaceReserved="false">
 
         <CheckBoxPreference
@@ -39,7 +39,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Tellows API"
+        android:title="@string/pref_category_tellows_api"
         app:iconSpaceReserved="false">
 
         <CheckBoxPreference
@@ -61,7 +61,7 @@
 
     <!-- Spam Number Filters -->
     <PreferenceCategory
-        android:title="Scrapers"
+        android:title="@string/pref_category_scrapers_es"
         app:iconSpaceReserved="false">
 
         <CheckBoxPreference

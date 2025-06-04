@@ -35,6 +35,9 @@
 
     <!-- Preferences Sections -->
     <string name="pref_category_general_blocking">General</string>
+    <string name="pref_category_unknown_phone_api">API Unknownphone</string>
+    <string name="pref_category_tellows_api">API Tellows</string>
+    <string name="pref_category_scrapers_es">Scrapers 🇪🇸</string>
     <string name="pref_category_spam_filters">Filtros de números de spam</string>
     <string name="pref_category_other_options">Otras opciones de bloqueo</string>
     <string name="pref_category_notifications">Notificaciones</string>
@@ -79,6 +82,9 @@
 
     <string name="pref_block_stir_shaken_risk_title">Bloquear llamadas STIR/SHAKEN</string>
     <string name="pref_block_stir_shaken_risk_summary">Bloquear llamadas marcadas como potencialmente fraudulentas por el sistema STIR/SHAKEN (solo Android 11+, disponible en algunos países y operadoras)</string>
+
+    <string name="pref_mute_instead_of_block_title">Silenciar en lugar de bloquear</string>
+    <string name="pref_mute_instead_of_block_summary">Silenciar las llamadas de spam entrantes en lugar de bloquearlas por completo</string>
 
     <!-- Notifications -->
     <string name="pref_show_notification_title">Mostrar notificación al bloquear</string>
@@ -129,4 +135,11 @@
     <string name="and">y</string>
     <string name="report_failure">No se pudo enviar el reporte</string>
     <string name="select_at_least_one_provider">Seleccione al menos un proveedor</string>
+
+    <!-- Import/export -->
+    <string name="preferences_import_success">Preferencias importadas con éxito</string>
+    <string name="preferences_import_error">Error al importar preferencias</string>
+    <string name="invalid_json_file">El archivo JSON no es válido</string>
+    <string name="preferences_export_success">Preferencias exportadas con éxito</string>
+    <string name="preferences_export_error">Error al exportar preferencias</string>
 </resources>
