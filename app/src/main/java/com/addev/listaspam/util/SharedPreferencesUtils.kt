@@ -2,6 +2,7 @@ package com.addev.listaspam.util
 
 import android.content.Context
 import androidx.preference.PreferenceManager
+import androidx.core.content.edit
 
 const val SPAM_PREFS = "SPAM_PREFS"
 const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
@@ -85,9 +86,8 @@ fun saveSpamNumber(context: Context, number: String) {
     blockedNumbers?.add(number)
 
     // Save the updated blocked numbers set to SharedPreferences
-    with(sharedPreferences.edit()) {
+    sharedPreferences.edit {
         putStringSet(BLOCK_NUMBERS_KEY, blockedNumbers)
-        apply()
     }
 }
 
@@ -105,9 +105,8 @@ fun removeSpamNumber(context: Context, number: String) {
     blockedNumbers?.remove(number)
 
     // Save the updated blocked numbers set to SharedPreferences
-    with(sharedPreferences.edit()) {
+    sharedPreferences.edit {
         putStringSet(BLOCK_NUMBERS_KEY, blockedNumbers)
-        apply()
     }
 }
 
@@ -129,9 +128,8 @@ fun addNumberToWhitelist(context: Context, number: String) {
     whitelistNumbers?.add(number)
 
     // Save the updated whitelist numbers set to SharedPreferences
-    with(sharedPreferences.edit()) {
+    sharedPreferences.edit {
         putStringSet(WHITELIST_NUMBERS_KEY, whitelistNumbers)
-        apply()
     }
 }
 
@@ -149,9 +147,8 @@ fun removeWhitelistNumber(context: Context, number: String) {
     whitelistNumbers?.remove(number)
 
     // Save the updated whitelist numbers set to SharedPreferences
-    with(sharedPreferences.edit()) {
+    sharedPreferences.edit {
         putStringSet(WHITELIST_NUMBERS_KEY, whitelistNumbers)
-        apply()
     }
 }
 
