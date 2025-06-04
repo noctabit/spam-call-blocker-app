@@ -35,6 +35,7 @@ import com.addev.listaspam.util.getWhitelistNumbers
 import com.addev.listaspam.util.setListaSpamApiLang
 import com.addev.listaspam.util.setTellowsApiCountry
 import java.util.Locale
+import androidx.core.net.toUri
 
 class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
@@ -82,13 +83,13 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
             }
 
             R.id.action_about -> {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_LINK))
+                val intent = Intent(Intent.ACTION_VIEW, ABOUT_LINK.toUri())
                 this.startActivity(intent)
                 true
             }
 
             R.id.donate -> {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DONATE_LINK))
+                val intent = Intent(Intent.ACTION_VIEW, DONATE_LINK.toUri())
                 this.startActivity(intent)
                 true
             }
@@ -140,7 +141,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         builder.setTitle(getString(R.string.test_number))
 
         val input = EditText(this)
-        input.inputType = InputType.TYPE_CLASS_PHONE // Para números telefónicos
+        input.inputType = InputType.TYPE_CLASS_PHONE
         builder.setView(input)
 
         builder.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
@@ -236,6 +237,21 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         Toast.makeText(context, message, duration).show()
     }
 
+    /**
+     * Checks for necessary permissions and requests them if not granted.
+     *
+     * This function identifies which of the required permissions (READ_CALL_LOG,
+     * READ_PHONE_STATE, READ_CONTACTS, ANSWER_PHONE_CALLS, and POST_NOTIFICATIONS
+     * for Android Tiramisu and above) are not granted.
+     *
+     * It then differentiates between permissions that haven't been requested yet
+     * (missingPermissions) and those that have been denied by the user previously
+     * (deniedPermissions).
+     *
+     * For missing permissions, it directly requests them using `ActivityCompat.requestPermissions`.
+     * For denied permissions, it calls `showPermissionToastAndRequest` to inform the user
+     * and guide them to settings.
+     */
     private fun checkPermissionsAndRequest() {
         val permissions = mutableListOf(
             Manifest.permission.READ_CALL_LOG,
@@ -273,7 +289,6 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
      *
      * @param missingPermissions a list of permissions that are missing.
      */
-
     private fun showPermissionToastAndRequest(missingPermissions: List<String>) {
         val permissionNames = missingPermissions.map { "• " + getPermissionName(it) }
         val message =
@@ -300,6 +315,12 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         permissionDeniedDialog?.show()
     }
 
+    /**
+     * Returns the human-readable name for a given permission string.
+     *
+     * @param permission The permission string (e.g., Manifest.permission.READ_CALL_LOG).
+     * @return The human-readable name of the permission, or the original permission string if no mapping is found.
+     */
     private fun getPermissionName(permission: String): String {
         return when (permission) {
             Manifest.permission.READ_CALL_LOG -> getString(R.string.permission_read_call_log)

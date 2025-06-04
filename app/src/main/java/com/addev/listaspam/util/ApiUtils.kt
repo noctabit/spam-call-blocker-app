@@ -76,8 +76,6 @@ object ApiUtils {
      * @param phone The phone number being reported.
      * @param comment The user comment about the phone number.
      * @param lang The language code (e.g., "ES" for Spanish).
-     * @param username Optional: The username of the person submitting the report.
-     * @param phoneOwner Optional: A string indicating ownership or recipient identity.
      * @return `true` if the report was submitted successfully; `false` otherwise.
      */
     fun reportToUnknownPhone(
@@ -89,7 +87,7 @@ object ApiUtils {
         val optRating = if (isSpam) "1" else "5"
 
         val formBuilder = FormBody.Builder()
-            .add("api_key", "d58d5bdaba8a80b2311957e9e4af885c")
+            .add("api_key", UNKNOWN_PHONE_API_KEY)
             .add("phone", phone)
             .add("_action", "_submit_comment")
             .add("comment", comment)
