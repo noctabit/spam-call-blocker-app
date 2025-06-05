@@ -20,6 +20,7 @@ import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -203,18 +204,21 @@ class SpamUtils {
         spamCheckers: List<suspend (String) -> Boolean>,
         number: String
     ): Boolean = coroutineScope {
-        val deferreds = spamCheckers.map { checker ->
-            async {
-                runCatching { checker(number) }.getOrDefault(false)
+        val resultChannel = Channel<Boolean>()
+
+        val jobs = spamCheckers.map { checker ->
+            launch {
+                val result = runCatching { checker(number) }.getOrDefault(false)
+                if (result) resultChannel.send(true)
             }
         }
-        for (deferred in deferreds) {
-            if (deferred.await()) {
-                deferreds.forEach { if (it != deferred) it.cancel() }
-                return@coroutineScope true
-            }
-        }
-        return@coroutineScope false
+
+        val isSpam = resultChannel.receive()
+
+        // Cancelar todos los jobs restantes
+        jobs.forEach { it.cancel() }
+
+        return@coroutineScope isSpam
     }
 
     private fun isContactOrShouldBlockNonContacts(context: Context, number: String): Boolean {
