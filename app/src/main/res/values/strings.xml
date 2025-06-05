@@ -37,6 +37,7 @@
     <string name="pref_category_general_blocking">General</string>
     <string name="pref_category_unknown_phone_api">Unknownphone API 🌐</string>
     <string name="pref_category_tellows_api">Tellows API 🌐</string>
+    <string name="pref_category_truecaller_api">Truecaller API 🌐</string>
     <string name="pref_category_scrapers_es">Scrapers 🇪🇸</string>
     <string name="pref_category_spam_filters">Spam Number Filters</string>
     <string name="pref_category_other_options">Other Blocking Options</string>
@@ -60,6 +61,13 @@
     <string name="pref_filter_tellows_api_country_title">Tellows API Country</string>
     <string name="pref_filter_tellows_api_country_summary">Select the country for searches in the Tellows API (affects results)</string>
 
+    <!-- API Truecaller -->
+    <string name="pref_filter_truecaller_title">Truecaller API</string>
+    <string name="pref_filter_truecaller_summary">(Recommended) Blocks calls from spam numbers identified by Truecaller API</string>
+
+    <string name="pref_filter_truecaller_api_country_title">Truecaller API Country</string>
+    <string name="pref_filter_truecaller_api_country_summary">Select the country for searches in the Truecaller API (affects results)</string>
+
     <!-- Spam Number Filters -->
     <string name="pref_filter_lista_spam_scraper_title">listaspam.com Scraper</string>
     <string name="pref_filter_lista_spam_scraper_summary">(Deprecated) Blocks calls from spam numbers listed on listaspam.es website</string>
@@ -80,7 +88,7 @@
     <string name="pref_block_international_numbers_title">Block International Calls</string>
     <string name="pref_block_international_numbers_summary">Block calls from other countries</string>
 
-    <string name="pref_block_stir_shaken_risk_title">Block STIR/SHAKEN Calls</string>
+    <string name="pref_block_stir_shaken_risk_title">Verify with STIR/SHAKEN</string>
     <string name="pref_block_stir_shaken_risk_summary">Block calls marked as potentially fraudulent by the STIR/SHAKEN system (Android 11+ only, available in some countries and carriers)</string>
 
     <string name="pref_mute_instead_of_block_title">Mute Instead of Block</string>

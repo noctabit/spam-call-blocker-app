@@ -36,7 +36,8 @@
     <!-- Preferences Sections -->
     <string name="pref_category_general_blocking">General</string>
     <string name="pref_category_unknown_phone_api">API Unknownphone</string>
-    <string name="pref_category_tellows_api">API Tellows</string>
+    <string name="pref_category_tellows_api">API Tellows 🌐</string>
+    <string name="pref_category_truecaller_api">API Truecaller 🌐</string>
     <string name="pref_category_scrapers_es">Scrapers 🇪🇸</string>
     <string name="pref_category_spam_filters">Filtros de números de spam</string>
     <string name="pref_category_other_options">Otras opciones de bloqueo</string>
@@ -48,27 +49,34 @@
 
     <!-- API Unknownphone -->
     <string name="pref_filter_lista_spam_title">API Unknownphone</string>
-    <string name="pref_filter_lista_spam_summary">[🌐] (Recomendado) Bloquea llamadas de números spam incluidos en la API unknownphone.com</string>
+    <string name="pref_filter_lista_spam_summary">(Recomendado) Bloquea llamadas de números spam incluidos en la API unknownphone.com</string>
 
     <string name="pref_filter_lista_spam_api_language_title">Idioma API unknownphone.com</string>
     <string name="pref_filter_lista_spam_api_language_summary">Seleccione el idioma para realizar las búsquedas en la API de unknownphone.com (afecta a los resultados)</string>
 
     <!-- API Tellows -->
     <string name="pref_filter_tellows_title">API Tellows</string>
-    <string name="pref_filter_tellows_summary">[🌐] (Recomendado) Bloquea llamadas de números spam listados en la API de Tellows</string>
+    <string name="pref_filter_tellows_summary">(Recomendado) Bloquea llamadas de números spam listados en la API de Tellows</string>
 
     <string name="pref_filter_tellows_api_country_title">País API Tellows</string>
     <string name="pref_filter_tellows_api_country_summary">Seleccione el país para las búsquedas en la API de Tellows (afecta a los resultados)</string>
 
+    <!-- API Truecaller -->
+    <string name="pref_filter_truecaller_title">API Truecaller</string>
+    <string name="pref_filter_truecaller_summary">(Recomendado) Bloquea llamadas de números spam identificados por la API de Truecaller</string>
+
+    <string name="pref_filter_truecaller_api_country_title">País API Truecaller</string>
+    <string name="pref_filter_truecaller_api_country_summary">Seleccione el país para las búsquedas en la API de Truecaller (afecta a los resultados)</string>
+
     <!-- Spam Number Filters -->
-    <string name="pref_filter_lista_spam_scraper_title">Scraper listaspam.com</string>
-    <string name="pref_filter_lista_spam_scraper_summary">[🇪🇸] (Obsoleto) Bloquea llamadas de números spam incluidos en la web listaspam.es</string>
+    <string name="pref_filter_lista_spam_scraper_title">Scraper listaspam.com 🇪🇸</string>
+    <string name="pref_filter_lista_spam_scraper_summary">(Obsoleto) Bloquea llamadas de números spam incluidos en la web listaspam.es</string>
 
     <string name="pref_filter_responder_o_no_title">Scraper responderono.es</string>
-    <string name="pref_filter_responder_o_no_summary">[🇪🇸] Bloquea llamadas de números spam incluidos en la web responderono.es</string>
+    <string name="pref_filter_responder_o_no_summary">Bloquea llamadas de números spam incluidos en la web responderono.es</string>
 
     <string name="pref_filter_cleverdialer_title">Scraper cleverdialer.es</string>
-    <string name="pref_filter_cleverdialer_summary">[🇪🇸] Bloquea llamadas de números spam incluidos en la web cleverdialer.es</string>
+    <string name="pref_filter_cleverdialer_summary">Bloquea llamadas de números spam incluidos en la web cleverdialer.es</string>
 
     <!-- Other Blocking Options -->
     <string name="pref_block_non_contacts_title">Bloquear llamadas de desconocidos</string>
@@ -80,7 +88,7 @@
     <string name="pref_block_international_numbers_title">Bloquear llamadas internacionales</string>
     <string name="pref_block_international_numbers_summary">Bloquear llamadas de otros países</string>
 
-    <string name="pref_block_stir_shaken_risk_title">Bloquear llamadas STIR/SHAKEN</string>
+    <string name="pref_block_stir_shaken_risk_title">Verificar con STIR/SHAKEN</string>
     <string name="pref_block_stir_shaken_risk_summary">Bloquear llamadas marcadas como potencialmente fraudulentas por el sistema STIR/SHAKEN (solo Android 11+, disponible en algunos países y operadoras)</string>
 
     <string name="pref_mute_instead_of_block_title">Silenciar en lugar de bloquear</string>

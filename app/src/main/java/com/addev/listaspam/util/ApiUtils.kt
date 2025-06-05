@@ -17,6 +17,16 @@ object ApiUtils {
     private const val TELLOWS_API_URL = "www.tellows.de"
     private const val TELLOWS_API_KEY = "koE5hjkOwbHnmcADqZuqqq2"
 
+    private const val TRUECALLER_API_URL_EU = "search5-eu.truecaller.com"
+    private const val TRUECALLER_API_URL_NONEU = "search5-noneu.truecaller.com"
+    private const val TRUECALLER_API_KEY = "a1i1V--ua298eldF0hb0rL520GjDz7bzVAdt63J2nzZBnWlEKNCJUeln_7kWj4Ir"
+
+    private val EU_COUNTRIES = setOf(
+        "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR",
+        "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL",
+        "PL", "PT", "RO", "SK", "SI", "ES", "SE"
+    )
+
     private val client = OkHttpClient()
 
     /**
@@ -111,6 +121,55 @@ object ApiUtils {
         }
     }
 
+    fun checkTruecallerSpamApi(number: String, countryCode: String): Boolean {
+        val host = if (EU_COUNTRIES.contains(countryCode.uppercase())) {
+            TRUECALLER_API_URL_EU
+        } else {
+            TRUECALLER_API_URL_NONEU
+        }
+
+        val url = HttpUrl.Builder()
+            .scheme("https")
+            .host(host)
+            .addPathSegments("v2/search")
+            .addQueryParameter("q", number)
+            .addQueryParameter("countryCode", countryCode)
+            .addQueryParameter("type", "4")
+            .addQueryParameter("locAddr", "")
+            .addQueryParameter("placement", "SEARCHRESULTS,HISTORY,DETAILS")
+            .addQueryParameter("adId", "")
+            .addQueryParameter("encoding", "json")
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .header("Connection", "Keep-Alive")
+            .header("User-Agent", "Truecaller/9.00.3 (Android;10)")
+            .header("Authorization", "Bearer $TRUECALLER_API_KEY")
+            .header("Host", "search5-eu.truecaller.com")
+            .build()
+
+        return try {
+            val response = client.newCall(request).execute()
+            if (!response.isSuccessful) return false
+
+            val bodyString = response.body?.string() ?: return false
+            val json = JSONObject(bodyString)
+            val dataArray = json.optJSONArray("data") ?: return false
+            if (dataArray.length() == 0) return false
+
+            val firstEntry = dataArray.getJSONObject(0)
+            val spamInfo = firstEntry.optJSONObject("spamInfo")
+            val spamType = spamInfo?.optString("spamType")
+            val spamScore = spamInfo?.optInt("spamScore", 0) ?: 0 // Reports quantity
+
+            !spamType.isNullOrBlank() && spamScore > 1
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     fun checkTellowsSpamApi(number: String, country: String): Boolean {
         val url = HttpUrl.Builder()
             .scheme("https")
@@ -159,8 +218,7 @@ object ApiUtils {
      *
      * @param phone The phone number to report (without country code prefix, if already localized).
      * @param comment A description of the issue or behavior associated with the number.
-     * @param complainTypeId Type of complaint, e.g. 5 = "estafa" (scam).
-     * @param userScore The danger score (1 = safe, 9 = dangerous).
+     * @param isSpam
      * @param lang Language and country code, e.g. "es".
      * @return `true` if the report was accepted; `false` otherwise.
      */
@@ -169,9 +227,9 @@ object ApiUtils {
         comment: String,
         isSpam: Boolean,
         lang: String = "es",
-        complainTypeId: Int = 5
     ): Boolean {
         val userScore = if (isSpam) 9 else 1
+        val complainTypeId = if (isSpam) 5 else 2 // 5 is aggressive advertising and 2 is reliable number
 
         val url = HttpUrl.Builder()
             .scheme("https")

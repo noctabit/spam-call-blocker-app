@@ -10,6 +10,7 @@ import com.addev.listaspam.R
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import androidx.core.net.toUri
 
 /**
  * Class responsible for checking if a newer version of the app is available on a GitHub repository.
@@ -81,7 +82,7 @@ class UpdateChecker(
 
     companion object {
         fun redirectToGitHubReleasePage(context: Context, url: String) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }

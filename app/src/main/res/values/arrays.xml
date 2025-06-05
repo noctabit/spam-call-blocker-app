@@ -160,4 +160,489 @@
         <item>USA / Canada</item>                  <!-- USA/Canada (English) -->
         <item>Venezuela</item>                     <!-- Venezuela (Spanish) -->
     </string-array>
+    <string-array name="truecaller_region_display">
+        <item>Isla Ascensión</item>                  <!-- AC -->
+        <item>Andorra</item>                         <!-- AD -->
+        <item>الإمارات العربية المتحدة</item>          <!-- AE -->
+        <item>افغانستان</item>                       <!-- AF -->
+        <item>Antigua and Barbuda</item>             <!-- AG -->
+        <item>Anguilla</item>                       <!-- AI -->
+        <item>Shqipëria</item>                      <!-- AL -->
+        <item>Հայաստան</item>                       <!-- AM -->
+        <item>Angola</item>                         <!-- AO -->
+        <item>Argentina</item>                      <!-- AR -->
+        <item>American Samoa</item>                 <!-- AS -->
+        <item>Österreich</item>                     <!-- AT -->
+        <item>Australia</item>                      <!-- AU -->
+        <item>Aruba</item>                         <!-- AW -->
+        <item>Åland</item>                         <!-- AX -->
+        <item>Azərbaycan</item>                    <!-- AZ -->
+        <item>Bosna i Hercegovina</item>            <!-- BA -->
+        <item>Barbados</item>                       <!-- BB -->
+        <item>বাংলাদেশ</item>                       <!-- BD -->
+        <item>België</item>                        <!-- BE -->
+        <item>Burkina Faso</item>                   <!-- BF -->
+        <item>България</item>                      <!-- BG -->
+        <item>البحرين</item>                        <!-- BH -->
+        <item>Burundi</item>                       <!-- BI -->
+        <item>Bénin</item>                         <!-- BJ -->
+        <item>Saint-Barthélemy</item>              <!-- BL -->
+        <item>Bermuda</item>                       <!-- BM -->
+        <item>Brunei Darussalam</item>              <!-- BN -->
+        <item>Bolivia</item>                       <!-- BO -->
+        <item>Caribbean Netherlands</item>          <!-- BQ -->
+        <item>Brasil</item>                        <!-- BR -->
+        <item>Bahamas</item>                       <!-- BS -->
+        <item>འབྲུག་ཡུལ་</item>                      <!-- BT -->
+        <item>Botswana</item>                      <!-- BW -->
+        <item>Беларусь</item>                      <!-- BY -->
+        <item>Belize</item>                        <!-- BZ -->
+        <item>Canada</item>                        <!-- CA -->
+        <item>Cocos (Keeling) Islands</item>        <!-- CC -->
+        <item>Congo (DRC)</item>                   <!-- CD -->
+        <item>République Centrafricaine</item>      <!-- CF -->
+        <item>Congo (Brazzaville)</item>           <!-- CG -->
+        <item>Schweiz</item>                       <!-- CH -->
+        <item>Côte d’Ivoire</item>                 <!-- CI -->
+        <item>Cook Islands</item>                  <!-- CK -->
+        <item>Chile</item>                         <!-- CL -->
+        <item>Cameroun</item>                      <!-- CM -->
+        <item>中国</item>                           <!-- CN -->
+        <item>Colombia</item>                      <!-- CO -->
+        <item>Costa Rica</item>                    <!-- CR -->
+        <item>Cuba</item>                          <!-- CU -->
+        <item>Cabo Verde</item>                    <!-- CV -->
+        <item>Curaçao</item>                       <!-- CW -->
+        <item>Christmas Island</item>              <!-- CX -->
+        <item>Κύπρος</item>                       <!-- CY -->
+        <item>Česko</item>                        <!-- CZ -->
+        <item>Deutschland</item>                   <!-- DE -->
+        <item>Djibouti</item>                      <!-- DJ -->
+        <item>Danmark</item>                       <!-- DK -->
+        <item>Dominica</item>                      <!-- DM -->
+        <item>República Dominicana</item>          <!-- DO -->
+        <item>الجزائر</item>                       <!-- DZ -->
+        <item>Ecuador</item>                       <!-- EC -->
+        <item>Eesti</item>                         <!-- EE -->
+        <item>مصر</item>                           <!-- EG -->
+        <item>الصحراء الغربية</item>                <!-- EH -->
+        <item>ኤርትራ</item>                         <!-- ER -->
+        <item>España</item>                       <!-- ES -->
+        <item>ኢትዮጵያ</item>                        <!-- ET -->
+        <item>Suomi</item>                         <!-- FI -->
+        <item>Fiji</item>                          <!-- FJ -->
+        <item>Falkland Islands</item>              <!-- FK -->
+        <item>Micronesia</item>                   <!-- FM -->
+        <item>Føroyar</item>                      <!-- FO -->
+        <item>France</item>                        <!-- FR -->
+        <item>Gabon</item>                         <!-- GA -->
+        <item>United Kingdom</item>                <!-- GB -->
+        <item>Grenada</item>                       <!-- GD -->
+        <item>საქართველო</item>                    <!-- GE -->
+        <item>Guyane française</item>              <!-- GF -->
+        <item>Guernsey</item>                      <!-- GG -->
+        <item>Ghana</item>                         <!-- GH -->
+        <item>Gibraltar</item>                     <!-- GI -->
+        <item>Kalaallit Nunaat</item>              <!-- GL -->
+        <item>Gambia</item>                        <!-- GM -->
+        <item>Guinée</item>                       <!-- GN -->
+        <item>Guadeloupe</item>                    <!-- GP -->
+        <item>Ελλάδα</item>                       <!-- GR -->
+        <item>Guatemala</item>                     <!-- GT -->
+        <item>Guam</item>                          <!-- GU -->
+        <item>Guiné-Bissau</item>                 <!-- GW -->
+        <item>Guyana</item>                        <!-- GY -->
+        <item>香港</item>                           <!-- HK -->
+        <item>Honduras</item>                      <!-- HN -->
+        <item>Hrvatska</item>                      <!-- HR -->
+        <item>Haïti</item>                        <!-- HT -->
+        <item>Magyarország</item>                  <!-- HU -->
+        <item>Indonesia</item>                     <!-- ID -->
+        <item>Éire</item>                          <!-- IE -->
+        <item>ישראל</item>                         <!-- IL -->
+        <item>Isle of Man</item>                   <!-- IM -->
+        <item>भारत</item>                          <!-- IN -->
+        <item>العراق</item>                        <!-- IQ -->
+        <item>ایران</item>                         <!-- IR -->
+        <item>Ísland</item>                       <!-- IS -->
+        <item>Italia</item>                        <!-- IT -->
+        <item>Jersey</item>                        <!-- JE -->
+        <item>Jamaica</item>                       <!-- JM -->
+        <item>الأردن</item>                        <!-- JO -->
+        <item>日本</item>                           <!-- JP -->
+        <item>Kenya</item>                         <!-- KE -->
+        <item>Кыргызстан</item>                    <!-- KG -->
+        <item>កម្ពុជា</item>                       <!-- KH -->
+        <item>Kiribati</item>                      <!-- KI -->
+        <item>ﺍﻟﻘﻤﺮي</item>                       <!-- KM -->
+        <item>Saint Kitts and Nevis</item>          <!-- KN -->
+        <item>조선민주주의인민공화국</item>          <!-- KP -->
+        <item>대한민국</item>                       <!-- KR -->
+        <item>الكويت</item>                        <!-- KW -->
+        <item>Cayman Islands</item>                 <!-- KY -->
+        <item>Қазақстан</item>                    <!-- KZ -->
+        <item>ລາວ</item>                          <!-- LA -->
+        <item>لبنان</item>                         <!-- LB -->
+        <item>Saint Lucia</item>                   <!-- LC -->
+        <item>Liechtenstein</item>                 <!-- LI -->
+        <item>ශ්‍රී ලංකාව</item>                  <!-- LK -->
+        <item>Liberia</item>                       <!-- LR -->
+        <item>Lesotho</item>                       <!-- LS -->
+        <item>Lietuva</item>                       <!-- LT -->
+        <item>Luxembourg</item>                    <!-- LU -->
+        <item>Latvija</item>                       <!-- LV -->
+        <item>ليبيا</item>                         <!-- LY -->
+        <item>المغرب</item>                        <!-- MA -->
+        <item>Monaco</item>                        <!-- MC -->
+        <item>Moldova</item>                       <!-- MD -->
+        <item>Crna Gora</item>                     <!-- ME -->
+        <item>Saint-Martin</item>                  <!-- MF -->
+        <item>Madagasikara</item>                  <!-- MG -->
+        <item>Marshall Islands</item>              <!-- MH -->
+        <item>Северна Македонија</item>            <!-- MK -->
+        <item>Mali</item>                          <!-- ML -->
+        <item>မြန်မာ</item>                       <!-- MM -->
+        <item>Монгол</item>                        <!-- MN -->
+        <item>澳門</item>                           <!-- MO -->
+        <item>Northern Mariana Islands</item>       <!-- MP -->
+        <item>Martinique</item>                    <!-- MQ -->
+        <item>موريتانيا</item>                     <!-- MR -->
+        <item>Montserrat</item>                    <!-- MS -->
+        <item>Malta</item>                         <!-- MT -->
+        <item>Maurice</item>                       <!-- MU -->
+        <item>ދިވެހިރާއްޖެ</item>                  <!-- MV -->
+        <item>Malawi</item>                        <!-- MW -->
+        <item>México</item>                        <!-- MX -->
+        <item>Malaysia</item>                      <!-- MY -->
+        <item>Moçambique</item>                    <!-- MZ -->
+        <item>Namibia</item>                       <!-- NA -->
+        <item>Nouvelle-Calédonie</item>            <!-- NC -->
+        <item>Niger</item>                         <!-- NE -->
+        <item>Norfolk Island</item>                <!-- NF -->
+        <item>Nigeria</item>                       <!-- NG -->
+        <item>Nicaragua</item>                     <!-- NI -->
+        <item>Nederland</item>                     <!-- NL -->
+        <item>Norge</item>                         <!-- NO -->
+        <item>नेपाल</item>                         <!-- NP -->
+        <item>Nauru</item>                         <!-- NR -->
+        <item>Niue</item>                          <!-- NU -->
+        <item>New Zealand</item>                   <!-- NZ -->
+        <item>عُمان</item>                         <!-- OM -->
+        <item>Panamá</item>                        <!-- PA -->
+        <item>Perú</item>                          <!-- PE -->
+        <item>Polynésie française</item>           <!-- PF -->
+        <item>Papua New Guinea</item>               <!-- PG -->
+        <item>Pilipinas</item>                     <!-- PH -->
+        <item>پاکستان</item>                       <!-- PK -->
+        <item>Polska</item>                        <!-- PL -->
+        <item>Saint-Pierre-et-Miquelon</item>       <!-- PM -->
+        <item>فلسطين</item>                        <!-- PS -->
+        <item>Puerto Rico</item>                   <!-- PR -->
+        <item>Portugal</item>                      <!-- PT -->
+        <item>Palau</item>                         <!-- PW -->
+        <item>Paraguay</item>                      <!-- PY -->
+        <item>قطر</item>                           <!-- QA -->
+        <item>La Réunion</item>                   <!-- RE -->
+        <item>România</item>                      <!-- RO -->
+        <item>Србија</item>                       <!-- RS -->
+        <item>Россия</item>                        <!-- RU -->
+        <item>Rwanda</item>                        <!-- RW -->
+        <item>المملكة العربية السعودية</item>       <!-- SA -->
+        <item>Solomon Islands</item>                <!-- SB -->
+        <item>Seychelles</item>                    <!-- SC -->
+        <item>السودان</item>                       <!-- SD -->
+        <item>Sverige</item>                       <!-- SE -->
+        <item>Singapore</item>                      <!-- SG -->
+        <item>Saint Helena</item>                   <!-- SH -->
+        <item>Slovenija</item>                     <!-- SI -->
+        <item>Svalbard og Jan Mayen</item>          <!-- SJ -->
+        <item>Slovensko</item>                     <!-- SK -->
+        <item>Sierra Leone</item>                   <!-- SL -->
+        <item>San Marino</item>                    <!-- SM -->
+        <item>Sénégal</item>                       <!-- SN -->
+        <item>Soomaaliya</item>                    <!-- SO -->
+        <item>Suriname</item>                      <!-- SR -->
+        <item>São Tomé e Príncipe</item>           <!-- ST -->
+        <item>El Salvador</item>                    <!-- SV -->
+        <item>Sint Maarten</item>                  <!-- SX -->
+        <item>سوريا</item>                         <!-- SY -->
+        <item>Eswatini</item>                      <!-- SZ -->
+        <item>Turks and Caicos Islands</item>       <!-- TC -->
+        <item>Tchad</item>                         <!-- TD -->
+        <item>Togo</item>                          <!-- TG -->
+        <item>ไทย</item>                           <!-- TH -->
+        <item>Тоҷикистон</item>                   <!-- TJ -->
+        <item>Timor-Leste</item>                   <!-- TL -->
+        <item>Türkmenistan</item>                  <!-- TM -->
+        <item>تونس</item>                         <!-- TN -->
+        <item>Tonga</item>                         <!-- TO -->
+        <item>Türkiye</item>                       <!-- TR -->
+        <item>Trinidad and Tobago</item>            <!-- TT -->
+        <item>Tuvalu</item>                        <!-- TV -->
+        <item>台灣</item>                           <!-- TW -->
+        <item>Tanzania</item>                      <!-- TZ -->
+        <item>Україна</item>                      <!-- UA -->
+        <item>Uganda</item>                        <!-- UG -->
+        <item>United States</item>                 <!-- US -->
+        <item>Uruguay</item>                       <!-- UY -->
+        <item>Oʻzbekiston</item>                  <!-- UZ -->
+        <item>Città del Vaticano</item>            <!-- VA -->
+        <item>Saint Vincent and the Grenadines</item><!-- VC -->
+        <item>Venezuela</item>                     <!-- VE -->
+        <item>British Virgin Islands</item>         <!-- VG -->
+        <item>U.S. Virgin Islands</item>           <!-- VI -->
+        <item>Việt Nam</item>                     <!-- VN -->
+        <item>Vanuatu</item>                       <!-- VU -->
+        <item>Wallis et Futuna</item>               <!-- WF -->
+        <item>Samoa</item>                         <!-- WS -->
+        <item>Kosovë</item>                       <!-- XK -->
+        <item>اليمن</item>                         <!-- YE -->
+        <item>Mayotte</item>                       <!-- YT -->
+        <item>South Africa</item>                  <!-- ZA -->
+        <item>Zambia</item>                        <!-- ZM -->
+        <item>Zimbabwe</item>                      <!-- ZW -->
+    </string-array>
+
+    <string-array name="truecaller_region_code">
+        <item>AC</item>
+        <item>AD</item>
+        <item>AE</item>
+        <item>AF</item>
+        <item>AG</item>
+        <item>AI</item>
+        <item>AL</item>
+        <item>AM</item>
+        <item>AO</item>
+        <item>AR</item>
+        <item>AS</item>
+        <item>AT</item>
+        <item>AU</item>
+        <item>AW</item>
+        <item>AX</item>
+        <item>AZ</item>
+        <item>BA</item>
+        <item>BB</item>
+        <item>BD</item>
+        <item>BE</item>
+        <item>BF</item>
+        <item>BG</item>
+        <item>BH</item>
+        <item>BI</item>
+        <item>BJ</item>
+        <item>BL</item>
+        <item>BM</item>
+        <item>BN</item>
+        <item>BO</item>
+        <item>BQ</item>
+        <item>BR</item>
+        <item>BS</item>
+        <item>BT</item>
+        <item>BW</item>
+        <item>BY</item>
+        <item>BZ</item>
+        <item>CA</item>
+        <item>CC</item>
+        <item>CD</item>
+        <item>CF</item>
+        <item>CG</item>
+        <item>CH</item>
+        <item>CI</item>
+        <item>CK</item>
+        <item>CL</item>
+        <item>CM</item>
+        <item>CN</item>
+        <item>CO</item>
+        <item>CR</item>
+        <item>CU</item>
+        <item>CV</item>
+        <item>CW</item>
+        <item>CX</item>
+        <item>CY</item>
+        <item>CZ</item>
+        <item>DE</item>
+        <item>DJ</item>
+        <item>DK</item>
+        <item>DM</item>
+        <item>DO</item>
+        <item>DZ</item>
+        <item>EC</item>
+        <item>EE</item>
+        <item>EG</item>
+        <item>EH</item>
+        <item>ER</item>
+        <item>ES</item>
+        <item>ET</item>
+        <item>FI</item>
+        <item>FJ</item>
+        <item>FK</item>
+        <item>FM</item>
+        <item>FO</item>
+        <item>FR</item>
+        <item>GA</item>
+        <item>GB</item>
+        <item>GD</item>
+        <item>GE</item>
+        <item>GF</item>
+        <item>GG</item>
+        <item>GH</item>
+        <item>GI</item>
+        <item>GL</item>
+        <item>GM</item>
+        <item>GN</item>
+        <item>GP</item>
+        <item>GR</item>
+        <item>GT</item>
+        <item>GU</item>
+        <item>GW</item>
+        <item>GY</item>
+        <item>HK</item>
+        <item>HN</item>
+        <item>HR</item>
+        <item>HT</item>
+        <item>HU</item>
+        <item>ID</item>
+        <item>IE</item>
+        <item>IL</item>
+        <item>IM</item>
+        <item>IN</item>
+        <item>IQ</item>
+        <item>IR</item>
+        <item>IS</item>
+        <item>IT</item>
+        <item>JE</item>
+        <item>JM</item>
+        <item>JO</item>
+        <item>JP</item>
+        <item>KE</item>
+        <item>KG</item>
+        <item>KH</item>
+        <item>KI</item>
+        <item>KM</item>
+        <item>KN</item>
+        <item>KP</item>
+        <item>KR</item>
+        <item>KW</item>
+        <item>KY</item>
+        <item>KZ</item>
+        <item>LA</item>
+        <item>LB</item>
+        <item>LC</item>
+        <item>LI</item>
+        <item>LK</item>
+        <item>LR</item>
+        <item>LS</item>
+        <item>LT</item>
+        <item>LU</item>
+        <item>LV</item>
+        <item>LY</item>
+        <item>MA</item>
+        <item>MC</item>
+        <item>MD</item>
+        <item>ME</item>
+        <item>MF</item>
+        <item>MG</item>
+        <item>MH</item>
+        <item>MK</item>
+        <item>ML</item>
+        <item>MM</item>
+        <item>MN</item>
+        <item>MO</item>
+        <item>MP</item>
+        <item>MQ</item>
+        <item>MR</item>
+        <item>MS</item>
+        <item>MT</item>
+        <item>MU</item>
+        <item>MV</item>
+        <item>MW</item>
+        <item>MX</item>
+        <item>MY</item>
+        <item>MZ</item>
+        <item>NA</item>
+        <item>NC</item>
+        <item>NE</item>
+        <item>NF</item>
+        <item>NG</item>
+        <item>NI</item>
+        <item>NL</item>
+        <item>NO</item>
+        <item>NP</item>
+        <item>NR</item>
+        <item>NU</item>
+        <item>NZ</item>
+        <item>OM</item>
+        <item>PA</item>
+        <item>PE</item>
+        <item>PF</item>
+        <item>PG</item>
+        <item>PH</item>
+        <item>PK</item>
+        <item>PL</item>
+        <item>PM</item>
+        <item>PS</item>
+        <item>PR</item>
+        <item>PT</item>
+        <item>PW</item>
+        <item>PY</item>
+        <item>QA</item>
+        <item>RE</item>
+        <item>RO</item>
+        <item>RS</item>
+        <item>RU</item>
+        <item>RW</item>
+        <item>SA</item>
+        <item>SB</item>
+        <item>SC</item>
+        <item>SD</item>
+        <item>SE</item>
+        <item>SG</item>
+        <item>SH</item>
+        <item>SI</item>
+        <item>SJ</item>
+        <item>SK</item>
+        <item>SL</item>
+        <item>SM</item>
+        <item>SN</item>
+        <item>SO</item>
+        <item>SR</item>
+        <item>ST</item>
+        <item>SV</item>
+        <item>SX</item>
+        <item>SY</item>
+        <item>SZ</item>
+        <item>TC</item>
+        <item>TD</item>
+        <item>TG</item>
+        <item>TH</item>
+        <item>TJ</item>
+        <item>TL</item>
+        <item>TM</item>
+        <item>TN</item>
+        <item>TO</item>
+        <item>TR</item>
+        <item>TT</item>
+        <item>TV</item>
+        <item>TW</item>
+        <item>TZ</item>
+        <item>UA</item>
+        <item>UG</item>
+        <item>US</item>
+        <item>UY</item>
+        <item>UZ</item>
+        <item>VA</item>
+        <item>VC</item>
+        <item>VE</item>
+        <item>VG</item>
+        <item>VI</item>
+        <item>VN</item>
+        <item>VU</item>
+        <item>WF</item>
+        <item>WS</item>
+        <item>XK</item>
+        <item>YE</item>
+        <item>YT</item>
+        <item>ZA</item>
+        <item>ZM</item>
+        <item>ZW</item>
+    </string-array>
 </resources>

@@ -36,6 +36,8 @@ import com.addev.listaspam.util.setListaSpamApiLang
 import com.addev.listaspam.util.setTellowsApiCountry
 import java.util.Locale
 import androidx.core.net.toUri
+import com.addev.listaspam.util.getTruecallerApiCountry
+import com.addev.listaspam.util.setTruecallerApiCountry
 
 class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
@@ -65,7 +67,8 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         recyclerView?.layoutManager = LinearLayoutManager(this)
 
         setLanguage()
-        setCountry()
+        setTellowsCountry()
+        setTruecallerCountry()
         checkUpdates()
     }
 
@@ -124,7 +127,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         setListaSpamApiLang(this, finalLang.uppercase())
     }
 
-    private fun setCountry() {
+    private fun setTellowsCountry() {
         if (getTellowsApiCountry(this) != null) return
 
         val systemCountry = Locale.getDefault().country.lowercase()
@@ -133,6 +136,17 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
         val finalCountry = if (supportedCountries.contains(systemCountry)) systemCountry else "us"
         setTellowsApiCountry(this, finalCountry)
+    }
+
+    private fun setTruecallerCountry() {
+        if (getTruecallerApiCountry(this) != null) return
+
+        val systemCountry = Locale.getDefault().country.uppercase()
+        val supportedCountries =
+            resources.getStringArray(R.array.truecaller_region_code).toSet()
+
+        val finalCountry = if (supportedCountries.contains(systemCountry)) systemCountry else "US"
+        setTruecallerApiCountry(this, finalCountry)
     }
 
 

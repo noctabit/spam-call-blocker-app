@@ -248,10 +248,19 @@ class SpamUtils {
             }
         }
 
+        // Tellows
         val tellowsApi = shouldFilterWithTellowsApi(context)
         if (tellowsApi) {
             spamCheckers.add { number ->
                 ApiUtils.checkTellowsSpamApi(number, getTellowsApiCountry(context) ?: "us")
+            }
+        }
+
+        // Truecaller
+        val truecallerApi = shouldFilterWithTruecallerApi(context)
+        if (truecallerApi) {
+            spamCheckers.add { number ->
+                ApiUtils.checkTruecallerSpamApi(number, getTruecallerApiCountry(context) ?: "US")
             }
         }
 

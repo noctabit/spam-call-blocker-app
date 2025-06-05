@@ -59,6 +59,27 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/pref_category_truecaller_api"
+        app:iconSpaceReserved="false">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_truecaller_api"
+            android:summary="@string/pref_filter_truecaller_summary"
+            android:title="@string/pref_filter_truecaller_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:entries="@array/truecaller_region_display"
+            android:entryValues="@array/truecaller_region_code"
+            android:key="pref_truecaller_country"
+            android:summary="@string/pref_filter_truecaller_api_country_summary"
+            android:title="@string/pref_filter_truecaller_api_country_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
     <!-- Spam Number Filters -->
     <PreferenceCategory
         android:title="@string/pref_category_scrapers_es"
