@@ -35,7 +35,7 @@
 
     <!-- Preferences Sections -->
     <string name="pref_category_general_blocking">General</string>
-    <string name="pref_category_unknown_phone_api">API Unknownphone</string>
+    <string name="pref_category_unknown_phone_api">API Unknownphone 🌐</string>
     <string name="pref_category_tellows_api">API Tellows 🌐</string>
     <string name="pref_category_truecaller_api">API Truecaller 🌐</string>
     <string name="pref_category_scrapers_es">Scrapers 🇪🇸</string>
@@ -69,7 +69,7 @@
     <string name="pref_filter_truecaller_api_country_summary">Seleccione el país para las búsquedas en la API de Truecaller (afecta a los resultados)</string>
 
     <!-- Spam Number Filters -->
-    <string name="pref_filter_lista_spam_scraper_title">Scraper listaspam.com 🇪🇸</string>
+    <string name="pref_filter_lista_spam_scraper_title">Scraper listaspam.com</string>
     <string name="pref_filter_lista_spam_scraper_summary">(Obsoleto) Bloquea llamadas de números spam incluidos en la web listaspam.es</string>
 
     <string name="pref_filter_responder_o_no_title">Scraper responderono.es</string>
