@@ -22,8 +22,10 @@ Here are some screenshots of the Call Blocker App in action:
   - Block calls from hidden numbers
   - Block calls from numbers not in contacts
   - Block international calls
-- **Multi-Language Number Lookup via UnknownPhone API**: Lookup phone numbers internationally using the UnknownPhone API.
-- **Multi-Country Number Lookup via Tellows API**: Lookup phone numbers internationally using the Tellows API.
+- **International Phone Number Lookup**: Multi-source verification using:
+  - UnknownPhone API
+  - Tellows API
+  - TrueCaller API
 - **Web-Based Number Lookup**: Automatically look up phone numbers using trusted Spanish websites:
   - [www.listaspam.com](https://www.listaspam.com)
   - [www.responderono.es](https://www.responderono.es)
