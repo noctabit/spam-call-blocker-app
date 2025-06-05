@@ -44,21 +44,6 @@ If you find this project helpful and want to support its development, consider m
 Your support helps keep the project active and maintained. Thank you! 🙌
 
 <a target="_blank" href="https://www.buymeacoffee.com/rSiZtB3"><img style="width: 200px" src="https://i.imgur.com/KCk0bxY.png" /></a>
-
-## Settings
-
-- **General Blocking**: Toggle to enable or disable call blocking.
-- **Filter by UnknownPhone API**: Use UnknownPhone API to check numbers based on selected language.
-- **Filter by Tellows API**: Use Tellows API to check numbers based on selected country.
-- **Filter by ListaSpam**: Enable filtering based on data from www.listaspam.com.
-- **Filter by Responderono**: Enable filtering based on data from www.responderono.es.
-- **Block Unknown Numbers**: Option to block all numbers not saved in your contacts.
-- **Block Hidden Numbers**: Option to block calls from numbers with hidden caller IDs.
-- **Block International Calls**: Option to block all incoming international calls.
-- **Notifications**: Receive a notification whenever a call is blocked.
-- **Export Preferences**: Export all app settings and blocked/whitelisted numbers.
-- **Import Preferences**: Import previously exported settings and number lists.
-
 ## Data Management
 
 - **Export**: Users can export all their preferences, including settings and black/white lists of numbers, to a file for backup or transfer to another device.
@@ -66,12 +51,12 @@ Your support helps keep the project active and maintained. Thank you! 🙌
 
 ## Privacy and Security
 
-This app is designed with user privacy in mind. All data is stored locally on the device, and the app only accesses the internet to perform web scraping for number lookup. No personal data is shared with external servers.
+This app is designed with user privacy in mind. All data is stored locally on the device, and the app only accesses the internet to perform API requests and web scraping for number lookup. No personal data is shared with external servers.
 
 ## Requirements
 
-- Android 9.0 (Pie) or higher
-- Internet connection for web scraping features
+- Android 10.0 or higher
+- Internet connection for API requests and web scraping features
 
 ## Installation
 
