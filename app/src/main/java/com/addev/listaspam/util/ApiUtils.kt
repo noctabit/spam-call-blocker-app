@@ -132,9 +132,9 @@ object ApiUtils {
         val deviceCountryCode = Locale.getDefault().country
 
         val host = if (EU_COUNTRIES.contains(deviceCountryCode.uppercase())) {
-            TRUE_CALLER_REPORT_API_URL_EU
+            TRUECALLER_API_URL_EU
         } else {
-            TRUE_CALLER_REPORT_API_URL_NONEU
+            TRUECALLER_API_URL_NONEU
         }
 
         val url = HttpUrl.Builder()
