@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.addev.listaspam.R
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,15 +51,26 @@ class ReportDialogManager(private val context: Context) {
         spamRadio.text = context.getString(R.string.report_spam)
         noSpamRadio.text = context.getString(R.string.report_not_spam)
 
-        checkboxUnknownPhone.text = buildProviderText(context, "UnknownPhone", getLanguageDisplayName())
+        checkboxUnknownPhone.text =
+            buildProviderText(context, "UnknownPhone", getLanguageDisplayName())
         checkboxTellows.text = buildProviderText(context, "Tellows", getCountryDisplayName())
-        if (!number.startsWith("+")) {
-            val prefix = getPrefix()
-            checkboxTruecaller.text = context.getString(R.string.truecaller_prefix_repository, prefix)
-        } else {
-            checkboxTruecaller.text = context.getString(R.string.truecaller_default_repository)
-        }
+        val prefix = extractPrefixFromNumber(number)
+        checkboxTruecaller.text = context.getString(
+            R.string.truecaller_prefix_repository,
+            "+$prefix"
+        )
 
+    }
+
+    private fun extractPrefixFromNumber(number: String): String {
+        val phoneUtil = PhoneNumberUtil.getInstance()
+        return try {
+            val parsedNumber: Phonenumber.PhoneNumber = phoneUtil.parse(number, null)
+            val countryCode = parsedNumber.countryCode
+            countryCode.toString()
+        } catch (e: Exception) {
+            getDevicePrefix().toString()
+        }
     }
 
     private fun setupDialogButtons(dialog: AlertDialog, dialogView: View, number: String) {
@@ -151,7 +163,7 @@ class ReportDialogManager(private val context: Context) {
 
             if (checkboxTruecaller.isChecked) {
                 // Add country code prefix if missing
-                val prefix = getPrefix()
+                val prefix = getDevicePrefix()
                 val formattedPhone = if (!number.startsWith("+")) {
                     "$prefix$number"
                 } else {
@@ -174,11 +186,11 @@ class ReportDialogManager(private val context: Context) {
         }
     }
 
-    private fun getPrefix(): String {
+    private fun getDevicePrefix(): Int {
         val telephonyManager = ContextCompat.getSystemService(context, TelephonyManager::class.java)
         val countryIso = telephonyManager?.networkCountryIso?.uppercase()
         val phoneUtil = PhoneNumberUtil.getInstance()
-        return "+" + phoneUtil.getCountryCodeForRegion(countryIso)
+        return phoneUtil.getCountryCodeForRegion(countryIso)
     }
 
     private fun buildReportMessage(reportedTo: List<String>): String {
@@ -199,12 +211,13 @@ class ReportDialogManager(private val context: Context) {
     }
 
     private fun getCountryDisplayName(): String {
-        val country = getTellowsApiCountry(context)
+        val country = getTellowsApiCountry(context)?.lowercase()
         val countryValues = context.resources.getStringArray(R.array.entryvalues_region_preference)
         val countryNames = context.resources.getStringArray(R.array.entries_region_preference)
         return getDisplayName(country, countryValues, countryNames)
             ?: context.getString(R.string.unknown_value)
     }
+
 
     private fun getDisplayName(
         value: String?,
@@ -217,7 +230,11 @@ class ReportDialogManager(private val context: Context) {
         }
     }
 
-    private fun buildProviderText(context: Context, providerName: String, displayName: String): String {
+    private fun buildProviderText(
+        context: Context,
+        providerName: String,
+        displayName: String
+    ): String {
         return context.getString(R.string.provider_repository_format, providerName, displayName)
     }
 }
