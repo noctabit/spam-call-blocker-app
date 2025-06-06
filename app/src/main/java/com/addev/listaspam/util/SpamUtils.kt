@@ -281,7 +281,7 @@ class SpamUtils {
 
         try {
             // Parse the phone number
-            val parsedNumber: Phonenumber.PhoneNumber = phoneNumberUtil.parse(phoneNumber, null)
+            val parsedNumber: Phonenumber.PhoneNumber = phoneNumberUtil.parse(phoneNumber, Locale.getDefault().country)
 
             // Get the country code of the parsed number
             val phoneCountryCode = parsedNumber.countryCode
