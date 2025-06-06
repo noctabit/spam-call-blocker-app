@@ -2,9 +2,13 @@ package com.addev.listaspam.util
 
 import okhttp3.FormBody
 import okhttp3.HttpUrl
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Locale
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
@@ -20,6 +24,9 @@ object ApiUtils {
     private const val TRUECALLER_API_URL_EU = "search5-eu.truecaller.com"
     private const val TRUECALLER_API_URL_NONEU = "search5-noneu.truecaller.com"
     private const val TRUECALLER_API_KEY = "a1i1V--ua298eldF0hb0rL520GjDz7bzVAdt63J2nzZBnWlEKNCJUeln_7kWj4Ir"
+
+    private const val TRUE_CALLER_REPORT_API_URL_EU = "https://filter-store4-eu.truecaller.com/v4/filters?encoding=json"
+    private const val TRUE_CALLER_REPORT_API_URL_NONEU = "https://filter-store4-noneu.truecaller.com/v4/filters?encoding=json"
 
     private val EU_COUNTRIES = setOf(
         "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR",
@@ -122,10 +129,12 @@ object ApiUtils {
     }
 
     fun checkTruecallerSpamApi(number: String, countryCode: String): Boolean {
-        val host = if (EU_COUNTRIES.contains(countryCode.uppercase())) {
-            TRUECALLER_API_URL_EU
+        val deviceCountryCode = Locale.getDefault().country
+
+        val host = if (EU_COUNTRIES.contains(deviceCountryCode.uppercase())) {
+            TRUE_CALLER_REPORT_API_URL_EU
         } else {
-            TRUECALLER_API_URL_NONEU
+            TRUE_CALLER_REPORT_API_URL_NONEU
         }
 
         val url = HttpUrl.Builder()
@@ -165,6 +174,53 @@ object ApiUtils {
             val spamScore = spamInfo?.optInt("spamScore", 0) ?: 0 // Reports quantity
 
             !spamType.isNullOrBlank() && spamScore > 1
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun reportToTruecaller(
+        phone: String,
+        comment: String,
+        isSpam: Boolean
+    ): Boolean {
+        val deviceCountryCode = Locale.getDefault().country
+
+        val host = if (EU_COUNTRIES.contains(deviceCountryCode.uppercase())) {
+            TRUE_CALLER_REPORT_API_URL_EU
+        } else {
+            TRUE_CALLER_REPORT_API_URL_NONEU
+        }
+
+
+        val requestBodyJson = JSONArray().put(
+            JSONObject().apply {
+                put("value", phone)
+                put("label", comment.take(10))
+                put("comment", comment)
+                put("rule", if (isSpam) "BLACKLIST" else "WHITELIST")
+                put("type", "OTHER")
+                put("source", "detailView")
+            }
+        ).toString()
+
+        val requestBody = requestBodyJson.toRequestBody("application/json; charset=UTF-8".toMediaType())
+
+        val request = Request.Builder()
+            .url(host)
+            .put(requestBody)
+            .header("Authorization", "Bearer $TRUECALLER_API_KEY")
+            .header("Content-Type", "application/json; charset=UTF-8")
+            .header("Connection", "Keep-Alive")
+            .header("Host", "filter-store4-eu.truecaller.com")
+            .header("User-Agent", "Truecaller/9.00.3 (Android;10)")
+            .build()
+
+        return try {
+            val response = client.newCall(request).execute()
+            val responseBody = response.body?.string() ?: return false
+            val json = JSONObject(responseBody)
+            json.has("data")
         } catch (e: Exception) {
             false
         }
