@@ -78,12 +78,12 @@
             android:checked="true"
             android:text="Tellows" />
 
-<!--        <CheckBox-->
-<!--            android:id="@+id/checkboxTruecaller"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:checked="true"-->
-<!--            android:text="Truecaller" />-->
+        <CheckBox
+            android:id="@+id/checkboxTruecaller"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Truecaller" />
 
         <View
             android:layout_width="match_parent"
