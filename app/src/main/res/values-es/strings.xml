@@ -123,6 +123,13 @@
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
     <string name="type_number">Por favor ingresa un número válido</string>
+    <string name="reported_to_unknown_phone">UnknownPhone</string>
+    <string name="reported_to_tellows">Tellows</string>
+    <string name="reported_to_truecaller">TrueCaller</string>
+    <string name="truecaller_prefix_repository">TrueCaller (repositorio de prefijo %1$s)</string>
+    <string name="truecaller_default_repository">TrueCaller (repositorio de prefijo por defecto)</string>
+    <string name="provider_repository_format">%1$s (repositorio %2$s)</string>
+    <string name="unknown_value">Desconocido</string>
 
     <!-- Updates -->
     <string name="update_available_title">Actualización disponible</string>

@@ -143,6 +143,14 @@
     <string name="and">and</string>
     <string name="report_failure">Report could not be sent</string>
     <string name="select_at_least_one_provider">Select at least one provider</string>
+    <string name="reported_to_unknown_phone">UnknownPhone</string>
+    <string name="reported_to_tellows">Tellows</string>
+    <string name="reported_to_truecaller">TrueCaller</string>
+    <string name="truecaller_prefix_repository">TrueCaller (%1$s prefix repository)</string>
+    <string name="truecaller_default_repository">TrueCaller (default prefix repository)</string>
+    <string name="provider_repository_format">%1$s (%2$s repository)</string>
+    <string name="unknown_value">Unknown</string>
+
 
     <!-- Import/export -->
     <string name="preferences_import_success">Preferences imported successfully</string>
