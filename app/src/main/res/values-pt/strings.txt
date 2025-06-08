@@ -1,0 +1,151 @@
+<resources>
+    <string name="app_name">Spam Call Blocker</string>
+    <string name="success_call_screening_role">Sucesso ao solicitar função de filtragem de chamadas!</string>
+    <string name="failed_call_screening_role">Falha ao solicitar função de filtragem de chamadas</string>
+    <string name="telecom_manager_unavailable">Gerenciador Telecom indisponível.</string>
+    <string name="call_screening_role_prompt">Por favor, conceda a permissão de filtragem de chamadas.</string>
+    <string name="permissions_required_title">Permissões Necessárias</string>
+    <string name="permissions_required_message">As seguintes permissões são necessárias para o aplicativo funcionar corretamente:\n\n%s\n\nPor favor, vá às configurações do sistema e conceda as permissões manualmente.</string>
+    <string name="go_to_settings">Ir para configurações</string>
+    <string name="permission_read_call_log">Ler o Registro de Chamadas</string>
+    <string name="permission_read_phone_state">Acessar o Estado do Telefone</string>
+    <string name="permission_read_contacts">Acesso aos Contatos</string>
+    <string name="permission_answer_phone_calls">Atender Chamadas Telefônicas</string>
+    <string name="permission_post_notifications">Enviar Notificações</string>
+    <string name="blocked_text_format">%1$s (bloqueado)</string>
+    <string name="whitelisted_text_format">%1$s (lista branca)</string>
+    <string name="duration_label">Duração: %1$d segundos</string>
+    <string name="report_url_template">http://example.com/report?number=%1$s</string>
+    <string name="incoming_call_not_spam">A chamada recebida parece não ser spam</string>
+    <string name="notification_channel_name">Bloqueador de Chamadas Spam</string>
+    <string name="notification_title_spam_blocked">Chamada bloqueada: %1$s</string>
+    <string name="number_copied_to_clipboard">Número de telefone copiado para a área de transferência</string>
+
+<!-- Call types -->
+    <string name="call_incoming">Chamada recebida</string>
+    <string name="call_missed">Chamada perdida</string>
+    <string name="call_rejected">Chamada rejeitada</string>
+    <string name="call_blocked">Chamada bloqueada</string>
+    <string name="call_unknown">Desconhecido</string>
+
+<!-- Preferences -->
+    <string name="action_settings">Configurações</string>
+    <string name="about">Sobre</string>
+    <string name="donate">Doar</string>
+
+<!-- Preferences Sections -->
+    <string name="pref_category_general_blocking">Geral</string>
+    <string name="pref_category_unknown_phone_api">API Unknownphone 🌐</string>
+    <string name="pref_category_tellows_api">API Tellows 🌐</string>
+    <string name="pref_category_truecaller_api">API Truecaller 🌐</string>
+    <string name="pref_category_scrapers_es">Scrapers 🇪🇸</string>
+    <string name="pref_category_spam_filters">Filtros de Números Spam</string>
+    <string name="pref_category_other_options">Outras Opções de Bloqueio</string>
+    <string name="pref_category_notifications">Notificações</string>
+
+<!-- General Blocking Settings -->
+    <string name="pref_enable_blocking_title">Ativar Bloqueio</string>
+    <string name="pref_enable_blocking_summary">Ativar ou desativar a funcionalidade de bloqueio de chamadas</string>
+
+<!-- API Unknownphone -->
+    <string name="pref_filter_lista_spam_title">API Unknownphone</string>
+    <string name="pref_filter_lista_spam_summary">(Recomendado) Bloqueia chamadas de números spam listados na API unknownphone.com</string>
+    <string name="pref_filter_lista_spam_api_language_title">Idioma da API unknownphone.com</string>
+    <string name="pref_filter_lista_spam_api_language_summary">Selecione o idioma para pesquisas na API unknownphone.com (afeta os resultados)</string>
+
+<!-- API Tellows -->
+    <string name="pref_filter_tellows_title">API Tellows</string>
+    <string name="pref_filter_tellows_summary">(Recomendado) Bloqueia chamadas de números spam listados na API Tellows</string>
+    <string name="pref_filter_tellows_api_country_title">País da API Tellows</string>
+    <string name="pref_filter_tellows_api_country_summary">Selecione o país para pesquisas na API Tellows (afeta os resultados)</string>
+
+<!-- API Truecaller -->
+    <string name="pref_filter_truecaller_title">API Truecaller</string>
+    <string name="pref_filter_truecaller_summary">(Recomendado) Bloqueia chamadas de números spam identificados pela API Truecaller</string>
+    <string name="pref_filter_truecaller_api_country_title">País da API Truecaller</string>
+    <string name="pref_filter_truecaller_api_country_summary">Selecione o país para pesquisas na API Truecaller (afeta os resultados)</string>
+
+<!-- Spam Number Filters -->
+    <string name="pref_filter_lista_spam_scraper_title">Scraper listaspam.com</string>
+    <string name="pref_filter_lista_spam_scraper_summary">(Obsoleto) Bloqueia chamadas de números spam listados no site listaspam.es</string>
+    <string name="pref_filter_responder_o_no_title">Scraper responderono.es</string>
+    <string name="pref_filter_responder_o_no_summary">Bloqueia chamadas de números spam listados no site responderono.es</string>
+    <string name="pref_filter_cleverdialer_title">Scraper cleverdialer.es</string>
+    <string name="pref_filter_cleverdialer_summary">Bloqueia chamadas de números spam listados no site cleverdialer.es</string>
+
+<!-- Other Blocking Options -->
+    <string name="pref_block_non_contacts_title">Bloquear  os não Contatos</string>
+    <string name="pref_block_non_contacts_summary">Bloquear chamadas de números não salvos nos contatos</string>
+    <string name="pref_block_hidden_numbers_title">Bloquear Números Ocultos</string>
+    <string name="pref_block_hidden_numbers_summary">Bloquear chamadas de números ocultos ou privados</string>
+    <string name="pref_block_international_numbers_title">Bloquear Chamadas Internacionais</string>
+    <string name="pref_block_international_numbers_summary">Bloquear chamadas de outros países</string>
+    <string name="pref_block_stir_shaken_risk_title">Verificar com STIR/SHAKEN</string>
+    <string name="pref_block_stir_shaken_risk_summary">Bloquear chamadas marcadas como potencialmente fraudulentas pelo sistema STIR/SHAKEN (apenas Android 11+, disponível em alguns países e operadoras)</string>
+    <string name="pref_mute_instead_of_block_title">Silenciar em Vez de Bloquear</string>
+    <string name="pref_mute_instead_of_block_summary">Silenciar chamadas spam recebidas em vez de bloqueá-las completamente</string>
+
+<!-- Notifications -->
+    <string name="pref_show_notification_title">Mostrar Notificação ao Bloquear</string>
+    <string name="pref_show_notification_summary">Exibir uma notificação quando uma chamada for bloqueada</string>
+
+<!-- Call item actions  -->
+    <string name="open_in_lista_spam_com">Abrir no ListaSpam</string>
+    <string name="open_in_unknown_phone_com">Abrir no UnknownPhone</string>
+    <string name="search_in_google">Pesquisar no Google</string>
+    <string name="block">Bloquear</string>
+    <string name="add_to_whitelist">Adicionar à lista branca</string>
+    <string name="unblock">Desbloquear</string>
+    <string name="remove_from_whitelist">Remover da lista branca</string>
+
+<!-- SpamUtils blocking reasons -->
+    <string name="block_reason_long">Chamada bloqueada:</string>
+    <string name="block_reason">Motivo:</string>
+    <string name="blocking_disabled">O bloqueio de chamadas está desabilitado nas configurações</string>
+    <string name="block_stir_shaken_risk">STIR/SHAKEN - provável chamada falsa</string>
+    <string name="block_hidden_number">Número oculto</string>
+    <string name="block_spam_number">Reportado como spam</string>
+    <string name="block_international_call">Chamada internacional</string>
+    <string name="block_already_blocked_number">Número bloqueado</string>
+    <string name="block_non_contact">Não é um contato</string>
+    <string name="export_config">Exportar configurações e listas</string>
+    <string name="import_config">Importar configurações e listas</string>
+    <string name="test_number">Testar número</string>
+    <string name="aceptar">Aceitar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="type_number">Por favor, digite um número válido</string>
+
+<!-- Updates -->
+    <string name="update_available_title">Atualização Disponível</string>
+    <string name="update_available_message">Há uma nova versão: %1$s\nDeseja baixá-la?</string>
+
+<!-- Reports -->
+    <string name="report_title">Reportar Número</string>
+    <string name="report_label">Descreva o motivo</string>
+    <string name="report_hint">Explicação breve</string>
+    <string name="where_to_report">Onde você deseja reportar?</string>
+    <string name="report_spam">É spam</string>
+    <string name="report_not_spam">NÃO é spam</string>
+    <string name="accept">Enviar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="report_validation_message">Deve conter pelo menos 2 palavras e 5 letras.</string>
+    <string name="report_radio_validation">Por favor, selecione se é spam ou não.</string>
+    <string name="report_success_prefix">Relatório enviado para</string>
+    <string name="and">e</string>
+    <string name="report_failure">O relatório não pôde ser enviado</string>
+    <string name="select_at_least_one_provider">Selecione pelo menos um provedor</string>
+    <string name="reported_to_unknown_phone">UnknownPhone</string>
+    <string name="reported_to_tellows">Tellows</string>
+    <string name="reported_to_truecaller">TrueCaller</string>
+    <string name="truecaller_prefix_repository">TrueCaller (repositório de prefixo %1$s)</string>
+    <string name="truecaller_default_repository">TrueCaller (repositório de prefixo padrão)</string>
+    <string name="provider_repository_format">%1$s (repositório %2$s)</string>
+    <string name="unknown_value">Desconhecido</string>
+
+<!-- Import/export -->
+    <string name="preferences_import_success">Preferências importadas com sucesso</string>
+    <string name="preferences_import_error">Erro ao importar preferências</string>
+    <string name="invalid_json_file">O arquivo JSON não é válido</string>
+    <string name="preferences_export_success">Preferências exportadas com sucesso</string>
+    <string name="preferences_export_error">Erro ao exportar preferências</string>
+</resources>
