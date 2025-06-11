@@ -196,4 +196,7 @@ fun isNumberWhitelisted(context: Context, number: String): Boolean {
     return false
 }
 
+fun isUpdateCheckEnabled(context: Context): Boolean =
+    getBooleanPref(context, "pref_enable_update_check", true)
+
 

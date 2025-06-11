@@ -34,10 +34,11 @@ import com.addev.listaspam.util.getTellowsApiCountry
 import com.addev.listaspam.util.getWhitelistNumbers
 import com.addev.listaspam.util.setListaSpamApiLang
 import com.addev.listaspam.util.setTellowsApiCountry
-import java.util.Locale
-import androidx.core.net.toUri
 import com.addev.listaspam.util.getTruecallerApiCountry
 import com.addev.listaspam.util.setTruecallerApiCountry
+import com.addev.listaspam.util.isUpdateCheckEnabled
+import java.util.Locale
+import androidx.core.net.toUri
 
 class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
@@ -69,7 +70,9 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         setLanguage()
         setTellowsCountry()
         setTruecallerCountry()
-        checkUpdates()
+        if (isUpdateCheckEnabled(this)) {
+            checkUpdates()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

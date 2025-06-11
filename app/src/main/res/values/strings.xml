@@ -158,4 +158,8 @@
     <string name="invalid_json_file">The JSON file is not valid</string>
     <string name="preferences_export_success">Preferences exported successfully</string>
     <string name="preferences_export_error">Error exporting preferences</string>
+
+    <!-- Update check preference -->
+    <string name="pref_enable_update_check_title">Check for updates automatically</string>
+    <string name="pref_enable_update_check_summary">If disabled, the app will not check for new versions automatically</string>
 </resources>

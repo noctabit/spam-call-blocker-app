@@ -157,4 +157,8 @@
     <string name="invalid_json_file">El archivo JSON no es válido</string>
     <string name="preferences_export_success">Preferencias exportadas con éxito</string>
     <string name="preferences_export_error">Error al exportar preferencias</string>
+
+    <!-- Update check preference -->
+    <string name="pref_enable_update_check_title">Comprobar actualizaciones automáticamente</string>
+    <string name="pref_enable_update_check_summary">Si está desactivado, la app no buscará nuevas versiones automáticamente</string>
 </resources>
