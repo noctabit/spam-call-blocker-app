@@ -43,7 +43,14 @@ If you find this project helpful and want to support its development, consider m
 
 Your support helps keep the project active and maintained. Thank you! 🙌
 
-<a target="_blank" href="https://www.buymeacoffee.com/rSiZtB3"><img style="width: 200px" src="https://i.imgur.com/KCk0bxY.png" /></a>
+<div style="display: flex; gap: 10px;">
+
+  <a target="_blank" href="https://www.buymeacoffee.com/rSiZtB3"><img style="height: 50px" src="https://i.imgur.com/KCk0bxY.png" /></a>
+
+  <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=3T9XNAPWW36Z2"><img style="height: 50px" src="https://i.imgur.com/Z3x38ey.png" /></a>
+</div>
+
+
 ## Data Management
 
 - **Export**: Users can export all their preferences, including settings and black/white lists of numbers, to a file for backup or transfer to another device.
