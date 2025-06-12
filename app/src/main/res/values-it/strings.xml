@@ -5,7 +5,7 @@
     <string name="telecom_manager_unavailable">Gestore Telecom non disponibile.</string>
     <string name="call_screening_role_prompt">Per favore autorizza lo screening delle chiamate.</string>
     <string name="permissions_required_title">Autorizzazione Richiesta</string>
-    <string name="permissions_required_message">Per il corretto funzionamento dell'app sono necessarie le seguenti autorizzazioni:\n\n%s\n\nVai nelle impostazioni e attribuisci manualmente i permessi.</string>
+    <string name="permissions_required_message">Per il corretto funzionamento dell\'app sono necessarie le seguenti autorizzazioni:\n\n%s\n\nVai nelle impostazioni e attribuisci manualmente i permessi.</string>
     <string name="go_to_settings">Vai alle impostazioni</string>
     <string name="permission_read_call_log">Leggi Registro Chiamate</string>
     <string name="permission_read_phone_state">Leggi Stato del Telefono</string>
@@ -49,24 +49,24 @@
 
     <!-- API Unknownphone -->
     <string name="pref_filter_lista_spam_title">API Unknownphone</string>
-    <string name="pref_filter_lista_spam_summary">(Consigliato) Blocca le chiamate dai numeri spam elencati nell'API di unknownphone.com</string>
+    <string name="pref_filter_lista_spam_summary">(Consigliato) Blocca le chiamate dai numeri spam elencati nell\'API di unknownphone.com</string>
 
     <string name="pref_filter_lista_spam_api_language_title">Lingua unknownphone.com API</string>
-    <string name="pref_filter_lista_spam_api_language_summary">Scegli il Paese in cui effettuare le ricerche nell'API unknownphone.com (influisce sui risultati)</string>
+    <string name="pref_filter_lista_spam_api_language_summary">Scegli il Paese in cui effettuare le ricerche nell\'API unknownphone.com (influisce sui risultati)</string>
 
     <!-- API Tellows -->
     <string name="pref_filter_tellows_title">Tellows API</string>
-    <string name="pref_filter_tellows_summary">(Consigliato) Blocca le chiamate dai numeri spam elencati nell'API di Tellows</string>
+    <string name="pref_filter_tellows_summary">(Consigliato) Blocca le chiamate dai numeri spam elencati nell\'API di Tellows</string>
 
     <string name="pref_filter_tellows_api_country_title">Paese Tellows API</string>
-    <string name="pref_filter_tellows_api_country_summary">Scegli il Paese in cui effettuare le ricerche nell'API Tellows (influisce sui risultati)</string>
+    <string name="pref_filter_tellows_api_country_summary">Scegli il Paese in cui effettuare le ricerche nell\'API Tellows (influisce sui risultati)</string>
 
     <!-- API Truecaller -->
     <string name="pref_filter_truecaller_title">Truecaller API</string>
-    <string name="pref_filter_truecaller_summary">(Consigliato) Blocca le chiamate dai numeri spam elencati nell'API di Truecaller</string>
+    <string name="pref_filter_truecaller_summary">(Consigliato) Blocca le chiamate dai numeri spam elencati nell\'API di Truecaller</string>
 
     <string name="pref_filter_truecaller_api_country_title">Paese Truecaller API</string>
-    <string name="pref_filter_truecaller_api_country_summary">Scegli il Paese in cui effettuare le ricerche nell'API Truecaller (influisce sui risultati)</string>
+    <string name="pref_filter_truecaller_api_country_summary">Scegli il Paese in cui effettuare le ricerche nell\'API Truecaller (influisce sui risultati)</string>
 
     <!-- Spam Number Filters -->
     <string name="pref_filter_lista_spam_scraper_title">Scraper listaspam.com</string>
@@ -154,12 +154,12 @@
 
     <!-- Import/export -->
     <string name="preferences_import_success">Preferenze importate con successo</string>
-    <string name="preferences_import_error">Errore nell'importazione delle preferenze</string>
+    <string name="preferences_import_error">Errore nell\'importazione delle preferenze</string>
     <string name="invalid_json_file">Il file JSON non è valido</string>
     <string name="preferences_export_success">Preferenze esportate con successo</string>
-    <string name="preferences_export_error">Errore nell'esportazione delle preferenze</string>
+    <string name="preferences_export_error">Errore nell\'esportazione delle preferenze</string>
 
     <!-- Update check preference -->
     <string name="pref_enable_update_check_title">Controlla automaticamente gli aggiornamenti</string>
-    <string name="pref_enable_update_check_summary">Se disattivato, l'app non cercherà automaticamente nuove versioni</string>
+    <string name="pref_enable_update_check_summary">Se disattivato, l\'app non cercherà automaticamente nuove versioni</string>
 </resources>
