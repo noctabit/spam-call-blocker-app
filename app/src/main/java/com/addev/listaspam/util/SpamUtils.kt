@@ -125,6 +125,24 @@ class SpamUtils {
                 }
             }
 
+            val isNumberInAgenda = isNumberInAgenda(context, number)
+
+            // Don't check number if is in contacts
+            if (isNumberInAgenda) {
+                return@launch
+            }
+            
+            if (shouldBlockNonContacts(context)) {
+                handleSpamNumber(
+                    context,
+                    number,
+                    false,
+                    context.getString(R.string.block_non_contact),
+                    callback
+                )
+                return@launch
+            }
+
             // End call if the number is already blocked
             if (blockedNumbers?.contains(number) == true) {
                 handleSpamNumber(
@@ -149,13 +167,6 @@ class SpamUtils {
                     context.getString(R.string.block_stir_shaken_risk),
                     callback
                 )
-                return@launch
-            }
-
-            if (isNumberWhitelisted(context, number) ||
-                isNumberBlocked(context, number) ||
-                isContactOrShouldBlockNonContacts(context, number)
-            ) {
                 return@launch
             }
 
@@ -219,26 +230,6 @@ class SpamUtils {
         jobs.forEach { it.cancel() }
 
         return@coroutineScope isSpam
-    }
-
-    private fun isContactOrShouldBlockNonContacts(context: Context, number: String): Boolean {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            if (isNumberInAgenda(context, number)) return true
-            if (shouldBlockNonContacts(context)) {
-                handleSpamNumber(
-                    context,
-                    number,
-                    false,
-                    context.getString(R.string.block_non_contact),
-                    {})
-                return true
-            }
-        }
-        return false
     }
 
     private fun buildSpamCheckers(context: Context): List<suspend (String) -> Boolean> {
