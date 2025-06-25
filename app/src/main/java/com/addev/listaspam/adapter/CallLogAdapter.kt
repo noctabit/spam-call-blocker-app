@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.CallLog
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -83,7 +84,12 @@ class CallLogAdapter(
             val number = callLog.number ?: "Unknown number"
             val contactName = getContactName(context, number)
             val textToShow = if (isBlocked) {
-                context.getString(R.string.blocked_text_format, contactName ?: number)
+                val displayText = when {
+                    contactName != null -> contactName
+                    number.isNotBlank() -> number
+                    else -> context.getString(R.string.unknown_value)
+                }
+                context.getString(R.string.blocked_text_format, displayText)
             } else if (isWhitelisted) {
                 context.getString(R.string.whitelisted_text_format, contactName ?: number)
             } else {
@@ -234,25 +240,28 @@ class CallLogAdapter(
     }
 
     private fun getContactName(context: Context, phoneNumber: String): String? {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            val contentResolver = context.contentResolver
-            val uri =
-                ContactsContract.PhoneLookup.CONTENT_FILTER_URI.buildUpon().appendPath(phoneNumber)
-                    .build()
+        if (phoneNumber.isBlank()) return null
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED
+        ) return null
+
+        return try {
+            val uri = Uri.withAppendedPath(
+                ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+                Uri.encode(phoneNumber)
+            )
             val projection = arrayOf(ContactsContract.PhoneLookup.DISPLAY_NAME)
 
-            contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
                 if (cursor.moveToFirst()) {
-                    return cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME))
-                }
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME))
+                } else null
             }
+        } catch (e: Exception) {
+            Log.e("getContactName", "Lookup failed for $phoneNumber", e)
+            null
         }
-
-        return null
     }
 
     private fun clipboardAction(number: String) {
