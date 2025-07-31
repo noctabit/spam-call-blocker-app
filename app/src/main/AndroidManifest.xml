@@ -41,7 +41,10 @@
                 <action android:name="android.telecom.CallScreeningService" />
             </intent-filter>
         </service>
-
+        <activity
+            android:name=".DonationActivity"
+            android:exported="false"
+            android:label="@string/donation_screen_title" />
     </application>
 
 </manifest>

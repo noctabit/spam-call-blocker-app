@@ -95,8 +95,8 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
             }
 
             R.id.donate -> {
-                val intent = Intent(Intent.ACTION_VIEW, DONATE_LINK.toUri())
-                this.startActivity(intent)
+                val intent = Intent(this, DonationActivity::class.java)
+                startActivity(intent)
                 true
             }
 
