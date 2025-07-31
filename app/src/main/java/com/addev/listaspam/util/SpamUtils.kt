@@ -11,15 +11,15 @@ import android.os.Looper
 import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.TelecomManager
+import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
 import com.addev.listaspam.R
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.Phonenumber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -131,7 +131,7 @@ class SpamUtils {
             if (isNumberInAgenda) {
                 return@launch
             }
-            
+
             if (shouldBlockNonContacts(context)) {
                 handleSpamNumber(
                     context,
@@ -170,7 +170,13 @@ class SpamUtils {
                 return@launch
             }
 
-            if (isInternationalCall(number) && shouldBlockInternationalNumbers(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_PHONE_STATE
+                ) == PackageManager.PERMISSION_GRANTED
+                && shouldBlockInternationalNumbers(context)
+                && isInternationalCall(context, number)
+            ) {
                 handleSpamNumber(
                     context,
                     number,
@@ -266,27 +272,38 @@ class SpamUtils {
         return spamCheckers
     }
 
-    private fun isInternationalCall(phoneNumber: String): Boolean {
-        // Get an instance of PhoneNumberUtil
+    @RequiresPermission(Manifest.permission.READ_PHONE_STATE)
+    private fun isInternationalCall(context: Context, phoneNumber: String): Boolean {
         val phoneNumberUtil = PhoneNumberUtil.getInstance()
 
-        try {
-            // Parse the phone number
-            val parsedNumber: Phonenumber.PhoneNumber = phoneNumberUtil.parse(phoneNumber, Locale.getDefault().country)
+        return try {
+            val subscriptionManager =
+                context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+            val activeSubscriptions = subscriptionManager.activeSubscriptionInfoList
 
-            // Get the country code of the parsed number
-            val phoneCountryCode = parsedNumber.countryCode
+            val parsedNumber = phoneNumberUtil.parse(phoneNumber, null) // Safe parsing
 
-            // Get the device's country code based on locale
-            val deviceCountryCode = PhoneNumberUtil.getInstance()
-                .getCountryCodeForRegion(Locale.getDefault().country)
+            if (!activeSubscriptions.isNullOrEmpty()) {
+                for (subscription in activeSubscriptions) {
+                    val simCountry = subscription.countryIso?.uppercase() ?: continue
+                    val simCountryCode = phoneNumberUtil.getCountryCodeForRegion(simCountry)
+                    if (parsedNumber.countryCode == simCountryCode) {
+                        return false // Not international for at least one SIM
+                    }
+                }
+            } else {
+                // No SIMs: use device locale country
+                val localeCountry = Locale.getDefault().country.uppercase()
+                val localeCountryCode = phoneNumberUtil.getCountryCodeForRegion(localeCountry)
+                if (parsedNumber.countryCode == localeCountryCode) {
+                    return false // Local to device's region
+                }
+            }
 
-            // Check if the country codes are different
-            return phoneCountryCode != deviceCountryCode
-
+            true // International
         } catch (e: Exception) {
             e.printStackTrace()
-            return false
+            false
         }
     }
 
