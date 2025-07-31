@@ -38,20 +38,13 @@ import java.util.logging.Logger
 class SpamUtils {
 
     companion object {
-        // ...existing code...
-
         private const val SPAM_PREFS = "SPAM_PREFS"
         private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
-
-        private const val USER_AGENT =
-            "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.103 Mobile Safari/537.36"
 
         object VerificationStatus {
             const val FAILED = 2
         }
     }
-
-    private val client = OkHttpClient()
 
     /**
      * Extracts the raw phone number from the call details.
@@ -231,7 +224,7 @@ class SpamUtils {
 
     private fun buildSpamCheckers(context: Context): List<suspend (String) -> Boolean> {
         val spamCheckers = mutableListOf<suspend (String) -> Boolean>()
-        // ...existing code for API-based checkers only...
+
         val listaSpamApi = shouldFilterWithListaSpamApi(context)
         if (listaSpamApi) {
             spamCheckers.add { number ->
@@ -258,30 +251,14 @@ class SpamUtils {
         val phoneNumberUtil = PhoneNumberUtil.getInstance()
 
         return try {
-            val subscriptionManager =
-                context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
-            val activeSubscriptions = subscriptionManager.activeSubscriptionInfoList
-
             val parsedNumber = phoneNumberUtil.parse(phoneNumber, null) // Safe parsing
-
-            if (!activeSubscriptions.isNullOrEmpty()) {
-                for (subscription in activeSubscriptions) {
-                    val simCountry = subscription.countryIso?.uppercase() ?: continue
-                    val simCountryCode = phoneNumberUtil.getCountryCodeForRegion(simCountry)
-                    if (parsedNumber.countryCode == simCountryCode) {
-                        return false // Not international for at least one SIM
-                    }
-                }
-            } else {
-                // No SIMs: use device locale country
-                val localeCountry = Locale.getDefault().country.uppercase()
-                val localeCountryCode = phoneNumberUtil.getCountryCodeForRegion(localeCountry)
-                if (parsedNumber.countryCode == localeCountryCode) {
-                    return false // Local to device's region
-                }
-            }
-
-            true // International
+            
+            // Get country from SIM or fall back to device locale
+            val simCountry = CountryLanguageUtils.getSimCountry(context).uppercase()
+            
+            val countryCode = phoneNumberUtil.getCountryCodeForRegion(simCountry)
+            parsedNumber.countryCode != countryCode // True if international
+            
         } catch (e: Exception) {
             e.printStackTrace()
             false
