@@ -26,7 +26,7 @@ class SettingsActivity : AppCompatActivity() {
 
         exportButton.setOnClickListener {
             val timestamp = java.text.SimpleDateFormat("yyyyMMdd", java.util.Locale.getDefault()).format(java.util.Date())
-            exportFileLauncher.launch("spam_call_blocker_export_${timestamp}.json")
+            exportFileLauncher.launch("spam_export_${timestamp}.json")
         }
 
         importButton.setOnClickListener {
