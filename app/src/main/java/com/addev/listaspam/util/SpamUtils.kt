@@ -56,12 +56,13 @@ class SpamUtils {
             details.handle != null -> details.handle.schemeSpecificPart
             details.gatewayInfo?.originalAddress != null -> details.gatewayInfo.originalAddress.schemeSpecificPart
             details.intentExtras != null -> {
-                var uri =
-                    details.intentExtras.getParcelable<Uri>(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS)
-                if (uri == null) {
-                    uri =
-                        details.intentExtras.getParcelable<Uri>(TelephonyManager.EXTRA_INCOMING_NUMBER)
-                }
+                val uri =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        details.intentExtras.getParcelable(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS, Uri::class.java)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        details.intentExtras.getParcelable(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS)
+                    }
                 uri?.schemeSpecificPart
             }
 
@@ -216,7 +217,7 @@ class SpamUtils {
 
         val isSpam = resultChannel.receive()
 
-        // Cancelar todos los jobs restantes
+        // Cancel all other jobs
         jobs.forEach { it.cancel() }
 
         return@coroutineScope isSpam
@@ -253,7 +254,6 @@ class SpamUtils {
         return try {
             val parsedNumber = phoneNumberUtil.parse(phoneNumber, null) // Safe parsing
             
-            // Get country from SIM or fall back to device locale
             val simCountry = CountryLanguageUtils.getSimCountry(context).uppercase()
             
             val countryCode = phoneNumberUtil.getCountryCodeForRegion(simCountry)
