@@ -1,6 +1,6 @@
 # Call Blocker App
 
-Call Blocker App is a Kotlin-based application designed to help you manage and block unwanted incoming calls while maintaining a whitelist of approved contacts. It integrates multiple spam detection sources, including real-time web scraping and an external API with multi-country support.
+Call Blocker App is a Kotlin-powered tool that empowers you to block unwanted calls using a combination of real-time API checks with multi-country support, and other methods for effective call filtering.
 
 ## Screenshots
 
@@ -22,14 +22,11 @@ Here are some screenshots of the Call Blocker App in action:
   - Block calls from hidden numbers
   - Block calls from numbers not in contacts
   - Block international calls
+
 - **International Phone Number Lookup**: Multi-source verification using:
   - UnknownPhone API
   - Tellows API
   - TrueCaller API
-- **Web-Based Number Lookup**: Automatically look up phone numbers using trusted Spanish websites:
-  - [www.listaspam.com](https://www.listaspam.com)
-  - [www.responderono.es](https://www.responderono.es)
-  - [www.cleverdialer.es](https://www.cleverdialer.es)
 - **STIR/SHAKEN Verification**: Support for blocking calls based on STIR/SHAKEN levels.
 - **Auto-Mute Option**: Choose to automatically mute incoming spam calls instead of blocking them completely.
 - **Report Dialog**: Built-in system to report suspicious or safe numbers.
@@ -65,12 +62,12 @@ You can also support the project with cryptocurrency:
 
 ## Privacy and Security
 
-This app is designed with user privacy in mind. All data is stored locally on the device, and the app only accesses the internet to perform API requests and web scraping for number lookup. No personal data is shared with external servers.
+This app is designed with user privacy in mind. All data is stored locally on the device, and the app only accesses the internet to perform API requests for number lookup. No personal data is shared with external servers.
 
 ## Requirements
 
 - Android 10.0 or higher
-- Internet connection for API requests and web scraping features
+- Internet connection for API requests
 
 ## Installation
 
