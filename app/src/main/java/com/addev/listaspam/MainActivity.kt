@@ -7,9 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import com.addev.listaspam.util.PermissionUtils
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
     private val spamUtils = SpamUtils()
 
     companion object {
-        private const val REQUEST_CODE_PERMISSIONS = 1
         private const val GITHUB_USER = "adamff-dev"
         private const val GITHUB_REPO = "spam-call-blocker-app"
         private const val ABOUT_LINK = "https://github.com/$GITHUB_USER/$GITHUB_REPO"
@@ -282,98 +280,17 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         Toast.makeText(context, message, duration).show()
     }
 
-    /**
-     * Checks for necessary permissions and requests them if not granted.
-     *
-     * This function identifies which of the required permissions (READ_CALL_LOG,
-     * READ_PHONE_STATE, READ_CONTACTS, ANSWER_PHONE_CALLS, and POST_NOTIFICATIONS
-     * for Android Tiramisu and above) are not granted.
-     *
-     * It then differentiates between permissions that haven't been requested yet
-     * (missingPermissions) and those that have been denied by the user previously
-     * (deniedPermissions).
-     *
-     * For missing permissions, it directly requests them using `ActivityCompat.requestPermissions`.
-     * For denied permissions, it calls `showPermissionToastAndRequest` to inform the user
-     * and guide them to settings.
-     */
     private fun checkPermissionsAndRequest() {
-        val permissions = mutableListOf(
-            Manifest.permission.READ_CALL_LOG,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.ANSWER_PHONE_CALLS,
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-        }
-        val notGrantedPermissions = permissions.filter {
-            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-        }
-        val missingPermissions = notGrantedPermissions.filter {
-            !ActivityCompat.shouldShowRequestPermissionRationale(this, it)
-        }
-        val deniedPermissions = notGrantedPermissions.filter {
-            ActivityCompat.shouldShowRequestPermissionRationale(this, it)
-        }
-        if (missingPermissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
+        PermissionUtils.checkPermissionsAndRequest(this) { deniedPermissions ->
+            permissionDeniedDialog = PermissionUtils.showPermissionDialog(
                 this,
-                missingPermissions.toTypedArray(),
-                REQUEST_CODE_PERMISSIONS
+                deniedPermissions,
+                permissionDeniedDialog
             )
-        }
-        if (deniedPermissions.isNotEmpty()) {
-            showPermissionToastAndRequest(deniedPermissions)
-        }
-    }
-
-    /**
-     * Shows a dialog to the user when permissions are required but not granted, and requests the missing permissions.
-     * If the dialog is already visible, it will not be shown again.
-     *
-     * @param missingPermissions a list of permissions that are missing.
-     */
-    private fun showPermissionToastAndRequest(missingPermissions: List<String>) {
-        val permissionNames = missingPermissions.map { "• " + getPermissionName(it) }
-        val message =
-            getString(R.string.permissions_required_message, permissionNames.joinToString("\n"))
-
-        if (permissionDeniedDialog?.isShowing == true) {
-            return
-        }
-
-        permissionDeniedDialog = AlertDialog.Builder(this)
-            .setCancelable(false)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle(R.string.permissions_required_title)
-            .setMessage(message)
-            .setPositiveButton(R.string.go_to_settings) { _, _ ->
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.fromParts("package", packageName, null)
-                startActivity(intent)
-            }
-            .setOnDismissListener {
+            permissionDeniedDialog?.setOnDismissListener {
                 permissionDeniedDialog = null
             }
-            .create()
-        permissionDeniedDialog?.show()
-    }
-
-    /**
-     * Returns the human-readable name for a given permission string.
-     *
-     * @param permission The permission string (e.g., Manifest.permission.READ_CALL_LOG).
-     * @return The human-readable name of the permission, or the original permission string if no mapping is found.
-     */
-    private fun getPermissionName(permission: String): String {
-        return when (permission) {
-            Manifest.permission.READ_CALL_LOG -> getString(R.string.permission_read_call_log)
-            Manifest.permission.READ_PHONE_STATE -> getString(R.string.permission_read_phone_state)
-            Manifest.permission.READ_CONTACTS -> getString(R.string.permission_read_contacts)
-            Manifest.permission.ANSWER_PHONE_CALLS -> getString(R.string.permission_answer_phone_calls)
-            Manifest.permission.POST_NOTIFICATIONS -> getString(R.string.permission_post_notifications)
-            else -> permission
+            permissionDeniedDialog?.show()
         }
     }
 
