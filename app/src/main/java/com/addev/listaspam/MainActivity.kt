@@ -38,6 +38,7 @@ import com.addev.listaspam.util.setTruecallerApiCountry
 import com.addev.listaspam.util.isUpdateCheckEnabled
 import java.util.Locale
 import androidx.core.net.toUri
+import com.addev.listaspam.util.CountryLanguageUtils
 
 class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
 
@@ -52,15 +53,6 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         private const val GITHUB_USER = "adamff-dev"
         private const val GITHUB_REPO = "spam-call-blocker-app"
         private const val ABOUT_LINK = "https://github.com/$GITHUB_USER/$GITHUB_REPO"
-        private const val DONATE_LINK = "https://buymeacoffee.com/rsiztb3"
-
-        private val COUNTRY_TO_LANG = mapOf(
-            "US" to "EN", "GB" to "EN", "ES" to "ES", "FR" to "FR", "DE" to "DE", "IT" to "IT",
-            "RU" to "RU", "SE" to "SV", "PL" to "PL", "PT" to "PT", "NL" to "NL", "NO" to "NO",
-            "CZ" to "CZ", "ID" to "ID", "CN" to "ZH", "TW" to "ZH", "HK" to "ZH", "JP" to "JA",
-            "IL" to "HE", "TR" to "TR", "HU" to "HU", "FI" to "FI", "DK" to "DA", "TH" to "TH",
-            "GR" to "GK", "SK" to "SK", "RO" to "RO"
-        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,9 +64,9 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView?.layoutManager = LinearLayoutManager(this)
 
-        setListaSpamLanguage()
-        setTellowsCountry()
-        setTruecallerCountry()
+        CountryLanguageUtils.setListaSpamLanguage(this)
+        CountryLanguageUtils.setTellowsCountry(this)
+        CountryLanguageUtils.setTruecallerCountry(this)
         if (isUpdateCheckEnabled(this)) {
             checkUpdates()
         }
@@ -125,59 +117,7 @@ class MainActivity : AppCompatActivity(), CallLogAdapter.OnItemChangedListener {
         }.start()
     }
 
-    private fun setListaSpamLanguage() {
-        if (getListaSpamApiLang(this) != null) return
 
-        val simCountry = getSimCountry(this)?.uppercase()
-        val supportedLanguages = resources.getStringArray(R.array.language_values).toSet()
-
-        val langFromSim = simCountry?.let { COUNTRY_TO_LANG[it] }
-        val systemLanguage = Locale.getDefault().language.uppercase()
-
-        val finalLang = when {
-            langFromSim != null && supportedLanguages.contains(langFromSim) -> langFromSim
-            supportedLanguages.contains(systemLanguage) -> systemLanguage
-            else -> "EN"
-        }
-        setListaSpamApiLang(this, finalLang)
-    }
-
-    private fun setTellowsCountry() {
-        if (getTellowsApiCountry(this) != null) return
-
-        val simCountry = getSimCountry(this)?.lowercase()
-        val systemCountry = Locale.getDefault().country.lowercase()
-        val supportedCountries =
-            resources.getStringArray(R.array.entryvalues_region_preference).toSet()
-
-        val finalCountry = when {
-            simCountry != null && supportedCountries.contains(simCountry) -> simCountry
-            supportedCountries.contains(systemCountry) -> systemCountry
-            else -> "us"
-        }
-        setTellowsApiCountry(this, finalCountry)
-    }
-
-    private fun setTruecallerCountry() {
-        if (getTruecallerApiCountry(this) != null) return
-
-        val simCountry = getSimCountry(this)?.uppercase()
-        val systemCountry = Locale.getDefault().country.uppercase()
-        val supportedCountries =
-            resources.getStringArray(R.array.truecaller_region_code).toSet()
-
-        val finalCountry = when {
-            simCountry != null && supportedCountries.contains(simCountry) -> simCountry
-            supportedCountries.contains(systemCountry) -> systemCountry
-            else -> "US"
-        }
-        setTruecallerApiCountry(this, finalCountry)
-    }
-
-    private fun getSimCountry(context: Context): String? {
-        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? android.telephony.TelephonyManager
-        return telephonyManager?.simCountryIso?.takeIf { it.isNotEmpty() }
-    }
 
     private fun showNumberInputDialog() {
         val builder = AlertDialog.Builder(this)
