@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="language_names">
-        <item>English</item>           <!-- en -->
-        <item>Español</item>           <!-- es -->
-        <item>Français</item>          <!-- fr -->
-        <item>Deutsch</item>           <!-- de -->
-        <item>Italiano</item>          <!-- it -->
-        <item>ру́сский</item>          <!-- ru -->
-        <item>Svenska</item>           <!-- sv -->
-        <item>Polski</item>            <!-- pl -->
-        <item>Português</item>         <!-- pt -->
-        <item>Nederlands</item>        <!-- nl -->
-        <item>Norsk</item>             <!-- no -->
-        <item>Čeština</item>           <!-- cz -->
-        <item>Indonesia</item>         <!-- id -->
-        <item>国语</item>               <!-- zh -->
-        <item>日本語</item>             <!-- ja -->
-        <item>עִבְרִית</item>           <!-- he -->
-        <item>Türkçe</item>            <!-- tr -->
-        <item>Magyar</item>            <!-- hu -->
-        <item>Suomi</item>             <!-- fi -->
-        <item>Dansk</item>             <!-- da -->
-        <item>ภาษาไทย</item>           <!-- th -->
-        <item>ελληνικά</item>          <!-- gk -->
-        <item>Slovenčina</item>        <!-- sk -->
-        <item>Românește</item>         <!-- ro -->
+        <item>English (USA/UK)</item>
+        <item>Español (España)</item>
+        <item>Français (France)</item>
+        <item>Deutsch (Deutschland)</item>
+        <item>Italiano (Italia)</item>
+        <item>Русский (Россия)</item>
+        <item>Svenska (Sverige)</item>
+        <item>Polski (Polska)</item>
+        <item>Português (Portugal)</item>
+        <item>Nederlands (Nederland)</item>
+        <item>Norsk (Norge)</item>
+        <item>Čeština (Česko)</item>
+        <item>Indonesia (Indonesia)</item>
+        <item>中文 (中国/台湾/香港)</item>
+        <item>日本語 (日本)</item>
+        <item>עברית (ישראל)</item>
+        <item>Türkçe (Türkiye)</item>
+        <item>Magyar (Magyarország)</item>
+        <item>Suomi (Suomi)</item>
+        <item>Dansk (Danmark)</item>
+        <item>ไทย (ประเทศไทย)</item>
+        <item>Ελληνικά (Ελλάδα)</item>
+        <item>Slovenčina (Slovensko)</item>
+        <item>Românește (România)</item>
     </string-array>
     <string-array name="language_values">
         <item>EN</item>
