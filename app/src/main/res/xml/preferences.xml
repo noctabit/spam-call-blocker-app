@@ -80,34 +80,6 @@
 
     </PreferenceCategory>
 
-    <!-- Spam Number Filters -->
-    <PreferenceCategory
-        android:title="@string/pref_category_scrapers_es"
-        app:iconSpaceReserved="false">
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="pref_filter_lista_spam_scraper"
-            android:summary="@string/pref_filter_lista_spam_scraper_summary"
-            android:title="@string/pref_filter_lista_spam_scraper_title"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="pref_filter_responder_o_no"
-            android:summary="@string/pref_filter_responder_o_no_summary"
-            android:title="@string/pref_filter_responder_o_no_title"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="pref_filter_cleverdialer"
-            android:summary="@string/pref_filter_cleverdialer_summary"
-            android:title="@string/pref_filter_cleverdialer_title"
-            app:iconSpaceReserved="false" />
-
-    </PreferenceCategory>
-
     <!-- Other Blocking Options -->
     <PreferenceCategory
         android:title="@string/pref_category_other_options"

@@ -56,14 +56,7 @@ fun getTruecallerApiCountry(context: Context): String? =
 fun setTruecallerApiCountry(context: Context, countryCode: String) =
     setStringPref(context, "pref_truecaller_country", countryCode.uppercase())
 
-fun shouldFilterWithListaSpamScraper(context: Context): Boolean =
-    getBooleanPref(context, "pref_filter_lista_spam_scraper", false)
-
-fun shouldFilterWithResponderONo(context: Context): Boolean =
-    getBooleanPref(context, "pref_filter_responder_o_no", false)
-
-fun shouldFilterWithCleverdialer(context: Context): Boolean =
-    getBooleanPref(context, "pref_filter_cleverdialer", false)
+// ...scraper-related preferences removed...
 
 fun shouldBlockNonContacts(context: Context): Boolean =
     getBooleanPref(context, "pref_block_non_contacts", false)
@@ -178,11 +171,65 @@ fun getWhitelistNumbers(context: Context): Set<String> {
  * @param number The phone number to check.
  * @return True if the number is blocked locally, false otherwise.
  */
+
+/**
+ * Checks if a number is blocked locally in shared preferences, supporting wildcards.
+ *
+ * Wildcard rules:
+ *   - '*' at the end: matches prefix (e.g., +33162*)
+ *   - '*' at the start: matches suffix (e.g., *98)
+ *   - '*' in the middle: matches infix (e.g., 213*134)
+ *   - No '*': exact match
+ *   - If pattern does not start with '+', also check with user's country prefix
+ *
+ * @param context The application context.
+ * @param number The phone number to check.
+ * @return True if the number is blocked locally, false otherwise.
+ */
 fun isNumberBlocked(context: Context, number: String): Boolean {
     val sharedPreferences = context.getSharedPreferences(SPAM_PREFS, Context.MODE_PRIVATE)
-    val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, emptySet())
-    if (blockedNumbers != null) {
-        return blockedNumbers.contains(number)
+    val blockedNumbers = sharedPreferences.getStringSet(BLOCK_NUMBERS_KEY, emptySet()) ?: emptySet()
+    val normalizedNumber = number.replace("\\D".toRegex(), "")
+
+    // Helper to get user's country prefix (e.g., "+33")
+    fun getUserCountryPrefix(): String? {
+        return try {
+            val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? android.telephony.TelephonyManager
+            val countryIso = telephonyManager?.networkCountryIso?.uppercase()
+            if (countryIso != null) {
+                val phoneUtil = com.google.i18n.phonenumbers.PhoneNumberUtil.getInstance()
+                val code = phoneUtil.getCountryCodeForRegion(countryIso)
+                if (code > 0) "+$code" else null
+            } else null
+        } catch (e: Exception) { null }
+    }
+    val userPrefix = getUserCountryPrefix()
+
+    fun matchesPattern(pattern: String, num: String): Boolean {
+        return when {
+            pattern == "*" -> true
+            pattern.startsWith("*") && pattern.endsWith("*") && pattern.length > 2 -> num.contains(pattern.substring(1, pattern.length-1))
+            pattern.startsWith("*") -> num.endsWith(pattern.substring(1))
+            pattern.endsWith("*") -> num.startsWith(pattern.substring(0, pattern.length-1))
+            pattern.contains("*") -> {
+                val parts = pattern.split("*")
+                if (parts.size == 2) num.startsWith(parts[0]) && num.endsWith(parts[1])
+                else false
+            }
+            else -> num == pattern
+        }
+    }
+
+    for (pattern in blockedNumbers) {
+        if (pattern.isNullOrBlank()) continue
+        val normalizedPattern = pattern.replace("\\D".toRegex(), "")
+        // Try direct match
+        if (matchesPattern(normalizedPattern, normalizedNumber)) return true
+        // If pattern does not start with '+', try with user prefix
+        if (!pattern.startsWith("+") && userPrefix != null) {
+            val withPrefix = (userPrefix + normalizedPattern).replace("\\D".toRegex(), "")
+            if (matchesPattern(withPrefix, normalizedNumber)) return true
+        }
     }
     return false
 }

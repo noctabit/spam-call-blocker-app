@@ -38,16 +38,7 @@ import java.util.logging.Logger
 class SpamUtils {
 
     companion object {
-        // URLs
-        const val LISTA_SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
-        const val LISTA_SPAM_CSS_SELECTOR =
-            ".rate-and-owner .phone_rating:not(.result-4):not(.result-5)"
-        private const val RESPONDERONO_URL_TEMPLATE =
-            "https://www.responderono.es/numero-de-telefono/%s"
-        private const val RESPONDERONO_CSS_SELECTOR = ".scoreContainer .score.negative"
-        private const val CLEVER_DIALER_URL_TEMPLATE = "https://www.cleverdialer.es/numero/%s"
-        private const val CLEVER_DIALER_CSS_SELECTOR =
-            "body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam"
+        // ...existing code...
 
         private const val SPAM_PREFS = "SPAM_PREFS"
         private const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
@@ -240,35 +231,25 @@ class SpamUtils {
 
     private fun buildSpamCheckers(context: Context): List<suspend (String) -> Boolean> {
         val spamCheckers = mutableListOf<suspend (String) -> Boolean>()
-
-        // ListaSpam
+        // ...existing code for API-based checkers only...
         val listaSpamApi = shouldFilterWithListaSpamApi(context)
         if (listaSpamApi) {
             spamCheckers.add { number ->
                 ApiUtils.checkListaSpamApi(number, getListaSpamApiLang(context) ?: "EN")
             }
         }
-
-        // Tellows
         val tellowsApi = shouldFilterWithTellowsApi(context)
         if (tellowsApi) {
             spamCheckers.add { number ->
                 ApiUtils.checkTellowsSpamApi(number, getTellowsApiCountry(context) ?: "us")
             }
         }
-
-        // Truecaller
         val truecallerApi = shouldFilterWithTruecallerApi(context)
         if (truecallerApi) {
             spamCheckers.add { number ->
                 ApiUtils.checkTruecallerSpamApi(number, getTruecallerApiCountry(context) ?: "US")
             }
         }
-
-        if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi) spamCheckers.add(::checkListaSpam)
-
-        if (shouldFilterWithResponderONo(context)) spamCheckers.add(::checkResponderono)
-        if (shouldFilterWithCleverdialer(context)) spamCheckers.add(::checkCleverdialer)
         return spamCheckers
     }
 
@@ -356,69 +337,7 @@ class SpamUtils {
         }
     }
 
-    /**
-     * Checks if a number is marked as spam on ListaSpam.
-     *
-     * @param number The phone number to check.
-     * @return True if the number is marked as spam, false otherwise.
-     */
-    private suspend fun checkListaSpam(number: String): Boolean {
-        val url = LISTA_SPAM_URL_TEMPLATE.format(number)
-        return checkUrlForSpam(
-            url,
-            LISTA_SPAM_CSS_SELECTOR
-        )
-    }
-
-    /**
-     * Checks if a number is marked as spam on Responderono.
-     *
-     * @param number The phone number to check.
-     * @return True if the number is marked as spam, false otherwise.
-     */
-    private suspend fun checkResponderono(number: String): Boolean {
-        val url = RESPONDERONO_URL_TEMPLATE.format(number)
-        return checkUrlForSpam(url, RESPONDERONO_CSS_SELECTOR)
-    }
-
-    /**
-     * Checks if a number is marked as spam on Cleverdialer.
-     *
-     * @param number The phone number to check.
-     * @return True if the number is marked as spam, false otherwise.
-     */
-    private suspend fun checkCleverdialer(number: String): Boolean {
-        val url = CLEVER_DIALER_URL_TEMPLATE.format(number)
-        return checkUrlForSpam(url, CLEVER_DIALER_CSS_SELECTOR)
-    }
-
-    /**
-     * Checks a URL for spam indicators using a CSS selector.
-     *
-     * @param url The URL to check.
-     * @param cssSelector The CSS selector to use for finding spam indicators.
-     * @return True if spam indicators are found, false otherwise.
-     */
-    private suspend fun checkUrlForSpam(url: String, cssSelector: String): Boolean {
-        val request = Request.Builder()
-            .header("User-Agent", USER_AGENT)
-            .url(url)
-            .build()
-
-        return withContext(Dispatchers.IO) {
-            try {
-                client.newCall(request).execute().use { response ->
-                    val body = response.body?.string() ?: return@withContext false
-                    val doc = Jsoup.parse(body)
-                    doc.select(cssSelector).isNotEmpty()
-                }
-            } catch (e: IOException) {
-                Logger.getLogger("checkUrlForSpam")
-                    .warning("Error checking URL: $url with error ${e.message}")
-                false
-            }
-        }
-    }
+    // ...scraper logic removed...
 
     /**
      * Handles the scenario when a phone number is identified as spam.
