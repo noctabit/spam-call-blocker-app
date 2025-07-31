@@ -161,4 +161,12 @@
     <!-- Update check preference -->
     <string name="pref_enable_update_check_title">Comprobar actualizaciones automáticamente</string>
     <string name="pref_enable_update_check_summary">Si está desactivado, la app no buscará nuevas versiones automáticamente</string>
+
+    <!-- Donation Screen -->
+    <string name="donation_screen_title">Donaciones</string>
+    <string name="copy_address">Copiar</string>
+    <string name="address_copied">Dirección copiada</string>
+    <string name="donation_help_development">¡Ayuda a mantener el desarrollo y mantenimiento de esta aplicación!</string>
+    <string name="donation_traditional_methods">Apoya mediante métodos tradicionales:</string>
+    <string name="donation_crypto_methods">O si lo prefieres, puedes donar con criptomonedas:</string>
 </resources>
