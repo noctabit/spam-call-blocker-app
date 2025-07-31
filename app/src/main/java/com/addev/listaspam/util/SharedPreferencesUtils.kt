@@ -17,7 +17,7 @@ private fun getStringPref(context: Context, key: String): String? =
     getPrefs(context).getString(key, null)
 
 private fun setStringPref(context: Context, key: String, value: String) {
-    getPrefs(context).edit().putString(key, value).apply()
+    getPrefs(context).edit { putString(key, value) }
 }
 
 fun isBlockingEnabled(context: Context): Boolean =
