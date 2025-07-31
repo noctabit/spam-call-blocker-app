@@ -14,9 +14,16 @@ object CountryLanguageUtils {
         "GR" to "GK", "SK" to "SK", "RO" to "RO"
     )
 
-    private fun getSimCountry(context: Context): String? {
+    fun getSimCountry(context: Context): String {
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
-        return telephonyManager?.simCountryIso?.takeIf { it.isNotEmpty() }
+        val simCountry = telephonyManager?.simCountryIso?.takeIf { it.isNotEmpty() }
+        if (!simCountry.isNullOrEmpty()) return simCountry
+
+        val networkCountry = telephonyManager?.networkCountryIso?.takeIf { it.isNotEmpty() }
+        if (!networkCountry.isNullOrEmpty()) return networkCountry
+
+        val localeCountry = Locale.getDefault().country.takeIf { it.isNotEmpty() }
+        return localeCountry ?: "us"
     }
 
     fun setListaSpamLanguage(context: Context) {
