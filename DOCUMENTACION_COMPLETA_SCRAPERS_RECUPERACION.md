@@ -10,9 +10,30 @@ Esta documentación permite a una IA futura reintroducir los scrapers web tal co
 ### ⚠️ ARCHIVOS PRINCIPALES - MODIFICACIÓN CRÍTICA REQUERIDA
 
 #### 1. `app/src/main/java/com/addev/listaspam/util/SharedPreferencesUtils.kt`
+
+**ESTRUCTURA DEL ARCHIVO Y CONTEXTO:**
+```kotlin
+package com.addev.listaspam.util
+
+import android.content.Context
+import androidx.preference.PreferenceManager
+import androidx.core.content.edit
+
+const val SPAM_PREFS = "SPAM_PREFS"
+const val BLOCK_NUMBERS_KEY = "BLOCK_NUMBERS"
+const val WHITELIST_NUMBERS_KEY = "WHITELIST_NUMBERS"
+
+private fun getPrefs(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
+private fun getBooleanPref(context: Context, key: String, defaultValue: Boolean): Boolean =
+    getPrefs(context).getBoolean(key, defaultValue)
+```
+
 **FUNCIONES DE CONFIGURACIÓN DE SCRAPERS QUE DEBEN ESTAR PRESENTES:**
 
 ```kotlin
+// AGREGAR DESPUÉS DE LAS FUNCIONES DE API EXISTENTES:
+// shouldFilterWithListaSpamApi(), shouldFilterWithTellowsApi(), shouldFilterWithTruecallerApi()
+
 fun shouldFilterWithListaSpamScraper(context: Context): Boolean =
     getBooleanPref(context, "pref_filter_lista_spam_scraper", false)
 
@@ -23,7 +44,30 @@ fun shouldFilterWithCleverdialer(context: Context): Boolean =
     getBooleanPref(context, "pref_filter_cleverdialer", false)
 ```
 
-**UBICACIÓN**: Buscar en el companion object o funciones principales del archivo
+**UBICACIÓN EXACTA**: 
+- Buscar las funciones que empiezan con `shouldFilterWith` (hay varias de APIs)
+- Agregar las nuevas funciones DESPUÉS de:
+  - `shouldFilterWithTruecallerApi(context: Context)`
+  - `setTruecallerApiCountry(context: Context, countryCode: String)`
+- ANTES de:
+  - `shouldBlockNonContacts(context: Context)`
+
+**FUNCIONES EXISTENTES COMO REFERENCIA:**
+```kotlin
+// YA EXISTEN (NO MODIFICAR):
+fun shouldFilterWithListaSpamApi(context: Context): Boolean
+fun shouldFilterWithTellowsApi(context: Context): Boolean  
+fun shouldFilterWithTruecallerApi(context: Context): Boolean
+
+// AGREGAR DESPUÉS DE ESTAS:
+fun shouldFilterWithListaSpamScraper(context: Context): Boolean  // NUEVO
+fun shouldFilterWithResponderONo(context: Context): Boolean      // NUEVO
+fun shouldFilterWithCleverdialer(context: Context): Boolean      // NUEVO
+
+// YA EXISTEN (NO MODIFICAR):
+fun shouldBlockNonContacts(context: Context): Boolean
+fun shouldShowNotification(context: Context): Boolean
+```
 
 #### 2. `app/src/main/java/com/addev/listaspam/util/SpamUtils.kt`
 **CONSTANTES DE CONFIGURACIÓN QUE DEBEN ESTAR PRESENTES:**
@@ -641,3 +685,48 @@ Después de implementar todos los elementos listados en este documento:
 **🔧 ESTADO**: Scrapers completamente implementados y funcionales  
 **🧪 ESTADO POST-PRUEBAS**: ResponderONo funcional, CleverDialer requiere actualización, ListaSpam obsoleto  
 **📂 ARCHIVO ÚNICO DE DOCUMENTACIÓN**: DOCUMENTACION_COMPLETA_SCRAPERS_RECUPERACION.md
+**🔍 ESTRATEGIA**: Buscar patrones de código existente en lugar de números de línea
+**🎯 RESULTADO**: IA futura puede ubicar y reintroducir scrapers sin referencias a líneas específicas
+
+---
+
+## 🔍 ESTRATEGIAS DE BÚSQUEDA PARA UBICAR CÓDIGO
+
+### **En SharedPreferencesUtils.kt:**
+- Buscar texto: `shouldFilterWithTruecallerApi`
+- Agregar las nuevas funciones inmediatamente DESPUÉS
+
+### **En SpamUtils.kt - Constantes:**
+- Buscar texto: `LISTA_SPAM_CSS_SELECTOR`  
+- Agregar las nuevas constantes inmediatamente DESPUÉS
+
+### **En SpamUtils.kt - Funciones:**
+- Buscar texto: `private fun isNumberInAgenda`
+- Agregar las 3 funciones de scrapers DESPUÉS de esa función
+
+### **En SpamUtils.kt - Integración:**
+- Buscar texto: `buildSpamCheckers(context: Context)`
+- Buscar texto: `return spamCheckers`
+- Agregar las 3 líneas ANTES del return
+
+### **En preferences.xml:**
+- Buscar texto: `pref_category_spam_apis`
+- Agregar la nueva categoría DESPUÉS de `</PreferenceCategory>`
+
+### **En strings.xml:**
+- Buscar texto: `pref_filter_truecaller_api`
+- Agregar los nuevos strings DESPUÉS de todos los strings de APIs
+
+---
+
+## 🔄 PROCESO DE IMPLEMENTACIÓN PASO A PASO
+
+1. **VERIFICAR dependencias** en build.gradle.kts y libs.versions.toml
+2. **AGREGAR constantes** en SpamUtils.kt companion object
+3. **AGREGAR funciones de configuración** en SharedPreferencesUtils.kt  
+4. **AGREGAR funciones de scrapers** en SpamUtils.kt
+5. **INTEGRAR en buildSpamCheckers()** en SpamUtils.kt
+6. **AGREGAR interfaz** en preferences.xml
+7. **AGREGAR strings** en todos los archivos de idiomas
+8. **PROBAR cada scraper** individualmente
+9. **ACTUALIZAR strings deprecados** para ListaSpam
