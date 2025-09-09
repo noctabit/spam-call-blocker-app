@@ -35,7 +35,16 @@ Native Android apps cannot run directly in Replit's web-based environment becaus
 4. **Code Quality**: Run static analysis tools
 5. **Migration**: Convert core logic to a web application
 
+## Estado de los Scrapers
+**Estado actual**: Los scrapers fueron eliminados en una versión reciente por el autor
+**Funciones afectadas**: Las funciones están presentes pero el autor los marcó como deprecated
+**Scrapers identificados**: 
+- ListaSpam (no funcional - bloqueado por Cloudflare)
+- ResponderONo (funcional)
+- CleverDialer (parcialmente funcional - requiere actualización)
+
 ## Recent Changes
 - 2025-09-09: Initial project import and analysis
 - Java and Gradle tools installed
 - Project structure documented
+- Análisis de scrapers eliminados completado
