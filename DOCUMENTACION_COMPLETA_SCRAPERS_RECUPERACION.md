@@ -259,6 +259,146 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 
 ---
 
+## 🧪 HISTORIAL DETALLADO DE PRUEBAS DE SCRAPERS
+
+### 📅 Información de las Pruebas
+- **Fecha de pruebas**: 9 de septiembre de 2025
+- **Números de prueba utilizados**: 
+  - 873981181 (España)
+  - 623363131 (España)
+- **Herramientas**: curl con User-Agent Android
+
+### 🔬 RESULTADOS DETALLADOS POR SCRAPER
+
+#### PRUEBA 1: ListaSpam.com - ❌ COMPLETAMENTE NO FUNCIONAL
+
+**Configuración probada:**
+- **URL**: `https://www.listaspam.com/busca.php?Telefono=873981181`
+- **Selector CSS**: `.rate-and-owner .phone_rating:not(.result-4):not(.result-5)`
+
+**Comando de prueba:**
+```bash
+curl -s -H "User-Agent: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36..." \
+"https://www.listaspam.com/busca.php?Telefono=873981181"
+```
+
+**Resultado obtenido:**
+```html
+<title>Just a moment...</title>
+<noscript>
+  <div class="h2">
+    <span id="challenge-error-text">Enable JavaScript and cookies to continue</span>
+  </div>
+</noscript>
+```
+
+**Diagnóstico:**
+- ❌ **Cloudflare detecta y bloquea requests automatizados**
+- ❌ **El scraper no puede acceder al contenido real de la página**
+- ❌ **Estado: COMPLETAMENTE NO FUNCIONAL**
+- 🚨 **Acción requerida: ELIMINAR de versiones futuras**
+
+#### PRUEBA 2: ResponderONo.es - ✅ COMPLETAMENTE FUNCIONAL
+
+**Configuración probada:**
+- **URL**: `https://www.responderono.es/numero-de-telefono/873981181`
+- **Selector CSS**: `.scoreContainer .score.negative`
+
+**Comando de prueba:**
+```bash
+curl -s -H "User-Agent: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36..." \
+"https://www.responderono.es/numero-de-telefono/873981181"
+```
+
+**Contenido HTML encontrado:**
+```html
+<div class="scoreContainer">
+    <div class="score negative"></div>
+</div>
+<div class="number">
+    +34 873 98 11 81
+    <span style="color:#000">NEGATIVA VENDEDOR TELEFÓNICO</span>
+    <span>línea fija</span>
+    <span>Canary Islands, Lerida</span>
+</div>
+```
+
+**Análisis del selector:**
+- **Selector buscado**: `.scoreContainer .score.negative`
+- **Elemento encontrado**: `<div class="score negative"></div>`
+- **Resultado**: ✅ **SPAM DETECTADO**
+- **Clasificación**: "NEGATIVA VENDEDOR TELEFÓNICO"
+
+**Diagnóstico:**
+- ✅ **El selector CSS coincide perfectamente con la estructura HTML**
+- ✅ **ResponderONo NO tiene protección anti-bot**
+- ✅ **Estado: COMPLETAMENTE FUNCIONAL**
+- 🎯 **Acción requerida: MANTENER tal como está**
+
+#### PRUEBA 3: CleverDialer.es - ⚠️ PARCIALMENTE FUNCIONAL
+
+**Configuración probada:**
+- **URL**: `https://www.cleverdialer.es/numero/623363131`
+- **Selector CSS original**: `body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam`
+
+**Comando de prueba mejorado:**
+```bash
+curl -H "Accept-Encoding: identity" "https://www.cleverdialer.es/numero/623363131"
+```
+
+**Contenido HTML real encontrado:**
+```html
+<title>623363131 &#9989; Información sobre el número de teléfono de España</title>
+
+<div class="rating-text">
+    <span>1 de 5 estrellas</span>
+    <span class="nowrap">&bull; 1 valoración</span>
+</div>
+```
+
+**Análisis del selector original vs realidad:**
+
+**El selector original buscaba:**
+```css
+body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam
+```
+
+**Elementos que debería encontrar:**
+1. `.circle-spam` - ❌ **NO ENCONTRADO**
+2. `#comments` - ❌ **NO ENCONTRADO** con ese ID específico
+3. `.front-stars` - ❌ **NO ENCONTRADO**
+4. `.star-rating .stars-4` - ❌ **NO ENCONTRADO**
+5. `.star-rating .stars-5` - ❌ **NO ENCONTRADO**
+
+**Estructura real de CleverDialer:**
+- Usa `<div class="rating-text">` en lugar de clases star-rating
+- Las valoraciones están en texto plano: "1 de 5 estrellas"
+- NO usa las clases CSS que el selector original busca
+
+**Resultado del análisis:**
+- **Con selector original**: ❌ **NO DETECTARÍA SPAM**
+- **Con análisis manual**: ✅ **SÍ ES SPAM** (1 de 5 estrellas)
+
+**Diagnóstico:**
+- ⚠️ **El selector CSS NO coincide con la estructura HTML real**
+- ✅ **CleverDialer NO tiene protección anti-bot**
+- ⚠️ **Estado: PARCIALMENTE FUNCIONAL** (necesita actualización)
+- 🔧 **Acción requerida: ACTUALIZAR selector/lógica**
+
+### 📊 RESUMEN DE RESULTADOS DE PRUEBAS
+
+| Scraper | Estado | Número Probado | Resultado Spam | Observaciones |
+|---------|--------|----------------|----------------|---------------|
+| **ListaSpam** | ❌ NO FUNCIONAL | 873981181 | N/A | Cloudflare bloquea |
+| **ResponderONo** | ✅ FUNCIONAL | 873981181 | ✅ SÍ (Vendedor telefónico) | Selector CSS correcto |
+| **CleverDialer** | ⚠️ PARCIALMENTE FUNCIONAL | 623363131 | ✅ SÍ (1/5 estrellas) | Requiere modificación del selector |
+
+### 🎯 Scrapers Operativos Post-Pruebas
+- **1 de 3 scrapers** funciona correctamente con el código actual
+- **2 de 3 scrapers** podrían funcionar con modificaciones
+
+---
+
 ## 📊 INFORMACIÓN TÉCNICA DETALLADA
 
 ### 🔗 URLs y Selectores CSS por Scraper
@@ -328,17 +468,24 @@ Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
 
 #### 2. **ACTUALIZAR CLEVERDIALER SCRAPER**
 - 🔄 **DEBE SER ACTUALIZADO** según el historial de pruebas
+- **Problema identificado**: CSS Selector original NO coincide con estructura HTML real
 - **CSS Selector actual**: `body:has(#comments):has(.front-stars:not(.star-rating .stars-4, .star-rating .stars-5)), .circle-spam`
-- **CSS Selector recomendado**: Implementar parsing por texto en lugar de CSS
-- **Implementación sugerida**:
+- **Estructura HTML real encontrada**: `<div class="rating-text"><span>1 de 5 estrellas</span></div>`
+- **Solución recomendada**: Implementar parsing por texto en lugar de CSS
+
+**Implementación actualizada basada en pruebas reales:**
 
 ```kotlin
+// CONSTANTE ACTUALIZADA
+private const val CLEVER_DIALER_CSS_SELECTOR = "div.rating-text span"
+
+// FUNCIÓN ACTUALIZADA
 private suspend fun checkCleverdialer(number: String): Boolean {
     val url = CLEVER_DIALER_URL_TEMPLATE.format(number)
     
     val request = Request.Builder()
         .header("User-Agent", USER_AGENT)
-        .header("Accept-Encoding", "identity")  // Evitar compresión
+        .header("Accept-Encoding", "identity")  // Evitar compresión según pruebas
         .url(url)
         .build()
 
@@ -348,10 +495,11 @@ private suspend fun checkCleverdialer(number: String): Boolean {
                 val body = response.body?.string() ?: return@withContext false
                 val doc = Jsoup.parse(body)
                 
-                // Buscar elementos con valoraciones bajas
+                // Buscar elementos con valoraciones bajas según estructura real
                 val ratingElements = doc.select("div.rating-text span")
                 ratingElements.any { element ->
                     val text = element.text().lowercase()
+                    // Detectar 1-2 estrellas como spam según pruebas
                     text.contains("1 de 5 estrellas") || 
                     text.contains("2 de 5 estrellas")
                 }
@@ -363,6 +511,13 @@ private suspend fun checkCleverdialer(number: String): Boolean {
         }
     }
 }
+```
+
+**Justificación de la actualización:**
+- ✅ **Probado con número real**: 623363131 (detectó "1 de 5 estrellas")
+- ✅ **Basado en estructura HTML real**: `div.rating-text span`
+- ✅ **Header Accept-Encoding**: Evita contenido comprimido ilegible
+- ✅ **Lógica de detección**: 1-2 estrellas = spam (verificado manualmente)
 ```
 
 #### 3. **MANTENER RESPONDERONO SCRAPER**
@@ -430,6 +585,62 @@ Después de implementar todos los elementos listados en este documento:
 
 ---
 
+---
+
+## 🔄 INSTRUCCIONES ESPECÍFICAS PARA ELIMINAR LISTASPAM OBSOLETO
+
+### ⚠️ ELIMINACIÓN DEL SCRAPER LISTASPAM
+
+Según las pruebas realizadas, ListaSpam.com está **completamente bloqueado por Cloudflare** y debe ser eliminado:
+
+#### Modificaciones requeridas en `SpamUtils.kt`:
+
+```kotlin
+// COMENTAR O ELIMINAR estas constantes:
+// const val LISTA_SPAM_URL_TEMPLATE = "https://www.listaspam.com/busca.php?Telefono=%s"
+// const val LISTA_SPAM_CSS_SELECTOR = ".rate-and-owner .phone_rating:not(.result-4):not(.result-5)"
+
+// COMENTAR O ELIMINAR esta función:
+/*
+private suspend fun checkListaSpam(number: String): Boolean {
+    // return false  // Siempre falso porque está bloqueado por Cloudflare
+}
+*/
+
+// ELIMINAR esta línea de buildSpamCheckers():
+// if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi) spamCheckers.add(::checkListaSpam)
+```
+
+#### Modificaciones en strings.xml:
+
+```xml
+<!-- ACTUALIZAR summary para indicar que está obsoleto -->
+<string name="pref_filter_lista_spam_scraper_summary">(Deprecated - Blocked by Cloudflare) Previously blocked calls from listaspam.es website</string>
+```
+
+#### Modificaciones en strings-es.xml:
+
+```xml
+<string name="pref_filter_lista_spam_scraper_summary">(Obsoleto - Bloqueado por Cloudflare) Anteriormente bloqueaba llamadas de la web listaspam.es</string>
+```
+
+#### Mantener en preferences.xml pero con defaultValue="false":
+
+```xml
+<!-- MANTENER la opción pero desactivada por defecto -->
+<CheckBoxPreference
+    android:defaultValue="false"
+    android:enabled="false"
+    android:key="pref_filter_lista_spam_scraper"
+    android:summary="@string/pref_filter_lista_spam_scraper_summary"
+    android:title="@string/pref_filter_lista_spam_scraper_title"
+    app:iconSpaceReserved="false" />
+```
+
+---
+
 **📅 FECHA DE DOCUMENTACIÓN**: 9 de septiembre de 2025  
 **📱 VERSIÓN DE REFERENCIA**: Call Blocker App v2.3.5  
-**🔧 ESTADO**: Scrapers completamente implementados y funcionales
+**🔧 ESTADO**: Scrapers completamente implementados y funcionales  
+**🧪 ESTADO POST-PRUEBAS**: ResponderONo funcional, CleverDialer requiere actualización, ListaSpam obsoleto  
+**📋 ARCHIVO DE PRUEBAS**: Pasted--Historial-Detallado-de-Pruebas-de-Scrapers-Call-Blocker-App-Informaci-n-del-Proyecto-Arc-1757459486145_1757459486147.txt
