@@ -1,7 +1,7 @@
 # DOCUMENTACIÓN COMPLETA PARA RECUPERACIÓN DE SCRAPERS - CALL BLOCKER APP
 
 ## 🎯 OBJETIVO DE ESTE DOCUMENTO
-Esta documentación permite a una IA futura reintroducir los scrapers web tal como están implementados en la versión 2.3.5 de la Call Blocker App, después de que fueron eliminados por el autor en versiones posteriores.
+Esta documentación permite a una IA futura reintroducir los scrapers web tal como están implementados en la versión actual de la Call Blocker App, después de que fueron eliminados por el autor en versiones posteriores.
 
 ---
 
@@ -23,10 +23,7 @@ fun shouldFilterWithCleverdialer(context: Context): Boolean =
     getBooleanPref(context, "pref_filter_cleverdialer", false)
 ```
 
-**UBICACIÓN EXACTA:** Líneas 59-66 en el archivo actual
-- Línea 59-60: `shouldFilterWithListaSpamScraper`
-- Línea 62-63: `shouldFilterWithResponderONo` 
-- Línea 65-66: `shouldFilterWithCleverdialer`
+**UBICACIÓN**: Buscar en el companion object o funciones principales del archivo
 
 #### 2. `app/src/main/java/com/addev/listaspam/util/SpamUtils.kt`
 **CONSTANTES DE CONFIGURACIÓN QUE DEBEN ESTAR PRESENTES:**
@@ -47,12 +44,12 @@ companion object {
 }
 ```
 
-**UBICACIÓN EXACTA:** Líneas 40-56 en el archivo actual
+**UBICACIÓN**: En el companion object de la clase SpamUtils
 
 **FUNCIONES DE SCRAPERS QUE DEBEN ESTAR PRESENTES:**
 
 ```kotlin
-// FUNCIÓN 1: Lista Spam Scraper (Líneas 348-354)
+// FUNCIÓN 1: Lista Spam Scraper
 private suspend fun checkListaSpam(number: String): Boolean {
     val url = LISTA_SPAM_URL_TEMPLATE.format(number)
     return checkUrlForSpam(
@@ -61,19 +58,19 @@ private suspend fun checkListaSpam(number: String): Boolean {
     )
 }
 
-// FUNCIÓN 2: ResponderONo Scraper (Líneas 362-365)
+// FUNCIÓN 2: ResponderONo Scraper
 private suspend fun checkResponderono(number: String): Boolean {
     val url = RESPONDERONO_URL_TEMPLATE.format(number)
     return checkUrlForSpam(url, RESPONDERONO_CSS_SELECTOR)
 }
 
-// FUNCIÓN 3: CleverDialer Scraper (Líneas 373-376)
+// FUNCIÓN 3: CleverDialer Scraper
 private suspend fun checkCleverdialer(number: String): Boolean {
     val url = CLEVER_DIALER_URL_TEMPLATE.format(number)
     return checkUrlForSpam(url, CLEVER_DIALER_CSS_SELECTOR)
 }
 
-// FUNCIÓN AUXILIAR: Verificación de URL (Líneas 385-404)
+// FUNCIÓN AUXILIAR: Verificación de URL
 private suspend fun checkUrlForSpam(url: String, cssSelector: String): Boolean {
     val request = Request.Builder()
         .header("User-Agent", USER_AGENT)
@@ -96,7 +93,7 @@ private suspend fun checkUrlForSpam(url: String, cssSelector: String): Boolean {
 }
 ```
 
-**INTEGRACIÓN EN buildSpamCheckers() - Líneas 262-266:**
+**INTEGRACIÓN EN buildSpamCheckers():**
 
 ```kotlin
 // Agregar estas líneas en la función buildSpamCheckers
@@ -105,6 +102,8 @@ if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi) spamCheckers.add
 if (shouldFilterWithResponderONo(context)) spamCheckers.add(::checkResponderono)
 if (shouldFilterWithCleverdialer(context)) spamCheckers.add(::checkCleverdialer)
 ```
+
+**UBICACIÓN**: Buscar la función `buildSpamCheckers` donde se configuran los diferentes verificadores de spam
 
 #### 3. `app/src/main/res/xml/preferences.xml`
 **SECCIÓN DE SCRAPERS QUE DEBE ESTAR PRESENTE:**
@@ -139,7 +138,7 @@ if (shouldFilterWithCleverdialer(context)) spamCheckers.add(::checkCleverdialer)
 </PreferenceCategory>
 ```
 
-**UBICACIÓN EXACTA:** Líneas 83-109 en el archivo actual
+**UBICACIÓN**: Buscar dentro del PreferenceScreen principal, agregar como nueva categoría
 
 ---
 
@@ -165,11 +164,6 @@ if (shouldFilterWithCleverdialer(context)) spamCheckers.add(::checkCleverdialer)
 <!-- Call item actions  -->
 <string name="open_in_lista_spam_com">Open in ListaSpam</string>
 ```
-
-**UBICACIÓN EXACTA:** 
-- Línea 41: categoría scrapers
-- Líneas 72-79: títulos y descripciones de scrapers
-- Línea 102: acción de abrir en ListaSpam
 
 #### 5. `app/src/main/res/values-es/strings.xml`
 **STRINGS EN ESPAÑOL QUE DEBEN ESTAR PRESENTES:**
@@ -240,7 +234,7 @@ dependencies {
 }
 ```
 
-**UBICACIÓN EXACTA:** Líneas 49-50 en el archivo actual
+**UBICACIÓN**: En el bloque dependencies del archivo
 
 #### 9. `gradle/libs.versions.toml`
 **VERSIONES DE DEPENDENCIAS CRÍTICAS:**
@@ -254,8 +248,6 @@ jsoup = "1.14.3"
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 ```
-
-**UBICACIÓN EXACTA:** Líneas 15, 20, 32 en el archivo actual
 
 ---
 
@@ -452,7 +444,7 @@ Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome
 
 #### Integración con APIs:
 - Los scrapers se agregan a la lista SOLO si la API correspondiente NO está habilitada
-- Línea específica: `if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi)`
+- Verificación: `if (shouldFilterWithListaSpamScraper(context) && !listaSpamApi)`
 - Esto evita duplicar verificaciones API + Scraper para el mismo servicio
 
 ---
@@ -518,72 +510,10 @@ private suspend fun checkCleverdialer(number: String): Boolean {
 - ✅ **Basado en estructura HTML real**: `div.rating-text span`
 - ✅ **Header Accept-Encoding**: Evita contenido comprimido ilegible
 - ✅ **Lógica de detección**: 1-2 estrellas = spam (verificado manualmente)
-```
 
 #### 3. **MANTENER RESPONDERONO SCRAPER**
 - ✅ **MANTENER TAL COMO ESTÁ** - Completamente funcional
 - No requiere modificaciones
-
----
-
-## 📋 CHECKLIST DE VERIFICACIÓN POST-IMPLEMENTACIÓN
-
-### ✅ Verificaciones Obligatorias:
-
-- [ ] **SharedPreferencesUtils.kt** contiene las 3 funciones de configuración
-- [ ] **SpamUtils.kt** contiene las 3 constantes de URL y selectores CSS  
-- [ ] **SpamUtils.kt** contiene las 3 funciones de scraper
-- [ ] **SpamUtils.kt** integra scrapers en `buildSpamCheckers()`
-- [ ] **preferences.xml** contiene la sección completa de scrapers
-- [ ] **strings.xml** (inglés) contiene todos los strings de scrapers
-- [ ] **strings-es.xml** contiene traducciones en español
-- [ ] **strings-it.xml** contiene traducciones en italiano  
-- [ ] **strings-pt.xml** contiene traducciones en portugués
-- [ ] **build.gradle.kts** incluye dependencias OkHttp y Jsoup
-- [ ] **libs.versions.toml** define versiones correctas
-- [ ] **arrays.xml** no requiere modificaciones (ya presente)
-
-### 🧪 Pruebas Requeridas:
-
-- [ ] **ListaSpam**: Verificar que está marcado como deprecated
-- [ ] **ResponderONo**: Probar con número 873981181 (debe detectar spam)
-- [ ] **CleverDialer**: Probar con número 623363131 (debe detectar 1-2 estrellas)
-- [ ] **Interfaz**: Verificar que aparecen las 3 opciones en Settings
-- [ ] **Persistencia**: Verificar que las preferencias se guardan correctamente
-
----
-
-## 📝 NOTAS IMPORTANTES DE IMPLEMENTACIÓN
-
-### 🔒 Aspectos de Seguridad:
-- Los scrapers usan User-Agent de Android real para evitar detección
-- Timeout implícito a través de OkHttp client
-- Manejo de errores robusto con catch-all
-
-### ⚡ Optimizaciones:
-- Ejecución paralela de todos los scrapers usando corrutinas
-- Race condition: primer resultado positivo cancela el resto
-- Cache de OkHttp client reutilizable
-
-### 🌐 Localización:
-- Scrapers específicos para España (🇪🇸) pero URLs funcionan internacionalmente
-- Strings localizados en 4 idiomas: EN, ES, IT, PT
-- Selectors CSS adaptados al contenido en español
-
----
-
-## 🎯 RESULTADO ESPERADO TRAS REINTRODUCCIÓN
-
-Después de implementar todos los elementos listados en este documento:
-
-1. ✅ **ResponderONo** funcionará completamente
-2. 🔄 **CleverDialer** funcionará después de la actualización sugerida  
-3. ❌ **ListaSpam** estará presente pero marcado como deprecated/no funcional
-4. 🎛️ **Interfaz** mostrará las 3 opciones en Settings → Scrapers 🇪🇸
-5. 🔧 **Configuración** persistirá las preferencias del usuario
-6. 🚀 **Integración** los scrapers se ejecutarán en paralelo con las APIs
-
----
 
 ---
 
@@ -639,8 +569,75 @@ private suspend fun checkListaSpam(number: String): Boolean {
 
 ---
 
+## 📋 CHECKLIST DE VERIFICACIÓN POST-IMPLEMENTACIÓN
+
+### ✅ Verificaciones Obligatorias:
+
+- [ ] **SharedPreferencesUtils.kt** contiene las 3 funciones de configuración
+- [ ] **SpamUtils.kt** contiene las 3 constantes de URL y selectores CSS  
+- [ ] **SpamUtils.kt** contiene las 3 funciones de scraper
+- [ ] **SpamUtils.kt** integra scrapers en `buildSpamCheckers()`
+- [ ] **preferences.xml** contiene la sección completa de scrapers
+- [ ] **strings.xml** (inglés) contiene todos los strings de scrapers
+- [ ] **strings-es.xml** contiene traducciones en español
+- [ ] **strings-it.xml** contiene traducciones en italiano  
+- [ ] **strings-pt.xml** contiene traducciones en portugués
+- [ ] **build.gradle.kts** incluye dependencias OkHttp y Jsoup
+- [ ] **libs.versions.toml** define versiones correctas
+- [ ] **arrays.xml** no requiere modificaciones (ya presente)
+
+### 🧪 Pruebas Requeridas:
+
+- [ ] **ListaSpam**: Verificar que está marcado como deprecated
+- [ ] **ResponderONo**: Probar con número 873981181 (debe detectar spam)
+- [ ] **CleverDialer**: Probar con número 623363131 (debe detectar 1-2 estrellas)
+- [ ] **Interfaz**: Verificar que aparecen las 3 opciones en Settings
+- [ ] **Persistencia**: Verificar que las preferencias se guardan correctamente
+
+---
+
+## 📝 NOTAS IMPORTANTES DE IMPLEMENTACIÓN
+
+### 🔒 Aspectos de Seguridad:
+- Los scrapers usan User-Agent de Android real para evitar detección
+- Timeout implícito a través de OkHttp client
+- Manejo de errores robusto con catch-all
+
+### ⚡ Optimizaciones:
+- Ejecución paralela de todos los scrapers usando corrutinas
+- Race condition: primer resultado positivo cancela el resto
+- Cache de OkHttp client reutilizable
+
+### 🌐 Localización:
+- Scrapers específicos para España (🇪🇸) pero URLs funcionan internacionalmente
+- Strings localizados en 4 idiomas: EN, ES, IT, PT
+- Selectors CSS adaptados al contenido en español
+
+### ⚠️ ADVERTENCIAS IMPORTANTES:
+
+1. **NO usar referencias a números de línea específicos** - el código puede cambiar y las funciones moverse
+2. **Buscar patrones de código** en lugar de ubicaciones exactas
+3. **Verificar estructura de archivos** antes de agregar código
+4. **Probar cada scraper individualmente** después de la implementación
+5. **Mantener compatibilidad** con versiones existentes de dependencias
+
+---
+
+## 🎯 RESULTADO ESPERADO TRAS REINTRODUCCIÓN
+
+Después de implementar todos los elementos listados en este documento:
+
+1. ✅ **ResponderONo** funcionará completamente
+2. 🔄 **CleverDialer** funcionará después de la actualización sugerida  
+3. ❌ **ListaSpam** estará presente pero marcado como deprecated/no funcional
+4. 🎛️ **Interfaz** mostrará las 3 opciones en Settings → Scrapers 🇪🇸
+5. 🔧 **Configuración** persistirá las preferencias del usuario
+6. 🚀 **Integración** los scrapers se ejecutarán en paralelo con las APIs
+
+---
+
 **📅 FECHA DE DOCUMENTACIÓN**: 9 de septiembre de 2025  
 **📱 VERSIÓN DE REFERENCIA**: Call Blocker App v2.3.5  
 **🔧 ESTADO**: Scrapers completamente implementados y funcionales  
 **🧪 ESTADO POST-PRUEBAS**: ResponderONo funcional, CleverDialer requiere actualización, ListaSpam obsoleto  
-**📋 ARCHIVO DE PRUEBAS**: Pasted--Historial-Detallado-de-Pruebas-de-Scrapers-Call-Blocker-App-Informaci-n-del-Proyecto-Arc-1757459486145_1757459486147.txt
+**📂 ARCHIVO ÚNICO DE DOCUMENTACIÓN**: DOCUMENTACION_COMPLETA_SCRAPERS_RECUPERACION.md
